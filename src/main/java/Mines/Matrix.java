@@ -1,13 +1,15 @@
 package Mines;
 
-public class Matrix {
+public abstract class Matrix {
+    final int bombCount;
+    private Cell[][] cells;
     private final int rows;
     private final int cols;
-    private Cell[][] cells;
 
-    public Matrix(int rows, int cols) {
+    public Matrix(int rows, int cols, int bombCount) {
         this.rows = rows;
         this.cols = cols;
+        this.bombCount = bombCount;
         setCells();
     }
 
