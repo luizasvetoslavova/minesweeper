@@ -1,2 +1,5 @@
-package Mines;public class CellStatus {
+package Mines;
+
+public enum CellStatus {
+    FLAGGED, OPENED, UNOPENED
 }
