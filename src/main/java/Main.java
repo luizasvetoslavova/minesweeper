@@ -4,8 +4,8 @@ import Mines.Matrix;
 
 public class Main {
     public static void main(String[] args) {
-        Matrix m = new Matrix(9, 9);
-        Initializer i = new Initializer(m, 20);
+        Matrix m = new Matrix(15, 32);
+        Initializer i = new Initializer(m, 100);
         i.setBombs();
         i.setDigits();
 

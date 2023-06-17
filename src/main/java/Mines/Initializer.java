@@ -41,17 +41,17 @@ public class Initializer {
                 digit++;
             if (row != 0 && matrix.getCells()[row - 1][col].isBomb())
                 digit++;
-            if (row != 0 && col != matrix.getCells().length - 1 && matrix.getCells()[row - 1][col + 1].isBomb())
+            if (row != 0 && col != matrix.getCells()[row].length - 1 && matrix.getCells()[row - 1][col + 1].isBomb())
                 digit++;
             if (col != 0 && matrix.getCells()[row][col - 1].isBomb())
                 digit++;
-            if (col != matrix.getCells().length - 1 && matrix.getCells()[row][col + 1].isBomb())
+            if (col != matrix.getCells()[row].length - 1 && matrix.getCells()[row][col + 1].isBomb())
                 digit++;
-            if (row != matrix.getCells()[row].length - 1 && col != 0 && matrix.getCells()[row + 1][col - 1].isBomb())
+            if (row != matrix.getCells().length - 1 && col != 0 && matrix.getCells()[row + 1][col - 1].isBomb())
                 digit++;
-            if (row != matrix.getCells()[row].length - 1 && matrix.getCells()[row + 1][col].isBomb())
+            if (row != matrix.getCells().length - 1 && matrix.getCells()[row + 1][col].isBomb())
                 digit++;
-            if (row != matrix.getCells()[row].length - 1 && col != matrix.getCells().length - 1
+            if (row != matrix.getCells().length - 1 && col != matrix.getCells()[row].length - 1
                     && matrix.getCells()[row + 1][col + 1].isBomb())
                 digit++;
             return digit;
