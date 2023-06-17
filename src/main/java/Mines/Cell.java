@@ -3,7 +3,6 @@ package Mines;
 public class Cell {
     private int digit;
     private boolean isBomb;
-    private CellStatus cellStatus;
 
     public void setBomb() {
         isBomb = true;

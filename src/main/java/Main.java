@@ -1,3 +1,4 @@
+
 import Mines.Initializer;
 import Mines.Matrix;
 
@@ -10,7 +11,13 @@ public class Main {
 
         for (int k = 0; k < m.getCells().length; k++) {
             for (int j = 0; j < m.getCells()[k].length; j++) {
-                System.out.print(m.getCells()[k][j].getDigit());
+                if (m.getCells()[k][j].isBomb()) {
+                    System.out.print("⬛  ");
+                } else if (m.getCells()[k][j].getDigit() == 0) {
+                    System.out.print("⬜  ");
+                } else {
+                    System.out.print(m.getCells()[k][j].getDigit() + "  ");
+                }
             }
             System.out.println();
         }

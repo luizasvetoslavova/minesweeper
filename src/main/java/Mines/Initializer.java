@@ -36,12 +36,26 @@ public class Initializer {
 
     private int setDigit(int row, int col) {
         int digit = 0;
-
-        if (matrix.getCells()[row][col].isBomb()) {
-            return matrix.getCells()[row][col].getDigit();
-        } else {
-            //TODO conditions
+        if (!matrix.getCells()[row][col].isBomb()) {
+            if (row != 0 && col != 0 && matrix.getCells()[row - 1][col - 1].isBomb())
+                digit++;
+            if (row != 0 && matrix.getCells()[row - 1][col].isBomb())
+                digit++;
+            if (row != 0 && col != matrix.getCells().length - 1 && matrix.getCells()[row - 1][col + 1].isBomb())
+                digit++;
+            if (col != 0 && matrix.getCells()[row][col - 1].isBomb())
+                digit++;
+            if (col != matrix.getCells().length - 1 && matrix.getCells()[row][col + 1].isBomb())
+                digit++;
+            if (row != matrix.getCells()[row].length - 1 && col != 0 && matrix.getCells()[row + 1][col - 1].isBomb())
+                digit++;
+            if (row != matrix.getCells()[row].length - 1 && matrix.getCells()[row + 1][col].isBomb())
+                digit++;
+            if (row != matrix.getCells()[row].length - 1 && col != matrix.getCells().length - 1
+                    && matrix.getCells()[row + 1][col + 1].isBomb())
+                digit++;
+            return digit;
         }
-        return digit;
+        return matrix.getCells()[row][col].getDigit();
     }
 }
