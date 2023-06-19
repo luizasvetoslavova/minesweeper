@@ -4,6 +4,7 @@ import Levels.Easy;
 import Levels.Expert;
 import Levels.Hard;
 import Levels.Medium;
+import Mines.Cell;
 import Mines.CellStatus;
 import Mines.Initializer;
 import Mines.Matrix;
@@ -77,43 +78,6 @@ public class ConsoleGameplay implements Gameplay {
     }
 
     @Override
-    public void optionChoice() {
-        view.show("1. Open cell \n" +
-                "2. Put flag \n" +
-                "3. Remove flag \n" +
-                "4. Reset game \n" +
-                "5. Exit \n" +
-                "Your choice: ");
-
-        switch (view.userInput()) {
-            case "1":
-                openCell();
-                showFront();
-                break;
-            case "2":
-                putFlag();
-                showFront();
-                break;
-            case "3":
-                removeFlag();
-                showFront();
-                break;
-            case "4":
-                reset();
-                break;
-            case "5":
-                view.show("Thank you for playing!");
-                activeGame = false;
-                break;
-            default: {
-                invalidInput();
-                optionChoice();
-                break;
-            }
-        }
-    }
-
-    @Override
     public void openCell() {
         int[] lineAndCol = getLineAndCol();
         int line = lineAndCol[0];
@@ -156,6 +120,42 @@ public class ConsoleGameplay implements Gameplay {
         startGame();
     }
 
+    private void optionChoice() {
+        view.show("1. Open cell \n" +
+                "2. Put flag \n" +
+                "3. Remove flag \n" +
+                "4. Reset game \n" +
+                "5. Exit \n" +
+                "Your choice: ");
+
+        switch (view.userInput()) {
+            case "1":
+                openCell();
+                showFront();
+                break;
+            case "2":
+                putFlag();
+                showFront();
+                break;
+            case "3":
+                removeFlag();
+                showFront();
+                break;
+            case "4":
+                reset();
+                break;
+            case "5":
+                view.show("Thank you for playing!");
+                activeGame = false;
+                break;
+            default: {
+                invalidInput();
+                optionChoice();
+                break;
+            }
+        }
+    }
+
     private void startGame() {
         levelChoice();
         showFront();
@@ -180,16 +180,24 @@ public class ConsoleGameplay implements Gameplay {
     }
 
     private void showFront() {
-        int iteration = 0;
+        int numRows = matrix.getCells().length;
+        int numCols = matrix.getCells()[0].length;
+        printColumnHeaders(numCols);
+        printRowsWithCellContents(numRows);
+    }
+
+    private void printColumnHeaders(int numCols) {
         view.show("\n");
-        for (int line = 0; line < matrix.getCells().length; line++) {
-            iteration++;
-            if (iteration == 1) {
-                for (int index = 0; index < matrix.getCells()[0].length; index++) {
-                    view.show(String.format("%2d ", index));
-                }
-                view.show("\n");
-            }
+        view.show("   ");
+        for (int index = 0; index < numCols; index++) {
+            view.show(String.format(" %d", index));
+            view.show(" ");
+        }
+        view.show("\n");
+    }
+
+    private void printRowsWithCellContents(int numRows) {
+        for (int line = 0; line < numRows; line++) {
             view.show(String.format("%2d ", line));
             showDifferentCellCases(line);
             view.show("\n");
@@ -198,18 +206,23 @@ public class ConsoleGameplay implements Gameplay {
     }
 
     private void showDifferentCellCases(int line) {
-        for (int col = 0; col < matrix.getCells()[line].length; col++) {
-            if (matrix.getCells()[line][col].getCellStatus().equals(CellStatus.OPENED) &&
-                    matrix.getCells()[line][col].getDigit() == 0) {
-                view.show(" ◽");
-            } else if (matrix.getCells()[line][col].getCellStatus().equals(CellStatus.OPENED) &&
-                    matrix.getCells()[line][col].isBomb()) {
-                view.show("⬛");
-            } else if (matrix.getCells()[line][col].getCellStatus().equals(CellStatus.OPENED)) {
-                view.show(String.valueOf(matrix.getCells()[line][col].getDigit()));
-            } else if (matrix.getCells()[line][col].getCellStatus().equals(CellStatus.UNOPENED)) {
+        int numCols = matrix.getCells()[line].length;
+
+        for (int col = 0; col < numCols; col++) {
+            Cell currentCell = matrix.getCells()[line][col];
+            CellStatus cellStatus = currentCell.getCellStatus();
+
+            if (cellStatus.equals(CellStatus.OPENED)) {
+                if (currentCell.getDigit() == 0) {
+                    view.show(" ◽");
+                } else if (currentCell.isBomb()) {
+                    view.show(" ⬛");
+                } else {
+                    view.show(String.format(" %d", currentCell.getDigit()));
+                }
+            } else if (cellStatus.equals(CellStatus.UNOPENED)) {
                 view.show(" ⬜");
-            } else if (matrix.getCells()[line][col].getCellStatus().equals(CellStatus.FLAGGED)) {
+            } else if (cellStatus.equals(CellStatus.FLAGGED)) {
                 view.show(" ⛳");
             }
         }

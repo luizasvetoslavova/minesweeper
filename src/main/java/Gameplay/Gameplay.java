@@ -7,8 +7,6 @@ public interface Gameplay {
 
     Matrix levelChoice();
 
-    void optionChoice();
-
     void openCell();
 
     void putFlag();
