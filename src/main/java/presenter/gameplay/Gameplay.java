@@ -1,6 +1,6 @@
-package Gameplay;
+package presenter.gameplay;
 
-import Mines.Matrix;
+import model.mines.Matrix;
 
 public interface Gameplay {
     void rules();

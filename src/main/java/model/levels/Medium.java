@@ -1,6 +1,6 @@
-package Levels;
+package model.levels;
 
-import Mines.Matrix;
+import model.mines.Matrix;
 
 public class Medium extends Matrix {
     public Medium() {

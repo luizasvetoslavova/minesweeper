@@ -1,14 +1,14 @@
-package Gameplay;
+package presenter.gameplay;
 
-import Levels.Easy;
-import Levels.Expert;
-import Levels.Hard;
-import Levels.Medium;
-import Mines.Cell;
-import Mines.CellStatus;
-import Mines.Initializer;
-import Mines.Matrix;
-import View.ConsoleView;
+import model.levels.Easy;
+import model.levels.Expert;
+import model.levels.Hard;
+import model.levels.Medium;
+import model.mines.Cell;
+import model.mines.CellStatus;
+import model.mines.Initializer;
+import model.mines.Matrix;
+import view.ConsoleView;
 
 public class ConsoleGameplay implements Gameplay {
     private final ConsoleView view;
@@ -30,8 +30,8 @@ public class ConsoleGameplay implements Gameplay {
     @Override
     public void rules() {
         view.show("\n Welcome to Minesweeper! \n Rules: \n" +
-                "~ The number shown on an unlocked cell is the number of mines adjacent to it. \n" +
-                "~ You have to flag all the mines and not unlock on a single one, or else you lose and the game ends. \n" +
+                "~ The number shown on an unlocked cell is the number of model.mines adjacent to it. \n" +
+                "~ You have to flag all the model.mines and not unlock on a single one, or else you lose and the game ends. \n" +
                 "You can start by clicking at any random cell. \n \n" +
                 "Signs: \n" +
                 "◽ - Empty cell. There are no bombs near it. \n" +
@@ -51,27 +51,15 @@ public class ConsoleGameplay implements Gameplay {
 
         switch (view.userInput()) {
             case "1":
-                Easy easy = new Easy();
-                matrix = easy;
-                init.setupMatrix(matrix);
-                return easy;
+                return setupMatrix(new Easy());
             case "2":
-                Medium medium = new Medium();
-                matrix = medium;
-                init.setupMatrix(matrix);
-                return medium;
+                return setupMatrix(new Medium());
             case "3":
-                Hard hard = new Hard();
-                matrix = hard;
-                init.setupMatrix(matrix);
-                return hard;
+                return setupMatrix(new Hard());
             case "4":
-                Expert expert = new Expert();
-                matrix = expert;
-                init.setupMatrix(matrix);
-                return expert;
+                return setupMatrix(new Expert());
             default: {
-                invalidInput();
+                view.invalidInput();
                 return levelChoice();
             }
         }
@@ -79,39 +67,40 @@ public class ConsoleGameplay implements Gameplay {
 
     @Override
     public void openCell() {
-        int[] lineAndCol = getLineAndCol();
+        int[] lineAndCol = view.getLineAndCol();
         int line = lineAndCol[0];
         int col = lineAndCol[1];
         if (!matrix.getCells()[line][col].getCellStatus().equals(CellStatus.OPENED)) {
             matrix.getCells()[line][col].setCellStatus(CellStatus.OPENED);
             checkBomb(line, col);
+            showNearCells(line, col);
         } else {
-            invalidInput();
+            view.invalidInput();
         }
     }
 
     @Override
     public void putFlag() {
-        int[] lineAndCol = getLineAndCol();
+        int[] lineAndCol = view.getLineAndCol();
         int line = lineAndCol[0];
         int col = lineAndCol[1];
         if (!matrix.getCells()[line][col].getCellStatus().equals(CellStatus.OPENED)) {
             matrix.getCells()[line][col].setCellStatus(CellStatus.FLAGGED);
             potentialWin();
         } else {
-            invalidInput();
+            view.invalidInput();
         }
     }
 
     @Override
     public void removeFlag() {
-        int[] lineAndCol = getLineAndCol();
+        int[] lineAndCol = view.getLineAndCol();
         int line = lineAndCol[0];
         int col = lineAndCol[1];
         if (matrix.getCells()[line][col].getCellStatus().equals(CellStatus.FLAGGED)) {
             matrix.getCells()[line][col].setCellStatus(CellStatus.UNOPENED);
         } else {
-            invalidInput();
+            view.invalidInput();
         }
     }
 
@@ -119,6 +108,13 @@ public class ConsoleGameplay implements Gameplay {
     public void reset() {
         view.show("\n Game reset! \n");
         startGame();
+    }
+
+    private Matrix setupMatrix(Matrix matrix1) {
+        matrix = matrix1;
+        init.setupMatrix(matrix);
+        this.view.setMatrix(matrix);
+        return matrix;
     }
 
     private void optionChoice() {
@@ -132,15 +128,15 @@ public class ConsoleGameplay implements Gameplay {
         switch (view.userInput()) {
             case "1":
                 openCell();
-                showFront();
+                view.showFront();
                 break;
             case "2":
                 putFlag();
-                showFront();
+                view.showFront();
                 break;
             case "3":
                 removeFlag();
-                showFront();
+                view.showFront();
                 break;
             case "4":
                 reset();
@@ -150,7 +146,7 @@ public class ConsoleGameplay implements Gameplay {
                 activeGame = false;
                 break;
             default: {
-                invalidInput();
+                view.invalidInput();
                 optionChoice();
                 break;
             }
@@ -159,7 +155,7 @@ public class ConsoleGameplay implements Gameplay {
 
     private void startGame() {
         levelChoice();
-        showFront();
+        view.showFront();
         activeGame = true;
 
         while (activeGame) {
@@ -167,13 +163,9 @@ public class ConsoleGameplay implements Gameplay {
         }
     }
 
-    private void invalidInput() {
-        view.show("Invalid input, please try again. \n");
-    }
-
     private void checkBomb(int line, int col) {
         if (matrix.getCells()[line][col].isBomb()) {
-            showFront();
+            view.showFront();
             view.show("BOOM! \n" +
                     "Game over. \n");
             reset();
@@ -190,10 +182,10 @@ public class ConsoleGameplay implements Gameplay {
 
     private int flaggedBombs() {
         int count = 0;
-        for(int line = 0; line < matrix.getCells().length; line++) {
-            for(int col = 0; col < matrix.getCells()[line].length; col++) {
+        for (int line = 0; line < matrix.getCells().length; line++) {
+            for (int col = 0; col < matrix.getCells()[line].length; col++) {
                 Cell currentCell = matrix.getCells()[line][col];
-                if(currentCell.isBomb() && currentCell.getCellStatus().equals(CellStatus.FLAGGED)) {
+                if (currentCell.isBomb() && currentCell.getCellStatus().equals(CellStatus.FLAGGED)) {
                     count++;
                 }
             }
@@ -203,10 +195,10 @@ public class ConsoleGameplay implements Gameplay {
 
     private int totalBombs() {
         int count = 0;
-        for(int line = 0; line < matrix.getCells().length; line++) {
-            for(int col = 0; col < matrix.getCells()[line].length; col++) {
+        for (int line = 0; line < matrix.getCells().length; line++) {
+            for (int col = 0; col < matrix.getCells()[line].length; col++) {
                 Cell currentCell = matrix.getCells()[line][col];
-                if(currentCell.isBomb()) {
+                if (currentCell.isBomb()) {
                     count++;
                 }
             }
@@ -214,77 +206,10 @@ public class ConsoleGameplay implements Gameplay {
         return count;
     }
 
-    private void showFront() {
-        int numRows = matrix.getCells().length;
-        int numCols = matrix.getCells()[0].length;
-        printColumnHeaders(numCols);
-        printRowsWithCellContents(numRows);
-    }
-
-    private void printColumnHeaders(int numCols) {
-        view.show("\n");
-        view.show("   ");
-        for (int index = 0; index < numCols; index++) {
-            view.show(String.format(" %d", index));
-            view.show(" ");
-        }
-        view.show("\n");
-    }
-
-    private void printRowsWithCellContents(int numRows) {
-        for (int line = 0; line < numRows; line++) {
-            view.show(String.format("%2d ", line));
-            showDifferentCellCases(line);
-            view.show("\n");
-        }
-        view.show("\n");
-    }
-
-    private void showDifferentCellCases(int line) {
-        int numCols = matrix.getCells()[line].length;
-
-        for (int col = 0; col < numCols; col++) {
-            Cell currentCell = matrix.getCells()[line][col];
-            CellStatus cellStatus = currentCell.getCellStatus();
-
-            if (cellStatus.equals(CellStatus.OPENED)) {
-                if (currentCell.getDigit() == 0) {
-                    view.show(" ◽");
-                } else if (currentCell.isBomb()) {
-                    view.show(" ⬛");
-                } else {
-                    view.show(String.format(" %d", currentCell.getDigit()));
-                }
-            } else if (cellStatus.equals(CellStatus.UNOPENED)) {
-                view.show(" ⬜");
-            } else if (cellStatus.equals(CellStatus.FLAGGED)) {
-                view.show(" ⛳");
-            }
-        }
-    }
-
-    private int[] getLineAndCol() {
-        view.show("Specify cell line and column (for ex. 1 and 7) \n" +
-                "Line (horizontal): ");
-        int[] parameters = new int[2];
-        try {
-            int line = Integer.parseInt(view.userInput());
-            view.show("Column (vertical): ");
-            int col = Integer.parseInt(view.userInput());
-
-            parameters[0] = line;
-            parameters[1] = col;
-            return parameters;
-
-        } catch (NumberFormatException e) {
-            invalidInput();
-            getLineAndCol();
-        }
-        return parameters;
-    }
-
-    //TODO
     private void showNearCells(int line, int col) {
-
+        //!flagged
+        //!isBomb
+        //random true/false
+        //from +5 to +15 cells opened, all near each other
     }
 }
