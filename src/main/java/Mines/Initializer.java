@@ -42,28 +42,57 @@ public class Initializer {
         }
     }
 
+//    private int setDigit(int line, int col, Matrix matrix) {
+//        int digit = 0;
+//        if (!matrix.getCells()[line][col].isBomb()) {
+//            if (line != 0 && col != 0 && matrix.getCells()[line - 1][col - 1].isBomb())
+//                digit++;
+//            if (line != 0 && matrix.getCells()[line - 1][col].isBomb())
+//                digit++;
+//            if (line != 0 && col != matrix.getCells()[line].length - 1 && matrix.getCells()[line - 1][col + 1].isBomb())
+//                digit++;
+//            if (col != 0 && matrix.getCells()[line][col - 1].isBomb())
+//                digit++;
+//            if (col != matrix.getCells()[line].length - 1 && matrix.getCells()[line][col + 1].isBomb())
+//                digit++;
+//            if (line != matrix.getCells().length - 1 && col != 0 && matrix.getCells()[line + 1][col - 1].isBomb())
+//                digit++;
+//            if (line != matrix.getCells().length - 1 && matrix.getCells()[line + 1][col].isBomb())
+//                digit++;
+//            if (line != matrix.getCells().length - 1 && col != matrix.getCells()[line].length - 1
+//                    && matrix.getCells()[line + 1][col + 1].isBomb())
+//                digit++;
+//            return digit;
+//        }
+//        return matrix.getCells()[line][col].getDigit();
+//    }
+
     private int setDigit(int line, int col, Matrix matrix) {
-        int digit = 0;
-        if (!matrix.getCells()[line][col].isBomb()) {
-            if (line != 0 && col != 0 && matrix.getCells()[line - 1][col - 1].isBomb())
-                digit++;
-            if (line != 0 && matrix.getCells()[line - 1][col].isBomb())
-                digit++;
-            if (line != 0 && col != matrix.getCells()[line].length - 1 && matrix.getCells()[line - 1][col + 1].isBomb())
-                digit++;
-            if (col != 0 && matrix.getCells()[line][col - 1].isBomb())
-                digit++;
-            if (col != matrix.getCells()[line].length - 1 && matrix.getCells()[line][col + 1].isBomb())
-                digit++;
-            if (line != matrix.getCells().length - 1 && col != 0 && matrix.getCells()[line + 1][col - 1].isBomb())
-                digit++;
-            if (line != matrix.getCells().length - 1 && matrix.getCells()[line + 1][col].isBomb())
-                digit++;
-            if (line != matrix.getCells().length - 1 && col != matrix.getCells()[line].length - 1
-                    && matrix.getCells()[line + 1][col + 1].isBomb())
-                digit++;
-            return digit;
+        if (matrix.getCells()[line][col].isBomb()) {
+            return matrix.getCells()[line][col].getDigit();
         }
-        return matrix.getCells()[line][col].getDigit();
+        int digit = 0;
+        int[][] offsets = {
+                {-1, -1}, {-1, 0}, {-1, 1},
+                {0, -1},           {0, 1},
+                {1, -1},  {1, 0},  {1, 1}
+        };
+
+        for (int[] offset : offsets) {
+            int neighborLine = line + offset[0];
+            int neighborCol = col + offset[1];
+
+            if (isValidNeighbor(neighborLine, neighborCol, matrix)
+                    && matrix.getCells()[neighborLine][neighborCol].isBomb()) {
+                digit++;
+            }
+        }
+        return digit;
     }
+
+    private boolean isValidNeighbor(int line, int col, Matrix matrix) {
+        return line >= 0 && line < matrix.getCells().length
+                && col >= 0 && col < matrix.getCells()[line].length;
+    }
+
 }

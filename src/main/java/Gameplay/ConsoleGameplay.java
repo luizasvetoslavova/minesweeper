@@ -43,10 +43,10 @@ public class ConsoleGameplay implements Gameplay {
     @Override
     public Matrix levelChoice() {
         view.show("Choose level: \n" +
-                "1. Easy \n" +
-                "2. Medium \n" +
-                "3. Hard \n" +
-                "4. Expert \n" +
+                "1. Easy - 9x9, 23 bombs \n" +
+                "2. Medium - 16x16, 60 bombs \n" +
+                "3. Hard - 16x30, 115 bombs \n" +
+                "4. Expert - 23x34, 200 bombs \n" +
                 "Your choice: ");
 
         switch (view.userInput()) {
@@ -97,6 +97,7 @@ public class ConsoleGameplay implements Gameplay {
         int col = lineAndCol[1];
         if (!matrix.getCells()[line][col].getCellStatus().equals(CellStatus.OPENED)) {
             matrix.getCells()[line][col].setCellStatus(CellStatus.FLAGGED);
+            potentialWin();
         } else {
             invalidInput();
         }
@@ -177,6 +178,40 @@ public class ConsoleGameplay implements Gameplay {
                     "Game over. \n");
             reset();
         }
+    }
+
+    private void potentialWin() {
+        boolean userWon = (totalBombs() == flaggedBombs());
+        if (userWon) {
+            view.show("Congratulations! You won!");
+            reset();
+        }
+    }
+
+    private int flaggedBombs() {
+        int count = 0;
+        for(int line = 0; line < matrix.getCells().length; line++) {
+            for(int col = 0; col < matrix.getCells()[line].length; col++) {
+                Cell currentCell = matrix.getCells()[line][col];
+                if(currentCell.isBomb() && currentCell.getCellStatus().equals(CellStatus.FLAGGED)) {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+
+    private int totalBombs() {
+        int count = 0;
+        for(int line = 0; line < matrix.getCells().length; line++) {
+            for(int col = 0; col < matrix.getCells()[line].length; col++) {
+                Cell currentCell = matrix.getCells()[line][col];
+                if(currentCell.isBomb()) {
+                    count++;
+                }
+            }
+        }
+        return count;
     }
 
     private void showFront() {
