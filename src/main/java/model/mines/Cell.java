@@ -1,4 +1,4 @@
-package Mines;
+package model.mines;
 
 public class Cell {
     private int digit;

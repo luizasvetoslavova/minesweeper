@@ -1,6 +1,6 @@
-import Gameplay.ConsoleGameplay;
-import Mines.Initializer;
-import View.ConsoleView;
+import presenter.gameplay.ConsoleGameplay;
+import model.mines.Initializer;
+import view.ConsoleView;
 
 import java.util.Scanner;
 

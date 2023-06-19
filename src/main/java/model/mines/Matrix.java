@@ -1,4 +1,4 @@
-package Mines;
+package model.mines;
 
 public abstract class Matrix {
     final int bombCount;
