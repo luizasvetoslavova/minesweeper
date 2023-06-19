@@ -11,6 +11,7 @@ public class Cell {
 
     public void setBomb() {
         isBomb = true;
+        digit = -1;
     }
 
     public boolean isBomb() {

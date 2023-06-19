@@ -7,8 +7,6 @@ public interface Gameplay {
 
     Matrix levelChoice();
 
-    void showHiddenCellsOnStart();
-
     void optionChoice();
 
     void openCell();
