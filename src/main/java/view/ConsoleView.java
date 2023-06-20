@@ -34,13 +34,19 @@ public class ConsoleView {
     }
 
     public int[] getLineAndCol() {
+        int[] parameters = new int[2];
+
         show("Specify cell line and column (for ex. 1 and 7) \n" +
                 "Line (horizontal): ");
-        int[] parameters = new int[2];
         try {
             int line = Integer.parseInt(userInput());
             show("Column (vertical): ");
             int col = Integer.parseInt(userInput());
+
+            if (line < 0 || line > matrix.getCells().length - 1 || col < 0 || col > matrix.getCells()[0].length - 1) {
+                invalidInput();
+                return getLineAndCol();
+            }
 
             parameters[0] = line;
             parameters[1] = col;

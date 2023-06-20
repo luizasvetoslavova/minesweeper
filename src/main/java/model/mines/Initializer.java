@@ -1,4 +1,5 @@
 package model.mines;
+
 import java.util.Random;
 
 public class Initializer {

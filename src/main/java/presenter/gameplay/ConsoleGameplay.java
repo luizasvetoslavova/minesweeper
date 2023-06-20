@@ -10,6 +10,9 @@ import model.mines.Initializer;
 import model.mines.Matrix;
 import view.ConsoleView;
 
+import java.util.Random;
+import java.util.function.Predicate;
+
 public class ConsoleGameplay implements Gameplay {
     private final ConsoleView view;
     private final Initializer init;
@@ -70,10 +73,12 @@ public class ConsoleGameplay implements Gameplay {
         int[] lineAndCol = view.getLineAndCol();
         int line = lineAndCol[0];
         int col = lineAndCol[1];
-        if (!matrix.getCells()[line][col].getCellStatus().equals(CellStatus.OPENED)) {
-            matrix.getCells()[line][col].setCellStatus(CellStatus.OPENED);
-            checkBomb(line, col);
-            showNearCells(line, col);
+        Cell cell = matrix.getCells()[line][col];
+        if (!cell.getCellStatus().equals(CellStatus.OPENED)) {
+            cell.setCellStatus(CellStatus.OPENED);
+            checkBomb(cell);
+            openNeighbors(line, col);
+            win();
         } else {
             view.invalidInput();
         }
@@ -86,7 +91,7 @@ public class ConsoleGameplay implements Gameplay {
         int col = lineAndCol[1];
         if (!matrix.getCells()[line][col].getCellStatus().equals(CellStatus.OPENED)) {
             matrix.getCells()[line][col].setCellStatus(CellStatus.FLAGGED);
-            potentialWin();
+            win();
         } else {
             view.invalidInput();
         }
@@ -163,8 +168,8 @@ public class ConsoleGameplay implements Gameplay {
         }
     }
 
-    private void checkBomb(int line, int col) {
-        if (matrix.getCells()[line][col].isBomb()) {
+    private void checkBomb(Cell cell) {
+        if (cell.isBomb()) {
             view.showFront();
             view.show("BOOM! \n" +
                     "Game over. \n");
@@ -172,20 +177,25 @@ public class ConsoleGameplay implements Gameplay {
         }
     }
 
-    private void potentialWin() {
-        boolean userWon = (totalBombs() == flaggedBombs());
+    private void win() {
+        int allDigits = countCells(cell -> cell.getDigit() > 0);
+        int openedDigits = countCells(cell -> cell.getDigit() > 0 && cell.getCellStatus().equals(CellStatus.OPENED));
+        int flaggedBombs = countCells(cell -> cell.isBomb() && cell.getCellStatus().equals(CellStatus.FLAGGED));
+        int totalBombs = countCells(Cell::isBomb);
+
+        boolean userWon = totalBombs == flaggedBombs && allDigits == openedDigits;
         if (userWon) {
             view.show("Congratulations! You won!");
             reset();
         }
     }
 
-    private int flaggedBombs() {
+    private int countCells(Predicate<Cell> condition) {
         int count = 0;
         for (int line = 0; line < matrix.getCells().length; line++) {
             for (int col = 0; col < matrix.getCells()[line].length; col++) {
-                Cell currentCell = matrix.getCells()[line][col];
-                if (currentCell.isBomb() && currentCell.getCellStatus().equals(CellStatus.FLAGGED)) {
+                Cell cell = matrix.getCells()[line][col];
+                if (condition.test(cell)) {
                     count++;
                 }
             }
@@ -193,23 +203,28 @@ public class ConsoleGameplay implements Gameplay {
         return count;
     }
 
-    private int totalBombs() {
-        int count = 0;
-        for (int line = 0; line < matrix.getCells().length; line++) {
-            for (int col = 0; col < matrix.getCells()[line].length; col++) {
-                Cell currentCell = matrix.getCells()[line][col];
-                if (currentCell.isBomb()) {
-                    count++;
+    private void openNeighbors(int line, int col) {
+        if (new Random().nextBoolean()) {
+            for (int line1 = 0; line1 < matrix.getCells().length; line1++) {
+                for (int col1 = 0; col1 < matrix.getCells()[line1].length; col1++) {
+                    Cell cell = matrix.getCells()[line1][col1];
+                    if(isNeighbor(cell, line, col) && !cell.getCellStatus().equals(CellStatus.FLAGGED) && !cell.isBomb()) {
+                        cell.setCellStatus(CellStatus.OPENED);
+                    }
                 }
             }
         }
-        return count;
     }
 
-    private void showNearCells(int line, int col) {
-        //!flagged
-        //!isBomb
-        //random true/false
-        //from +5 to +15 cells opened, all near each other
+    private boolean isNeighbor(Cell cell, int line, int col) {
+        return (line != 0 && col != 0 && cell == matrix.getCells()[line - 1][col - 1])
+                || (line != 0 && cell == matrix.getCells()[line - 1][col])
+                || (line != 0 && col != matrix.getCells()[line].length - 1 && cell == matrix.getCells()[line - 1][col + 1])
+                || (col != 0 && cell == matrix.getCells()[line][col - 1])
+                || (col != matrix.getCells()[line].length - 1 && cell == matrix.getCells()[line][col + 1])
+                || (line != matrix.getCells().length - 1 && col != 0 && cell == matrix.getCells()[line + 1][col - 1])
+                || (line != matrix.getCells().length - 1 && cell == matrix.getCells()[line + 1][col])
+                || (line != matrix.getCells().length - 1 && col != matrix.getCells()[line].length - 1
+                && cell == matrix.getCells()[line + 1][col + 1]);
     }
 }
