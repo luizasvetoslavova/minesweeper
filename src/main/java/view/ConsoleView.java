@@ -26,11 +26,11 @@ public class ConsoleView {
         show("Invalid input, please try again. \n");
     }
 
-    public void showFront() {
+    public void showFront(boolean showBombs) {
         int numRows = matrix.getCells().length;
         int numCols = matrix.getCells()[0].length;
         showColumnHeaders(numCols);
-        showRowsWithCellContents(numRows);
+        showRows(numRows, showBombs);
     }
 
     public int[] getLineAndCol() {
@@ -69,43 +69,28 @@ public class ConsoleView {
         show("\n");
     }
 
-    //////////////////
-    public void showFrontOnLose() {
-            int numRows = matrix.getCells().length;
-            int numCols = matrix.getCells()[0].length;
-            showColumnHeaders(numCols);
-        showRowsWithBombs(numRows);
-    }
-
-    private void showRowsWithCellContents(int numRows) {
+    private void showRows(int numRows, boolean showBombs) {
         for (int line = 0; line < numRows; line++) {
             show(String.format("%2d ", line));
-            showDifferentCellCases(line);
+            if (showBombs) {
+                showCellCases(line, showBombs);
+            } else {
+                showCellCases(line, showBombs);
+            }
             show("\n");
         }
         show("\n");
     }
 
-    //
-    private void showRowsWithBombs(int numRows) {
-        for (int line = 0; line < numRows; line++) {
-            show(String.format("%2d ", line));
-            showUnopenedBombsOnLose(line);
-            show("\n");
-        }
-        show("\n");
-    }
-    //
 
-    //
-    private void showUnopenedBombsOnLose(int line) {
+    private void showCellCases(int line, boolean showBombs) {
         int numCols = matrix.getCells()[line].length;
 
         for (int col = 0; col < numCols; col++) {
             Cell currentCell = matrix.getCells()[line][col];
             CellStatus cellStatus = currentCell.getCellStatus();
 
-            if (currentCell.isBomb()) {
+            if (showBombs && currentCell.isBomb()) {
                 show(" ⬛");
             }
             if (cellStatus.equals(CellStatus.OPENED)) {
@@ -113,30 +98,8 @@ public class ConsoleView {
                     show(" ◽");
                 } else if (currentCell.getDigit() > 0) {
                     show(String.format(" %d", currentCell.getDigit()));
-                }
-            } else if (cellStatus.equals(CellStatus.UNOPENED)) {
-                show(" ⬜");
-            } else if (cellStatus.equals(CellStatus.FLAGGED)) {
-                show(" ⛳");
-            }
-        }
-    }
-    //
-
-    private void showDifferentCellCases(int line) {
-        int numCols = matrix.getCells()[line].length;
-
-        for (int col = 0; col < numCols; col++) {
-            Cell currentCell = matrix.getCells()[line][col];
-            CellStatus cellStatus = currentCell.getCellStatus();
-
-            if (cellStatus.equals(CellStatus.OPENED)) {
-                if (currentCell.getDigit() == 0) {
-                    show(" ◽");
-                } else if (currentCell.isBomb()) {
+                } else if (!showBombs && currentCell.isBomb()) {
                     show(" ⬛");
-                } else {
-                    show(String.format(" %d", currentCell.getDigit()));
                 }
             } else if (cellStatus.equals(CellStatus.UNOPENED)) {
                 show(" ⬜");
@@ -145,7 +108,6 @@ public class ConsoleView {
             }
         }
     }
-    ////////////////////
 
     public void setMatrix(Matrix matrix) {
         this.matrix = matrix;

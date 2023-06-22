@@ -28,15 +28,21 @@ public class ConsoleGameplay implements Gameplay {
 
     @Override
     public void rules() {
-        view.show("\n Welcome to Minesweeper! \n Rules: \n" +
-                "~ The number shown on an unlocked cell is the number of model.mines adjacent to it. \n" +
-                "~ You have to flag all the model.mines and not unlock on a single one, or else you lose and the game ends. \n" +
-                "You can start by clicking at any random cell. \n \n" +
-                "Signs: \n" +
-                "◽ - Empty cell. There are no bombs near it. \n" +
-                "⬛ - Bomb. \n" +
-                "⬜ - Unopened cell. \n" +
-                "⛳ - Flag. \n \n");
+        view.show("""
+
+                 Welcome to Minesweeper!\s
+                 Rules:\s
+                ~ The number shown on an unlocked cell is the number of model.mines adjacent to it.\s
+                ~ You have to flag all the model.mines and not unlock on a single one, or else you lose and the game ends.\s
+                You can start by clicking at any random cell.\s
+                \s
+                Signs:\s
+                ◽ - Empty cell. There are no bombs near it.\s
+                ⬛ - Bomb.\s
+                ⬜ - Unopened cell.\s
+                ⛳ - Flag.\s
+                \s
+                """);
     }
 
     @Override
@@ -47,12 +53,13 @@ public class ConsoleGameplay implements Gameplay {
 
     @Override
     public Matrix levelChoice() {
-        view.show("Choose level: \n" +
-                "1. Easy - 9x9, 23 bombs \n" +
-                "2. Medium - 16x16, 60 bombs \n" +
-                "3. Hard - 16x30, 115 bombs \n" +
-                "4. Expert - 23x34, 200 bombs \n" +
-                "Your choice: ");
+        view.show("""
+                Choose level:\s
+                1. Easy - 9x9, 23 bombs\s
+                2. Medium - 16x16, 60 bombs\s
+                3. Hard - 16x30, 115 bombs\s
+                4. Expert - 23x34, 200 bombs\s
+                Your choice:\s""");
 
         switch (view.userInput()) {
             case "1":
@@ -130,9 +137,11 @@ public class ConsoleGameplay implements Gameplay {
     @Override
     public void lose(Cell cell) {
         if (cell.isBomb()) {
-            view.showFrontOnLose();
-            view.show("BOOM! \n" +
-                    "Game over. \n");
+            view.showFront(true);
+            view.show("""
+                    BOOM!\s
+                    Game over.\s
+                    """);
             reset();
         }
     }
@@ -145,7 +154,7 @@ public class ConsoleGameplay implements Gameplay {
 
     private void play() {
         levelChoice();
-        view.showFront();
+        view.showFront(false);
         activeGame = true;
 
         while (activeGame) {
@@ -162,25 +171,26 @@ public class ConsoleGameplay implements Gameplay {
     }
 
     private void optionChoice() {
-        view.show("1. Open cell \n" +
-                "2. Put flag \n" +
-                "3. Remove flag \n" +
-                "4. Reset game \n" +
-                "5. Exit \n" +
-                "Your choice: ");
+        view.show("""
+                1. Open cell\s
+                2. Put flag\s
+                3. Remove flag\s
+                4. Reset game\s
+                5. Exit\s
+                Your choice:\s""");
 
         switch (view.userInput()) {
             case "1" -> {
                 openCell();
-                view.showFront();
+                view.showFront(false);
             }
             case "2" -> {
                 putFlag();
-                view.showFront();
+                view.showFront(false);
             }
             case "3" -> {
                 removeFlag();
-                view.showFront();
+                view.showFront(false);
             }
             case "4" -> reset();
             case "5" -> {
