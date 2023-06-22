@@ -42,13 +42,7 @@ public class ConsoleGameplay implements Gameplay {
     @Override
     public void start() {
         rules();
-        levelChoice();
-        view.showFront();
-        activeGame = true;
-
-        while (activeGame) {
-            optionChoice();
-        }
+        play();
     }
 
     @Override
@@ -136,7 +130,7 @@ public class ConsoleGameplay implements Gameplay {
     @Override
     public void lose(Cell cell) {
         if (cell.isBomb()) {
-            view.showFront();
+            view.showFrontOnLose();
             view.show("BOOM! \n" +
                     "Game over. \n");
             reset();
@@ -146,7 +140,17 @@ public class ConsoleGameplay implements Gameplay {
     @Override
     public void reset() {
         view.show("\n Game reset! \n");
-        start();
+        play();
+    }
+
+    private void play() {
+        levelChoice();
+        view.showFront();
+        activeGame = true;
+
+        while (activeGame) {
+            optionChoice();
+        }
     }
 
     private Matrix setupMatrix(Matrix matrix1) {

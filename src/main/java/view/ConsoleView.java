@@ -3,6 +3,7 @@ package view;
 import model.mines.Cell;
 import model.mines.CellStatus;
 import model.mines.Matrix;
+
 import java.util.Scanner;
 
 public class ConsoleView {
@@ -68,6 +69,14 @@ public class ConsoleView {
         show("\n");
     }
 
+    //////////////////
+    public void showFrontOnLose() {
+            int numRows = matrix.getCells().length;
+            int numCols = matrix.getCells()[0].length;
+            showColumnHeaders(numCols);
+        showRowsWithBombs(numRows);
+    }
+
     private void showRowsWithCellContents(int numRows) {
         for (int line = 0; line < numRows; line++) {
             show(String.format("%2d ", line));
@@ -76,6 +85,43 @@ public class ConsoleView {
         }
         show("\n");
     }
+
+    //
+    private void showRowsWithBombs(int numRows) {
+        for (int line = 0; line < numRows; line++) {
+            show(String.format("%2d ", line));
+            showUnopenedBombsOnLose(line);
+            show("\n");
+        }
+        show("\n");
+    }
+    //
+
+    //
+    private void showUnopenedBombsOnLose(int line) {
+        int numCols = matrix.getCells()[line].length;
+
+        for (int col = 0; col < numCols; col++) {
+            Cell currentCell = matrix.getCells()[line][col];
+            CellStatus cellStatus = currentCell.getCellStatus();
+
+            if (currentCell.isBomb()) {
+                show(" ⬛");
+            }
+            if (cellStatus.equals(CellStatus.OPENED)) {
+                if (currentCell.getDigit() == 0) {
+                    show(" ◽");
+                } else if (currentCell.getDigit() > 0) {
+                    show(String.format(" %d", currentCell.getDigit()));
+                }
+            } else if (cellStatus.equals(CellStatus.UNOPENED)) {
+                show(" ⬜");
+            } else if (cellStatus.equals(CellStatus.FLAGGED)) {
+                show(" ⛳");
+            }
+        }
+    }
+    //
 
     private void showDifferentCellCases(int line) {
         int numCols = matrix.getCells()[line].length;
@@ -99,6 +145,7 @@ public class ConsoleView {
             }
         }
     }
+    ////////////////////
 
     public void setMatrix(Matrix matrix) {
         this.matrix = matrix;
