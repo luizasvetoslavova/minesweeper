@@ -77,7 +77,7 @@ public class ConsoleGameplay implements Gameplay {
         if (!cell.getCellStatus().equals(CellStatus.OPENED)) {
             cell.setCellStatus(CellStatus.OPENED);
             checkBomb(cell);
-            openNeighbors(line, col);
+            openNeighbors(cell);
             win();
         } else {
             view.invalidInput();
@@ -131,29 +131,26 @@ public class ConsoleGameplay implements Gameplay {
                 "Your choice: ");
 
         switch (view.userInput()) {
-            case "1":
+            case "1" -> {
                 openCell();
                 view.showFront();
-                break;
-            case "2":
+            }
+            case "2" -> {
                 putFlag();
                 view.showFront();
-                break;
-            case "3":
+            }
+            case "3" -> {
                 removeFlag();
                 view.showFront();
-                break;
-            case "4":
-                reset();
-                break;
-            case "5":
+            }
+            case "4" -> reset();
+            case "5" -> {
                 view.show("Thank you for playing!");
                 activeGame = false;
-                break;
-            default: {
+            }
+            default -> {
                 view.invalidInput();
                 optionChoice();
-                break;
             }
         }
     }
@@ -203,14 +200,28 @@ public class ConsoleGameplay implements Gameplay {
         return count;
     }
 
+    private void openNeighbors(Cell cell) {
+        Random random = new Random();
+        for (int line = 0; line < matrix.getCells().length; line++) {
+            for (int col = 0; col < matrix.getCells()[line].length; col++) {
+                if (random.nextBoolean() && isNeighbor(cell, line, col)
+                        && !matrix.getCells()[line][col].getCellStatus().equals(CellStatus.FLAGGED)
+                        && !matrix.getCells()[line][col].isBomb()) {
+                    matrix.getCells()[line][col].setCellStatus(CellStatus.OPENED);
+                    openNeighbors(line, col);
+                }
+            }
+        }
+    }
+
     private void openNeighbors(int line, int col) {
-        if (new Random().nextBoolean()) {
-            for (int line1 = 0; line1 < matrix.getCells().length; line1++) {
-                for (int col1 = 0; col1 < matrix.getCells()[line1].length; col1++) {
-                    Cell cell = matrix.getCells()[line1][col1];
-                    if(isNeighbor(cell, line, col) && !cell.getCellStatus().equals(CellStatus.FLAGGED) && !cell.isBomb()) {
-                        cell.setCellStatus(CellStatus.OPENED);
-                    }
+        Random random = new Random();
+        for (int line1 = 0; line1 < matrix.getCells().length; line1++) {
+            for (int col1 = 0; col1 < matrix.getCells()[line1].length; col1++) {
+                if (random.nextBoolean() && isNeighbor(matrix.getCells()[line][col], line1, col1)
+                        && !matrix.getCells()[line1][col1].getCellStatus().equals(CellStatus.FLAGGED)
+                        && !matrix.getCells()[line1][col1].isBomb()) {
+                    matrix.getCells()[line1][col1].setCellStatus(CellStatus.OPENED);
                 }
             }
         }

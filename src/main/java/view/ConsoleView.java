@@ -3,7 +3,6 @@ package view;
 import model.mines.Cell;
 import model.mines.CellStatus;
 import model.mines.Matrix;
-
 import java.util.Scanner;
 
 public class ConsoleView {
