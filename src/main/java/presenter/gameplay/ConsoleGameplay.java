@@ -26,11 +26,6 @@ public class ConsoleGameplay implements Gameplay {
         this.opener = opener;
     }
 
-    public void start() {
-        rules();
-        startGame();
-    }
-
     @Override
     public void rules() {
         view.show("\n Welcome to Minesweeper! \n Rules: \n" +
@@ -42,6 +37,18 @@ public class ConsoleGameplay implements Gameplay {
                 "⬛ - Bomb. \n" +
                 "⬜ - Unopened cell. \n" +
                 "⛳ - Flag. \n \n");
+    }
+
+    @Override
+    public void start() {
+        rules();
+        levelChoice();
+        view.showFront();
+        activeGame = true;
+
+        while (activeGame) {
+            optionChoice();
+        }
     }
 
     @Override
@@ -77,7 +84,7 @@ public class ConsoleGameplay implements Gameplay {
         Cell cell = matrix.getCells()[line][col];
         if (!cell.getCellStatus().equals(CellStatus.OPENED)) {
             cell.setCellStatus(CellStatus.OPENED);
-            checkBomb(cell);
+            lose(cell);
             opener.openNeighbors(cell);
             win();
         } else {
@@ -113,9 +120,33 @@ public class ConsoleGameplay implements Gameplay {
     }
 
     @Override
+    public void win() {
+        int allDigits = countCells(cell -> cell.getDigit() > 0);
+        int openedDigits = countCells(cell -> cell.getDigit() > 0 && cell.getCellStatus().equals(CellStatus.OPENED));
+        int flaggedBombs = countCells(cell -> cell.isBomb() && cell.getCellStatus().equals(CellStatus.FLAGGED));
+        int totalBombs = countCells(Cell::isBomb);
+
+        boolean userWon = totalBombs == flaggedBombs && allDigits == openedDigits;
+        if (userWon) {
+            view.show("Congratulations! You won!");
+            reset();
+        }
+    }
+
+    @Override
+    public void lose(Cell cell) {
+        if (cell.isBomb()) {
+            view.showFront();
+            view.show("BOOM! \n" +
+                    "Game over. \n");
+            reset();
+        }
+    }
+
+    @Override
     public void reset() {
         view.show("\n Game reset! \n");
-        startGame();
+        start();
     }
 
     private Matrix setupMatrix(Matrix matrix1) {
@@ -156,38 +187,6 @@ public class ConsoleGameplay implements Gameplay {
                 view.invalidInput();
                 optionChoice();
             }
-        }
-    }
-
-    private void startGame() {
-        levelChoice();
-        view.showFront();
-        activeGame = true;
-
-        while (activeGame) {
-            optionChoice();
-        }
-    }
-
-    private void checkBomb(Cell cell) {
-        if (cell.isBomb()) {
-            view.showFront();
-            view.show("BOOM! \n" +
-                    "Game over. \n");
-            reset();
-        }
-    }
-
-    private void win() {
-        int allDigits = countCells(cell -> cell.getDigit() > 0);
-        int openedDigits = countCells(cell -> cell.getDigit() > 0 && cell.getCellStatus().equals(CellStatus.OPENED));
-        int flaggedBombs = countCells(cell -> cell.isBomb() && cell.getCellStatus().equals(CellStatus.FLAGGED));
-        int totalBombs = countCells(Cell::isBomb);
-
-        boolean userWon = totalBombs == flaggedBombs && allDigits == openedDigits;
-        if (userWon) {
-            view.show("Congratulations! You won!");
-            reset();
         }
     }
 
