@@ -10,19 +10,20 @@ import model.mines.Initializer;
 import model.mines.Matrix;
 import view.ConsoleView;
 
-import java.util.Random;
 import java.util.function.Predicate;
 
 public class ConsoleGameplay implements Gameplay {
     private final ConsoleView view;
     private final Initializer init;
+    private final NeighborOpener opener;
 
     private Matrix matrix;
     private boolean activeGame;
 
-    public ConsoleGameplay(ConsoleView view, Initializer init) {
+    public ConsoleGameplay(ConsoleView view, Initializer init, NeighborOpener opener) {
         this.view = view;
         this.init = init;
+        this.opener = opener;
     }
 
     public void start() {
@@ -77,7 +78,7 @@ public class ConsoleGameplay implements Gameplay {
         if (!cell.getCellStatus().equals(CellStatus.OPENED)) {
             cell.setCellStatus(CellStatus.OPENED);
             checkBomb(cell);
-            openNeighbors(cell);
+            opener.openNeighbors(cell);
             win();
         } else {
             view.invalidInput();
@@ -89,8 +90,9 @@ public class ConsoleGameplay implements Gameplay {
         int[] lineAndCol = view.getLineAndCol();
         int line = lineAndCol[0];
         int col = lineAndCol[1];
-        if (!matrix.getCells()[line][col].getCellStatus().equals(CellStatus.OPENED)) {
-            matrix.getCells()[line][col].setCellStatus(CellStatus.FLAGGED);
+        Cell cell = matrix.getCells()[line][col];
+        if (!cell.getCellStatus().equals(CellStatus.OPENED)) {
+            cell.setCellStatus(CellStatus.FLAGGED);
             win();
         } else {
             view.invalidInput();
@@ -102,8 +104,9 @@ public class ConsoleGameplay implements Gameplay {
         int[] lineAndCol = view.getLineAndCol();
         int line = lineAndCol[0];
         int col = lineAndCol[1];
-        if (matrix.getCells()[line][col].getCellStatus().equals(CellStatus.FLAGGED)) {
-            matrix.getCells()[line][col].setCellStatus(CellStatus.UNOPENED);
+        Cell cell = matrix.getCells()[line][col];
+        if (cell.getCellStatus().equals(CellStatus.FLAGGED)) {
+            cell.setCellStatus(CellStatus.UNOPENED);
         } else {
             view.invalidInput();
         }
@@ -117,8 +120,9 @@ public class ConsoleGameplay implements Gameplay {
 
     private Matrix setupMatrix(Matrix matrix1) {
         matrix = matrix1;
-        init.setupMatrix(matrix);
-        this.view.setMatrix(matrix);
+        init.setMatrix(matrix);
+        view.setMatrix(matrix);
+        opener.setMatrix(matrix);
         return matrix;
     }
 
@@ -198,44 +202,5 @@ public class ConsoleGameplay implements Gameplay {
             }
         }
         return count;
-    }
-
-    private void openNeighbors(Cell cell) {
-        Random random = new Random();
-        for (int line = 0; line < matrix.getCells().length; line++) {
-            for (int col = 0; col < matrix.getCells()[line].length; col++) {
-                if (random.nextBoolean() && isNeighbor(cell, line, col)
-                        && !matrix.getCells()[line][col].getCellStatus().equals(CellStatus.FLAGGED)
-                        && !matrix.getCells()[line][col].isBomb()) {
-                    matrix.getCells()[line][col].setCellStatus(CellStatus.OPENED);
-                    openNeighbors(line, col);
-                }
-            }
-        }
-    }
-
-    private void openNeighbors(int line, int col) {
-        Random random = new Random();
-        for (int line1 = 0; line1 < matrix.getCells().length; line1++) {
-            for (int col1 = 0; col1 < matrix.getCells()[line1].length; col1++) {
-                if (random.nextBoolean() && isNeighbor(matrix.getCells()[line][col], line1, col1)
-                        && !matrix.getCells()[line1][col1].getCellStatus().equals(CellStatus.FLAGGED)
-                        && !matrix.getCells()[line1][col1].isBomb()) {
-                    matrix.getCells()[line1][col1].setCellStatus(CellStatus.OPENED);
-                }
-            }
-        }
-    }
-
-    private boolean isNeighbor(Cell cell, int line, int col) {
-        return (line != 0 && col != 0 && cell == matrix.getCells()[line - 1][col - 1])
-                || (line != 0 && cell == matrix.getCells()[line - 1][col])
-                || (line != 0 && col != matrix.getCells()[line].length - 1 && cell == matrix.getCells()[line - 1][col + 1])
-                || (col != 0 && cell == matrix.getCells()[line][col - 1])
-                || (col != matrix.getCells()[line].length - 1 && cell == matrix.getCells()[line][col + 1])
-                || (line != matrix.getCells().length - 1 && col != 0 && cell == matrix.getCells()[line + 1][col - 1])
-                || (line != matrix.getCells().length - 1 && cell == matrix.getCells()[line + 1][col])
-                || (line != matrix.getCells().length - 1 && col != matrix.getCells()[line].length - 1
-                && cell == matrix.getCells()[line + 1][col + 1]);
     }
 }

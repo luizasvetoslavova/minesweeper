@@ -15,7 +15,7 @@ public class Initializer {
     private Initializer() {
     }
 
-    public void setupMatrix(Matrix matrix) {
+    public void setMatrix(Matrix matrix) {
         setBombs(matrix);
         setDigits(matrix);
     }
