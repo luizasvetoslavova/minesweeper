@@ -9,17 +9,17 @@ public class Cell {
         this.cellStatus = CellStatus.UNOPENED;
     }
 
-    public void setBomb() {
+    void setBomb() {
         isBomb = true;
         digit = -1;
     }
 
-    public boolean isBomb() {
-        return isBomb;
+    void setDigit(int digit) {
+        this.digit = digit;
     }
 
-    public void setDigit(int digit) {
-        this.digit = digit;
+    public boolean isBomb() {
+        return isBomb;
     }
 
     public int getDigit() {

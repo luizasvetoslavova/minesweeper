@@ -1,4 +1,4 @@
-package presenter.gameplay;
+package presenter.gameplay.console;
 
 import model.levels.Easy;
 import model.levels.Expert;
@@ -8,6 +8,8 @@ import model.mines.Cell;
 import model.mines.CellStatus;
 import model.mines.Initializer;
 import model.mines.Matrix;
+import presenter.gameplay.Gameplay;
+import presenter.gameplay.NeighborOpener;
 import view.ConsoleView;
 
 import java.util.function.Predicate;
@@ -21,7 +23,7 @@ public class ConsoleGameplay implements Gameplay {
     private boolean activeGame;
     private int clickCount;
 
-    public ConsoleGameplay(ConsoleView view, Initializer init, NeighborOpener opener) {
+    ConsoleGameplay(ConsoleView view, Initializer init, NeighborOpener opener) {
         this.view = view;
         this.init = init;
         this.opener = opener;
@@ -158,9 +160,9 @@ public class ConsoleGameplay implements Gameplay {
         play();
     }
 
-    private void initOnFirstClick(Cell cell) {
+    private void initOnFirstClick(Cell firstOpened) {
         if (clickCount == 1) {
-            init.setMatrix(matrix, cell);
+            init.setMatrix(matrix, firstOpened);
         }
     }
 

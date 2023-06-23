@@ -17,6 +17,18 @@ public class NeighborOpener {
         }
     }
 
+    public boolean isNeighbor(Cell cell, int line, int col) {
+        return (line != 0 && col != 0 && cell == matrix.getCells()[line - 1][col - 1])
+                || (line != 0 && cell == matrix.getCells()[line - 1][col])
+                || (line != 0 && col != matrix.getCells()[line].length - 1 && cell == matrix.getCells()[line - 1][col + 1])
+                || (col != 0 && cell == matrix.getCells()[line][col - 1])
+                || (col != matrix.getCells()[line].length - 1 && cell == matrix.getCells()[line][col + 1])
+                || (line != matrix.getCells().length - 1 && col != 0 && cell == matrix.getCells()[line + 1][col - 1])
+                || (line != matrix.getCells().length - 1 && cell == matrix.getCells()[line + 1][col])
+                || (line != matrix.getCells().length - 1 && col != matrix.getCells()[line].length - 1
+                && cell == matrix.getCells()[line + 1][col + 1]);
+    }
+
     private void openRandomEmptyNeighbors(Cell cell) {
         Random random = new Random();
 
@@ -61,18 +73,6 @@ public class NeighborOpener {
                 }
             }
         }
-    }
-
-    private boolean isNeighbor(Cell cell, int line, int col) {
-        return (line != 0 && col != 0 && cell == matrix.getCells()[line - 1][col - 1])
-                || (line != 0 && cell == matrix.getCells()[line - 1][col])
-                || (line != 0 && col != matrix.getCells()[line].length - 1 && cell == matrix.getCells()[line - 1][col + 1])
-                || (col != 0 && cell == matrix.getCells()[line][col - 1])
-                || (col != matrix.getCells()[line].length - 1 && cell == matrix.getCells()[line][col + 1])
-                || (line != matrix.getCells().length - 1 && col != 0 && cell == matrix.getCells()[line + 1][col - 1])
-                || (line != matrix.getCells().length - 1 && cell == matrix.getCells()[line + 1][col])
-                || (line != matrix.getCells().length - 1 && col != matrix.getCells()[line].length - 1
-                && cell == matrix.getCells()[line + 1][col + 1]);
     }
 
     public void setMatrix(Matrix matrix) {

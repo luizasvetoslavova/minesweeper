@@ -73,16 +73,11 @@ public class ConsoleView {
     private void showRows(int numRows, boolean showBombs) {
         for (int line = 0; line < numRows; line++) {
             show(String.format("%2d ", line));
-            if (showBombs) {
-                showCellCases(line, showBombs);
-            } else {
-                showCellCases(line, showBombs);
-            }
+            showCellCases(line, showBombs);
             show("\n");
         }
         show("\n");
     }
-
 
     private void showCellCases(int line, boolean showBombs) {
         int numCols = matrix.getCells()[line].length;
@@ -105,6 +100,14 @@ public class ConsoleView {
             } else if (cellStatus.equals(CellStatus.UNOPENED)) {
                 show(" ⬜");
             } else if (cellStatus.equals(CellStatus.FLAGGED)) {
+                if (showBombs && !currentCell.isBomb()) {
+                    if (currentCell.getDigit() > 0) {
+                        show(String.valueOf(currentCell.getDigit()));
+                    } else {
+                        show(" ◽");
+                    }
+
+                }
                 show(" ⛳");
             }
         }
