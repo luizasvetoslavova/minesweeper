@@ -3,7 +3,6 @@ package view;
 import model.mines.Cell;
 import model.mines.CellStatus;
 import model.mines.Matrix;
-
 import java.util.Scanner;
 
 public class ConsoleView {
@@ -26,11 +25,11 @@ public class ConsoleView {
         show("Invalid input, please try again. \n");
     }
 
-    public void showFront(boolean showBombs) {
-        int numRows = matrix.getCells().length;
-        int numCols = matrix.getCells()[0].length;
-        showColumnHeaders(numCols);
-        showRows(numRows, showBombs);
+    public void showFront() {
+        int lines = matrix.getCells().length;
+        int cols = matrix.getCells()[0].length;
+        showColumnHeaders(cols);
+        showRows(lines);
     }
 
     public int[] getLineAndCol() {
@@ -55,9 +54,8 @@ public class ConsoleView {
 
         } catch (NumberFormatException e) {
             invalidInput();
-            getLineAndCol();
+            return getLineAndCol();
         }
-        return parameters;
     }
 
     private void showColumnHeaders(int numCols) {
@@ -70,25 +68,22 @@ public class ConsoleView {
         show("\n");
     }
 
-    private void showRows(int numRows, boolean showBombs) {
+    private void showRows(int numRows) {
         for (int line = 0; line < numRows; line++) {
             show(String.format("%2d ", line));
-            showCellCases(line, showBombs);
+            showCellCases(line);
             show("\n");
         }
         show("\n");
     }
 
-    private void showCellCases(int line, boolean showBombs) {
+    private void showCellCases(int line) {
         int numCols = matrix.getCells()[line].length;
 
         for (int col = 0; col < numCols; col++) {
             Cell currentCell = matrix.getCells()[line][col];
             CellStatus cellStatus = currentCell.getCellStatus();
 
-            if (showBombs && currentCell.isBomb()) {
-                show(" ⬛");
-            }
             if (cellStatus.equals(CellStatus.OPENED)) {
                 if (currentCell.getDigit() == 0) {
                     show(" ◽");
@@ -100,14 +95,6 @@ public class ConsoleView {
             } else if (cellStatus.equals(CellStatus.UNOPENED)) {
                 show(" ⬜");
             } else if (cellStatus.equals(CellStatus.FLAGGED)) {
-                if (showBombs && !currentCell.isBomb()) {
-                    if (currentCell.getDigit() > 0) {
-                        show(String.valueOf(currentCell.getDigit()));
-                    } else {
-                        show(" ◽");
-                    }
-
-                }
                 show(" ⛳");
             }
         }

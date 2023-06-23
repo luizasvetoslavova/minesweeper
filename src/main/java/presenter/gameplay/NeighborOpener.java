@@ -11,9 +11,10 @@ public class NeighborOpener {
 
     public void openNeighbors(Cell cell) {
         if (cell.getDigit() == 0) {
+            openAllNeighbors(cell);
             openEmptyNeighbors(cell);
         } else {
-            openRandomEmptyNeighbors(cell);
+            openRandomNeighbors(cell);
         }
     }
 
@@ -29,7 +30,7 @@ public class NeighborOpener {
                 && cell == matrix.getCells()[line + 1][col + 1]);
     }
 
-    private void openRandomEmptyNeighbors(Cell cell) {
+    private void openRandomNeighbors(Cell cell) {
         Random random = new Random();
 
         for (int line = 0; line < matrix.getCells().length; line++) {
@@ -42,7 +43,25 @@ public class NeighborOpener {
                     currentCell.setCellStatus(CellStatus.OPENED);
 
                     if (currentCell.getDigit() == 0) {
-                        openEmptyNeighbors(matrix.getCells()[line][col]);
+                        openAllNeighbors(currentCell);
+                        openEmptyNeighbors(currentCell);
+                    }
+                }
+            }
+        }
+    }
+
+    private void openAllNeighbors(Cell cell) {
+        for (int line = 0; line < matrix.getCells().length; line++) {
+            for (int col = 0; col < matrix.getCells()[line].length; col++) {
+                Cell currentCell = matrix.getCells()[line][col];
+
+                if (isNeighbor(cell, line, col) && !currentCell.getCellStatus().equals(CellStatus.FLAGGED)
+                        && !currentCell.isBomb()) {
+                    currentCell.setCellStatus(CellStatus.OPENED);
+
+                    if (currentCell.getDigit() == 0) {
+                        openEmptyNeighbors(currentCell);
                     }
                 }
             }

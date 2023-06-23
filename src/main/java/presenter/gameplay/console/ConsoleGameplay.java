@@ -12,6 +12,7 @@ import presenter.gameplay.Gameplay;
 import presenter.gameplay.NeighborOpener;
 import view.ConsoleView;
 
+import java.util.Arrays;
 import java.util.function.Predicate;
 
 public class ConsoleGameplay implements Gameplay {
@@ -23,7 +24,7 @@ public class ConsoleGameplay implements Gameplay {
     private boolean activeGame;
     private int clickCount;
 
-    ConsoleGameplay(ConsoleView view, Initializer init, NeighborOpener opener) {
+    public ConsoleGameplay(ConsoleView view, Initializer init, NeighborOpener opener) {
         this.view = view;
         this.init = init;
         this.opener = opener;
@@ -144,7 +145,8 @@ public class ConsoleGameplay implements Gameplay {
     @Override
     public void lose(Cell cell) {
         if (cell.isBomb()) {
-            view.showFront(true);
+            openAllBombs();
+            view.showFront();
             view.show("""
                     BOOM!\s
                     Game over.\s
@@ -153,11 +155,18 @@ public class ConsoleGameplay implements Gameplay {
         }
     }
 
+
     @Override
     public void reset() {
         clickCount = 0;
         view.show("\n Game reset! \n");
         play();
+    }
+
+    private void openAllBombs() {
+        Arrays.stream(matrix.getCells()).forEach(array -> Arrays.stream(array).forEach(cell -> {
+            if (cell.isBomb()) cell.setCellStatus(CellStatus.OPENED);
+        }));
     }
 
     private void initOnFirstClick(Cell firstOpened) {
@@ -168,7 +177,7 @@ public class ConsoleGameplay implements Gameplay {
 
     private void play() {
         levelChoice();
-        view.showFront(false);
+        view.showFront();
         activeGame = true;
 
         while (activeGame) {
@@ -195,15 +204,15 @@ public class ConsoleGameplay implements Gameplay {
         switch (view.userInput()) {
             case "1" -> {
                 openCell();
-                view.showFront(false);
+                view.showFront();
             }
             case "2" -> {
                 putFlag();
-                view.showFront(false);
+                view.showFront();
             }
             case "3" -> {
                 removeFlag();
-                view.showFront(false);
+                view.showFront();
             }
             case "4" -> reset();
             case "5" -> {
@@ -218,15 +227,10 @@ public class ConsoleGameplay implements Gameplay {
     }
 
     private int countCells(Predicate<Cell> condition) {
-        int count = 0;
-        for (int line = 0; line < matrix.getCells().length; line++) {
-            for (int col = 0; col < matrix.getCells()[line].length; col++) {
-                Cell cell = matrix.getCells()[line][col];
-                if (condition.test(cell)) {
-                    count++;
-                }
-            }
-        }
-        return count;
+        final int[] count = {0};
+        Arrays.stream(matrix.getCells()).forEach(array -> Arrays.stream(array).forEach(cell -> {
+            if (condition.test(cell)) count[0]++;
+        }));
+        return count[0];
     }
 }

@@ -1,6 +1,6 @@
 package model.mines;
 
-import model.levels.Easy;
+import model.levels.Hard;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -20,7 +20,7 @@ public class InitializerTest {
     @BeforeAll
     private void setUp() {
         Initializer initializer = Initializer.getInstance();
-        matrix = new Easy();
+        matrix = new Hard();
 
         Random random = new Random();
         int line = random.nextInt(matrix.getCells().length);
@@ -37,25 +37,20 @@ public class InitializerTest {
 
     @Test
     void testSetMatrix_WhenInitialized_ThenBombCountEqualsLevelBombCount() {
-        int bombCount = 0;
+        final int[] bombCount = {0};
+        Arrays.stream(matrix.getCells()).forEach(array -> Arrays.stream(array).forEach(cell -> {
+            if (cell.isBomb()) bombCount[0]++;
+        }));
 
-        for (int line = 0; line < matrix.getCells().length; line++) {
-            for (int col = 0; col < matrix.getCells()[line].length; col++) {
-                if (matrix.getCells()[line][col].isBomb()) {
-                    bombCount++;
-                }
-            }
-        }
-        Assertions.assertEquals(matrix.getBombCount(), bombCount);
+        Assertions.assertEquals(matrix.getBombCount(), bombCount[0]);
     }
 
     @Test
     void testSetMatrix_WhenInitialized_ThenDigitsMatchSurroundingBombsCount() {
         List<Cell> digits = new ArrayList<>();
         Arrays.stream(matrix.getCells()).forEach(array -> Arrays.stream(array).forEach(cell -> {
-                    if (cell.getDigit() > 0) digits.add(cell);
-                }
-        ));
+            if (cell.getDigit() > 0) digits.add(cell);
+        }));
 
         digits.forEach(cell -> Assertions.assertEquals(bombNeighborsCount(cell), cell.getDigit()));
     }
