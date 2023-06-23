@@ -1,8 +1,13 @@
-package Mines;
+package model.mines;
 
 public class Cell {
     private int digit;
     private boolean isBomb;
+    private CellStatus cellStatus;
+
+    public Cell() {
+        this.cellStatus = CellStatus.UNOPENED;
+    }
 
     public void setBomb() {
         isBomb = true;
@@ -19,5 +24,13 @@ public class Cell {
 
     public int getDigit() {
         return digit;
+    }
+
+    public CellStatus getCellStatus() {
+        return cellStatus;
+    }
+
+    public void setCellStatus(CellStatus cellStatus) {
+        this.cellStatus = cellStatus;
     }
 }
