@@ -24,7 +24,7 @@ public class Initializer {
         Random random = new Random();
         int bombCount = 0;
 
-        while (bombCount != matrix.bombCount) {
+        while (bombCount != matrix.getBombCount()) {
             int line = random.nextInt(matrix.getCells().length);
             int col = random.nextInt(matrix.getCells()[line].length);
 
