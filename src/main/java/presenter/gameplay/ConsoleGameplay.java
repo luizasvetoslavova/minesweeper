@@ -19,12 +19,13 @@ public class ConsoleGameplay implements Gameplay {
 
     private Matrix matrix;
     private boolean activeGame;
-    private Cell firstCell;
+    private int clickCount;
 
     public ConsoleGameplay(ConsoleView view, Initializer init, NeighborOpener opener) {
         this.view = view;
         this.init = init;
         this.opener = opener;
+        clickCount = 0;
     }
 
     @Override
@@ -81,14 +82,14 @@ public class ConsoleGameplay implements Gameplay {
     @Override
     public void openCell() {
         int[] lineAndCol = view.getLineAndCol();
+        clickCount++;
         int line = lineAndCol[0];
         int col = lineAndCol[1];
         Cell cell = matrix.getCells()[line][col];
-        firstCell = cell;
-        init.setMatrix(matrix, firstCell);
 
         if (!cell.getCellStatus().equals(CellStatus.OPENED)) {
             cell.setCellStatus(CellStatus.OPENED);
+            initOnFirstClick(cell);
             lose(cell);
             opener.openNeighbors(cell);
             win();
@@ -152,8 +153,15 @@ public class ConsoleGameplay implements Gameplay {
 
     @Override
     public void reset() {
+        clickCount = 0;
         view.show("\n Game reset! \n");
         play();
+    }
+
+    private void initOnFirstClick(Cell cell) {
+        if (clickCount == 1) {
+            init.setMatrix(matrix, cell);
+        }
     }
 
     private void play() {

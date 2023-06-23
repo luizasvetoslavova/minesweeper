@@ -1,7 +1,7 @@
 package model.mines;
 
 public abstract class Matrix {
-    final int bombCount;
+    private final int bombCount;
     private Cell[][] cells;
     private final int lines;
     private final int cols;
@@ -24,5 +24,9 @@ public abstract class Matrix {
                 cells[line][col] = new Cell();
             }
         }
+    }
+
+    public int getBombCount() {
+        return bombCount;
     }
 }

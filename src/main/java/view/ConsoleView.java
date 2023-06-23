@@ -43,7 +43,8 @@ public class ConsoleView {
             show("Column (vertical): ");
             int col = Integer.parseInt(userInput());
 
-            if (line < 0 || line > matrix.getCells().length - 1 || col < 0 || col > matrix.getCells()[0].length - 1) {
+            if (line < 0 || line > matrix.getCells().length - 1
+                    || col < 0 || col > matrix.getCells()[line].length - 1) {
                 invalidInput();
                 return getLineAndCol();
             }
@@ -98,7 +99,7 @@ public class ConsoleView {
                     show(" ◽");
                 } else if (currentCell.getDigit() > 0) {
                     show(String.format(" %d", currentCell.getDigit()));
-                } else if (!showBombs && currentCell.isBomb()) {
+                } else if (currentCell.isBomb()) {
                     show(" ⬛");
                 }
             } else if (cellStatus.equals(CellStatus.UNOPENED)) {
