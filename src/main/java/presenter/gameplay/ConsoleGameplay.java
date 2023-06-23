@@ -19,6 +19,7 @@ public class ConsoleGameplay implements Gameplay {
 
     private Matrix matrix;
     private boolean activeGame;
+    private Cell firstCell;
 
     public ConsoleGameplay(ConsoleView view, Initializer init, NeighborOpener opener) {
         this.view = view;
@@ -83,6 +84,9 @@ public class ConsoleGameplay implements Gameplay {
         int line = lineAndCol[0];
         int col = lineAndCol[1];
         Cell cell = matrix.getCells()[line][col];
+        firstCell = cell;
+        init.setMatrix(matrix, firstCell);
+
         if (!cell.getCellStatus().equals(CellStatus.OPENED)) {
             cell.setCellStatus(CellStatus.OPENED);
             lose(cell);
@@ -164,7 +168,6 @@ public class ConsoleGameplay implements Gameplay {
 
     private Matrix setupMatrix(Matrix matrix1) {
         matrix = matrix1;
-        init.setMatrix(matrix);
         view.setMatrix(matrix);
         opener.setMatrix(matrix);
         return matrix;

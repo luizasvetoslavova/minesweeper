@@ -15,12 +15,12 @@ public class Initializer {
     private Initializer() {
     }
 
-    public void setMatrix(Matrix matrix) {
-        setBombs(matrix);
+    public void setMatrix(Matrix matrix, Cell cell) {
+        setBombs(matrix, cell);
         setDigits(matrix);
     }
 
-    private void setBombs(Matrix matrix) {
+    private void setBombs(Matrix matrix, Cell cell) {
         Random random = new Random();
         int bombCount = 0;
 
@@ -28,7 +28,7 @@ public class Initializer {
             int line = random.nextInt(matrix.getCells().length);
             int col = random.nextInt(matrix.getCells()[line].length);
 
-            if (!matrix.getCells()[line][col].isBomb()) {
+            if (!matrix.getCells()[line][col].isBomb() && !matrix.getCells()[line][col].equals(cell)) {
                 matrix.getCells()[line][col].setBomb();
                 bombCount++;
             }
