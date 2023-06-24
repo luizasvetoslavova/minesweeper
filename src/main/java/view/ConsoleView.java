@@ -28,8 +28,8 @@ public class ConsoleView {
     public void showFront() {
         int lines = matrix.getCells().length;
         int cols = matrix.getCells()[0].length;
-        showColumnHeaders(cols);
-        showRows(lines);
+        showColumnIndexes(cols);
+        showLineIndexes(lines);
     }
 
     public int[] getLineAndCol() {
@@ -58,7 +58,7 @@ public class ConsoleView {
         }
     }
 
-    private void showColumnHeaders(int numCols) {
+    private void showColumnIndexes(int numCols) {
         show("\n");
         show("   ");
         for (int index = 0; index < numCols; index++) {
@@ -68,7 +68,7 @@ public class ConsoleView {
         show("\n");
     }
 
-    private void showRows(int numRows) {
+    private void showLineIndexes(int numRows) {
         for (int line = 0; line < numRows; line++) {
             show(String.format("%2d ", line));
             showCellCases(line);

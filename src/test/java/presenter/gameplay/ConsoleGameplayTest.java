@@ -1,6 +1,5 @@
 package presenter.gameplay;
 
-import model.levels.Hard;
 import model.mines.Initializer;
 import model.mines.Matrix;
 import org.junit.jupiter.api.BeforeAll;
@@ -19,6 +18,5 @@ public class ConsoleGameplayTest {
     private void setUp() {
         gameplay = new ConsoleGameplay(new ConsoleView(new Scanner(System.in)), Initializer.getInstance(),
                 new NeighborOpener());
-        matrix = new Hard();
     }
 }
