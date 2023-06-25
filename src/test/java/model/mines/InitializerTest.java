@@ -1,7 +1,6 @@
 package model.mines;
 
 import model.levels.Hard;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -11,6 +10,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class InitializerTest {
@@ -32,7 +34,7 @@ public class InitializerTest {
 
     @Test
     void testSetMatrix_WhenFirstCellIsOpened_ThenCellIsNotBomb() {
-        Assertions.assertFalse(firstClicked.isBomb());
+        assertFalse(firstClicked.isBomb());
     }
 
     @Test
@@ -42,7 +44,7 @@ public class InitializerTest {
             if (cell.isBomb()) bombCount[0]++;
         }));
 
-        Assertions.assertEquals(matrix.getBombCount(), bombCount[0]);
+        assertEquals(matrix.getBombCount(), bombCount[0]);
     }
 
     @Test
@@ -52,7 +54,7 @@ public class InitializerTest {
             if (cell.getDigit() > 0) digits.add(cell);
         }));
 
-        digits.forEach(cell -> Assertions.assertEquals(bombNeighborsCount(cell), cell.getDigit()));
+        digits.forEach(cell -> assertEquals(bombNeighborsCount(cell), cell.getDigit()));
     }
 
     private int bombNeighborsCount(Cell cell) {

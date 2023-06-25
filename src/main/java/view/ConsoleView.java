@@ -3,6 +3,7 @@ package view;
 import model.mines.Cell;
 import model.mines.CellStatus;
 import model.mines.Matrix;
+
 import java.util.Scanner;
 
 public class ConsoleView {
@@ -33,8 +34,6 @@ public class ConsoleView {
     }
 
     public int[] getLineAndCol() {
-        int[] parameters = new int[2];
-
         show("Specify cell line and column (for ex. 1 and 7) \n" +
                 "Line (horizontal): ");
         try {
@@ -45,16 +44,13 @@ public class ConsoleView {
             if (line < 0 || line > matrix.getCells().length - 1
                     || col < 0 || col > matrix.getCells()[line].length - 1) {
                 invalidInput();
-                return getLineAndCol();
+                return null;
             }
-
-            parameters[0] = line;
-            parameters[1] = col;
-            return parameters;
+            return new int[]{line, col};
 
         } catch (NumberFormatException e) {
             invalidInput();
-            return getLineAndCol();
+            return null;
         }
     }
 

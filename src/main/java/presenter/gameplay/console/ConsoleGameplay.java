@@ -104,6 +104,7 @@ public class ConsoleGameplay implements Gameplay {
     @Override
     public void putFlag() {
         int[] lineAndCol = view.getLineAndCol();
+        recursionUntilRight(lineAndCol);
         int line = lineAndCol[0];
         int col = lineAndCol[1];
         Cell cell = matrix.getCells()[line][col];
@@ -139,6 +140,12 @@ public class ConsoleGameplay implements Gameplay {
         if (userWon) {
             view.show("Congratulations! You won!");
             reset();
+        }
+    }
+
+    private void recursionUntilRight(int[] lineAndCol) {
+        while (lineAndCol == null) {
+            lineAndCol = view.getLineAndCol();
         }
     }
 

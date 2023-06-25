@@ -4,7 +4,6 @@ import model.levels.Easy;
 import model.mines.Cell;
 import model.mines.CellStatus;
 import model.mines.Matrix;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -12,6 +11,8 @@ import org.junit.jupiter.api.TestInstance;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class NeighborOpenerTest {
@@ -29,7 +30,7 @@ public class NeighborOpenerTest {
     void testOpenNeighbors_WhenOpenedCellIsEmpty_ThenOpenAllNeighbors() {
         Cell empty = getFirstEmptyCell();
         opener.openNeighbors(empty);
-        getAllNeighbors(empty).forEach(neighbor -> Assertions.assertEquals(neighbor.getCellStatus(), CellStatus.OPENED));
+        getAllNeighbors(empty).forEach(neighbor -> assertEquals(neighbor.getCellStatus(), CellStatus.OPENED));
     }
 
     @Test
@@ -39,7 +40,7 @@ public class NeighborOpenerTest {
         Arrays.stream(matrix.getCells()).forEach(array -> Arrays.stream(array).forEach(cell -> {
             if (cell.getDigit() == 0 && cell.getCellStatus().equals(CellStatus.OPENED)) {
                 getAllNeighbors(cell).forEach(neighbor -> {
-                    if (neighbor.getDigit() == 0) Assertions.assertEquals(neighbor.getCellStatus(), CellStatus.OPENED);
+                    if (neighbor.getDigit() == 0) assertEquals(neighbor.getCellStatus(), CellStatus.OPENED);
                 });
             }
         }));
@@ -59,7 +60,7 @@ public class NeighborOpenerTest {
                 }
             }
         }
-        Assertions.assertTrue(getAllNeighbors(randomCell).contains(neighbor));
+        assertTrue(getAllNeighbors(randomCell).contains(neighbor));
     }
 
     @Test
@@ -77,7 +78,7 @@ public class NeighborOpenerTest {
                 }
             }
         }
-        Assertions.assertFalse(getAllNeighbors(randomCell).contains(nonNeighbor));
+        assertFalse(getAllNeighbors(randomCell).contains(nonNeighbor));
     }
 
     private Cell getRandomCell() {
