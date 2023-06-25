@@ -23,12 +23,13 @@ public class InitializerTest {
     private void setUpMatrixAndFirstClicked() {
         Initializer initializer = Initializer.getInstance();
         matrix = new Hard();
+        initializer.setMatrix(matrix);
 
         Random random = new Random();
         int line = random.nextInt(matrix.getCells().length);
         int col = random.nextInt(matrix.getCells()[line].length);
         firstClicked = matrix.getCells()[line][col];
-        initializer.initOnFirstClick(firstClicked, 1, matrix);
+        initializer.initOnFirstClick(firstClicked, 1);
     }
 
     @Test

@@ -86,7 +86,7 @@ public class ConsoleGameplay implements Gameplay {
 
         if (!cell.getCellStatus().equals(CellStatus.OPENED)) {
             cell.setCellStatus(CellStatus.OPENED);
-            init.initOnFirstClick(cell, openedCount, matrix);
+            init.initOnFirstClick(cell, openedCount);
             lose(cell);
             opener.openNeighbors(cell);
             win();
@@ -102,7 +102,7 @@ public class ConsoleGameplay implements Gameplay {
 
         if (!cell.getCellStatus().equals(CellStatus.OPENED)) {
             cell.setCellStatus(CellStatus.FLAGGED);
-            win();
+            if (openedCount > 0) win();
         } else {
             view.invalidInput();
         }
@@ -127,9 +127,9 @@ public class ConsoleGameplay implements Gameplay {
         int flaggedBombs = countCells(cell -> cell.isBomb() && cell.getCellStatus().equals(CellStatus.FLAGGED));
         int totalBombs = countCells(Cell::isBomb);
 
-        boolean userWon = totalBombs == flaggedBombs && allDigits == openedDigits;
+        boolean userWon = (totalBombs == flaggedBombs) && (allDigits == openedDigits);
         if (userWon) {
-            view.show("Congratulations! You won!");
+            view.show("Congratulations! You won!\n");
             reset();
         }
     }
@@ -167,6 +167,7 @@ public class ConsoleGameplay implements Gameplay {
     private void setupMatrix(Matrix matrix1) {
         matrix = matrix1;
         view.setMatrix(matrix);
+        init.setMatrix(matrix);
         opener.setMatrix(matrix);
     }
 
@@ -206,9 +207,12 @@ public class ConsoleGameplay implements Gameplay {
 
     private int countCells(Predicate<Cell> condition) {
         final int[] count = {0};
-        Arrays.stream(matrix.getCells()).forEach(array -> Arrays.stream(array).forEach(cell -> {
-            if (condition.test(cell)) count[0]++;
-        }));
+        Arrays.stream(matrix.getCells()).flatMap(Arrays::stream)
+                .forEach(cell -> {
+                    if (condition.test(cell)) {
+                        count[0]++;
+                    }
+                });
         return count[0];
     }
 
