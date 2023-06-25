@@ -15,20 +15,20 @@ public class Initializer {
     private Initializer() {
     }
 
-    public void setMatrix(Matrix matrix, Cell cell) {
-        setBombs(matrix, cell);
+    public void setMatrix(Matrix matrix, Cell firstOpened) {
+        setBombs(matrix, firstOpened);
         setDigits(matrix);
     }
 
-    private void setBombs(Matrix matrix, Cell cell) {
+    private void setBombs(Matrix matrix, Cell firstOpened) {
         Random random = new Random();
         int bombCount = 0;
 
-        while (bombCount != matrix.getBombCount()) {
+        while (bombCount < matrix.getBombCount()) {
             int line = random.nextInt(matrix.getCells().length);
             int col = random.nextInt(matrix.getCells()[line].length);
 
-            if (!matrix.getCells()[line][col].isBomb() && !matrix.getCells()[line][col].equals(cell)) {
+            if (!matrix.getCells()[line][col].isBomb() && !matrix.getCells()[line][col].equals(firstOpened)) {
                 matrix.getCells()[line][col].setBomb();
                 bombCount++;
             }

@@ -26,16 +26,14 @@ public class ConsoleView {
         show("Invalid input, please try again. \n");
     }
 
-    public void showFront(boolean showBombs) {
-        int numRows = matrix.getCells().length;
-        int numCols = matrix.getCells()[0].length;
-        showColumnHeaders(numCols);
-        showRows(numRows, showBombs);
+    public void showFront() {
+        int lines = matrix.getCells().length;
+        int cols = matrix.getCells()[0].length;
+        showColumnIndexes(cols);
+        showLineIndexes(lines);
     }
 
     public int[] getLineAndCol() {
-        int[] parameters = new int[2];
-
         show("Specify cell line and column (for ex. 1 and 7) \n" +
                 "Line (horizontal): ");
         try {
@@ -46,21 +44,17 @@ public class ConsoleView {
             if (line < 0 || line > matrix.getCells().length - 1
                     || col < 0 || col > matrix.getCells()[line].length - 1) {
                 invalidInput();
-                return getLineAndCol();
+                return null;
             }
-
-            parameters[0] = line;
-            parameters[1] = col;
-            return parameters;
+            return new int[]{line, col};
 
         } catch (NumberFormatException e) {
             invalidInput();
-            getLineAndCol();
+            return null;
         }
-        return parameters;
     }
 
-    private void showColumnHeaders(int numCols) {
+    private void showColumnIndexes(int numCols) {
         show("\n");
         show("   ");
         for (int index = 0; index < numCols; index++) {
@@ -70,30 +64,22 @@ public class ConsoleView {
         show("\n");
     }
 
-    private void showRows(int numRows, boolean showBombs) {
+    private void showLineIndexes(int numRows) {
         for (int line = 0; line < numRows; line++) {
             show(String.format("%2d ", line));
-            if (showBombs) {
-                showCellCases(line, showBombs);
-            } else {
-                showCellCases(line, showBombs);
-            }
+            showCellCases(line);
             show("\n");
         }
         show("\n");
     }
 
-
-    private void showCellCases(int line, boolean showBombs) {
+    private void showCellCases(int line) {
         int numCols = matrix.getCells()[line].length;
 
         for (int col = 0; col < numCols; col++) {
             Cell currentCell = matrix.getCells()[line][col];
             CellStatus cellStatus = currentCell.getCellStatus();
 
-            if (showBombs && currentCell.isBomb()) {
-                show(" ⬛");
-            }
             if (cellStatus.equals(CellStatus.OPENED)) {
                 if (currentCell.getDigit() == 0) {
                     show(" ◽");

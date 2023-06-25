@@ -11,13 +11,26 @@ public class NeighborOpener {
 
     public void openNeighbors(Cell cell) {
         if (cell.getDigit() == 0) {
+            openAllNeighbors(cell);
             openEmptyNeighbors(cell);
         } else {
-            openRandomEmptyNeighbors(cell);
+            openRandomNeighbors(cell);
         }
     }
 
-    private void openRandomEmptyNeighbors(Cell cell) {
+    public boolean isNeighbor(Cell cell, int line, int col) {
+        return (line != 0 && col != 0 && cell == matrix.getCells()[line - 1][col - 1])
+                || (line != 0 && cell == matrix.getCells()[line - 1][col])
+                || (line != 0 && col != matrix.getCells()[line].length - 1 && cell == matrix.getCells()[line - 1][col + 1])
+                || (col != 0 && cell == matrix.getCells()[line][col - 1])
+                || (col != matrix.getCells()[line].length - 1 && cell == matrix.getCells()[line][col + 1])
+                || (line != matrix.getCells().length - 1 && col != 0 && cell == matrix.getCells()[line + 1][col - 1])
+                || (line != matrix.getCells().length - 1 && cell == matrix.getCells()[line + 1][col])
+                || (line != matrix.getCells().length - 1 && col != matrix.getCells()[line].length - 1
+                && cell == matrix.getCells()[line + 1][col + 1]);
+    }
+
+    private void openRandomNeighbors(Cell cell) {
         Random random = new Random();
 
         for (int line = 0; line < matrix.getCells().length; line++) {
@@ -30,7 +43,25 @@ public class NeighborOpener {
                     currentCell.setCellStatus(CellStatus.OPENED);
 
                     if (currentCell.getDigit() == 0) {
-                        openEmptyNeighbors(matrix.getCells()[line][col]);
+                        openAllNeighbors(currentCell);
+                        openEmptyNeighbors(currentCell);
+                    }
+                }
+            }
+        }
+    }
+
+    private void openAllNeighbors(Cell cell) {
+        for (int line = 0; line < matrix.getCells().length; line++) {
+            for (int col = 0; col < matrix.getCells()[line].length; col++) {
+                Cell currentCell = matrix.getCells()[line][col];
+
+                if (isNeighbor(cell, line, col) && !currentCell.getCellStatus().equals(CellStatus.FLAGGED)
+                        && !currentCell.isBomb()) {
+                    currentCell.setCellStatus(CellStatus.OPENED);
+
+                    if (currentCell.getDigit() == 0) {
+                        openEmptyNeighbors(currentCell);
                     }
                 }
             }
@@ -61,18 +92,6 @@ public class NeighborOpener {
                 }
             }
         }
-    }
-
-    private boolean isNeighbor(Cell cell, int line, int col) {
-        return (line != 0 && col != 0 && cell == matrix.getCells()[line - 1][col - 1])
-                || (line != 0 && cell == matrix.getCells()[line - 1][col])
-                || (line != 0 && col != matrix.getCells()[line].length - 1 && cell == matrix.getCells()[line - 1][col + 1])
-                || (col != 0 && cell == matrix.getCells()[line][col - 1])
-                || (col != matrix.getCells()[line].length - 1 && cell == matrix.getCells()[line][col + 1])
-                || (line != matrix.getCells().length - 1 && col != 0 && cell == matrix.getCells()[line + 1][col - 1])
-                || (line != matrix.getCells().length - 1 && cell == matrix.getCells()[line + 1][col])
-                || (line != matrix.getCells().length - 1 && col != matrix.getCells()[line].length - 1
-                && cell == matrix.getCells()[line + 1][col + 1]);
     }
 
     public void setMatrix(Matrix matrix) {
