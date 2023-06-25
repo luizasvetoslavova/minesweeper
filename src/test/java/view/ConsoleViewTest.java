@@ -2,6 +2,7 @@ package view;
 
 import model.levels.Easy;
 import model.levels.Hard;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
@@ -15,27 +16,31 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ConsoleViewTest {
     private ConsoleView view;
 
+    @AfterEach
+    private void setOutSystemOut() {
+        System.setOut(System.out);
+    }
+
     @Test
     void testShow_WhenStringGiven_ThenPrintInConsole() {
         view = new ConsoleView(new Scanner(System.in));
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outputStream));
-        String input = "Hello, World!";
-        view.show(input);
+        String expectedOutput = "Hello, World!";
+        view.show(expectedOutput);
 
-        assertEquals(input, outputStream.toString());
-        System.setOut(System.out);
+        assertEquals(expectedOutput, outputStream.toString());
     }
 
     @Test
-    void testUserInput_WhenStringGiven_ThenReturnInputToString() {
-        String expectedInput = "Hello, World!";
-        InputStream inputStream = new ByteArrayInputStream(expectedInput.getBytes());
+    void testUserInput_WhenTextGiven_ThenReturnInputToString() {
+        String input = "Hello, World!";
+        InputStream inputStream = new ByteArrayInputStream(input.getBytes());
 
         view = new ConsoleView(new Scanner(inputStream));
         String userInput = view.userInput();
-        assertEquals(expectedInput, userInput);
+        assertEquals(input, userInput);
     }
 
     @Test
@@ -48,11 +53,10 @@ public class ConsoleViewTest {
         view.invalidInput();
 
         assertEquals(invalidInputMessage, outputStream.toString());
-        System.setOut(System.out);
     }
 
     @Test
-    void testShowFront_WhenNoneAreOpened_ThenShowUnopenedCellsAndColumnIndexes() {
+    void testShowFront_WhenAllUnopened_ThenShowAllCellsAndColumnIndexes() {
         view = new ConsoleView(new Scanner(System.in));
         view.setMatrix(new Hard());
 
@@ -80,7 +84,6 @@ public class ConsoleViewTest {
 
         view.showFront();
         assertEquals(front, outputStream.toString());
-        System.setOut(System.out);
     }
 
     @Test
@@ -97,9 +100,7 @@ public class ConsoleViewTest {
         view = new ConsoleView(scanner);
         view.setMatrix(new Easy());
         int[] parameters = view.getLineAndCol();
-
         assertArrayEquals(expectedParameters, parameters);
-        System.setOut(System.out);
     }
 
     @Test
@@ -117,6 +118,5 @@ public class ConsoleViewTest {
         int[] parameters = view.getLineAndCol();
         assertNull(parameters);
         assertTrue(outputStream.toString().contains(expectedOutput));
-        System.setOut(System.out);
     }
 }

@@ -14,7 +14,7 @@ public class MatrixTest {
     private Matrix matrix;
 
     @BeforeAll
-    private void setUp() {
+    private void setUpMatrix() {
         matrix = new Hard();
     }
 

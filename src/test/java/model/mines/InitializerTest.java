@@ -20,7 +20,7 @@ public class InitializerTest {
     private Cell firstClicked;
 
     @BeforeAll
-    private void setUp() {
+    private void setUpMatrixAndFirstClicked() {
         Initializer initializer = Initializer.getInstance();
         matrix = new Hard();
 
@@ -28,7 +28,6 @@ public class InitializerTest {
         int line = random.nextInt(matrix.getCells().length);
         int col = random.nextInt(matrix.getCells()[line].length);
         firstClicked = matrix.getCells()[line][col];
-
         initializer.setMatrix(matrix, firstClicked);
     }
 
@@ -43,7 +42,6 @@ public class InitializerTest {
         Arrays.stream(matrix.getCells()).forEach(array -> Arrays.stream(array).forEach(cell -> {
             if (cell.isBomb()) bombCount[0]++;
         }));
-
         assertEquals(matrix.getBombCount(), bombCount[0]);
     }
 
