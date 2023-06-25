@@ -236,47 +236,11 @@ public class ConsoleGameplay implements Gameplay {
         return count[0];
     }
 
-    public void setView(ConsoleView view) {
-        this.view = view;
-    }
-
     public Matrix getMatrix() {
         return matrix;
     }
 
-    public void setOpener(NeighborOpener opener) {
-        this.opener = opener;
-    }
-
     public void setMatrix(Matrix matrix) {
         this.matrix = matrix;
-    }
-
-    public ConsoleView getView() {
-        return view;
-    }
-
-    public Initializer getInit() {
-        return init;
-    }
-
-    public NeighborOpener getOpener() {
-        return opener;
-    }
-
-    public boolean isActiveGame() {
-        return activeGame;
-    }
-
-    public int getOpenedCount() {
-        return openedCount;
-    }
-
-    public void setActiveGame(boolean activeGame) {
-        this.activeGame = activeGame;
-    }
-
-    public void setOpenedCount(int openedCount) {
-        this.openedCount = openedCount;
     }
 }
