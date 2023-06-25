@@ -4,7 +4,7 @@ import model.levels.Hard;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import presenter.gameplay.NeighborOpener;
+import presenter.gameplay.CellOpener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,12 +23,13 @@ public class InitializerTest {
     private void setUpMatrixAndFirstClicked() {
         Initializer initializer = Initializer.getInstance();
         matrix = new Hard();
+        initializer.setMatrix(matrix);
 
         Random random = new Random();
         int line = random.nextInt(matrix.getCells().length);
         int col = random.nextInt(matrix.getCells()[line].length);
         firstClicked = matrix.getCells()[line][col];
-        initializer.setMatrix(matrix, firstClicked);
+        initializer.initOnFirstClick(firstClicked, 1);
     }
 
     @Test
@@ -56,7 +57,7 @@ public class InitializerTest {
     }
 
     private int bombNeighborsCount(Cell cell) {
-        NeighborOpener opener = new NeighborOpener();
+        CellOpener opener = new CellOpener();
         opener.setMatrix(matrix);
         int counter = 0;
 

@@ -110,13 +110,13 @@ public class ConsoleViewTest {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outputStream));
 
-        String expectedInput = "10\n15\n";
+        String expectedInput = "10\n15\n1\n2\n";
         InputStream inputStream = new ByteArrayInputStream(expectedInput.getBytes());
         view = new ConsoleView(new Scanner(inputStream));
         view.setMatrix(new Easy());
 
         int[] parameters = view.getLineAndCol();
-        assertNull(parameters);
+        assertArrayEquals(parameters, new int[] {1, 2});
         assertTrue(outputStream.toString().contains(expectedOutput));
     }
 }

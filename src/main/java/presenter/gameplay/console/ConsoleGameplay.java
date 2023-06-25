@@ -9,22 +9,22 @@ import model.mines.CellStatus;
 import model.mines.Initializer;
 import model.mines.Matrix;
 import presenter.gameplay.Gameplay;
-import presenter.gameplay.NeighborOpener;
+import presenter.gameplay.CellOpener;
 import view.ConsoleView;
 
 import java.util.Arrays;
 import java.util.function.Predicate;
 
 public class ConsoleGameplay implements Gameplay {
-    private ConsoleView view;
+    private final ConsoleView view;
     private final Initializer init;
-    private NeighborOpener opener;
+    private final CellOpener opener;
 
     private Matrix matrix;
     private boolean activeGame;
     private int openedCount;
 
-    public ConsoleGameplay(ConsoleView view, Initializer init, NeighborOpener opener) {
+    public ConsoleGameplay(ConsoleView view, Initializer init, CellOpener opener) {
         this.view = view;
         this.init = init;
         this.opener = opener;
@@ -71,7 +71,7 @@ public class ConsoleGameplay implements Gameplay {
             case "2" -> setupMatrix(new Medium());
             case "3" -> setupMatrix(new Hard());
             case "4" -> setupMatrix(new Expert());
-            default  ->  {
+            default -> {
                 view.invalidInput();
                 levelChoice();
             }
@@ -80,15 +80,13 @@ public class ConsoleGameplay implements Gameplay {
 
     @Override
     public void openCell() {
-        int[] lineAndCol = getLineAndCol();
+        int[] lineAndCol = view.getLineAndCol();
         openedCount++;
-        int line = lineAndCol[0];
-        int col = lineAndCol[1];
-        Cell cell = matrix.getCells()[line][col];
+        Cell cell = matrix.getCells()[lineAndCol[0]][lineAndCol[1]];
 
         if (!cell.getCellStatus().equals(CellStatus.OPENED)) {
             cell.setCellStatus(CellStatus.OPENED);
-            initOnFirstClick(cell);
+            init.initOnFirstClick(cell, openedCount);
             lose(cell);
             opener.openNeighbors(cell);
             win();
@@ -99,13 +97,12 @@ public class ConsoleGameplay implements Gameplay {
 
     @Override
     public void putFlag() {
-        int[] lineAndCol = getLineAndCol();
-        int line = lineAndCol[0];
-        int col = lineAndCol[1];
-        Cell cell = matrix.getCells()[line][col];
+        int[] lineAndCol = view.getLineAndCol();
+        Cell cell = matrix.getCells()[lineAndCol[0]][lineAndCol[1]];
+
         if (!cell.getCellStatus().equals(CellStatus.OPENED)) {
             cell.setCellStatus(CellStatus.FLAGGED);
-            win();
+            if (openedCount > 0) win();
         } else {
             view.invalidInput();
         }
@@ -113,10 +110,9 @@ public class ConsoleGameplay implements Gameplay {
 
     @Override
     public void removeFlag() {
-        int[] lineAndCol = getLineAndCol();
-        int line = lineAndCol[0];
-        int col = lineAndCol[1];
-        Cell cell = matrix.getCells()[line][col];
+        int[] lineAndCol = view.getLineAndCol();
+        Cell cell = matrix.getCells()[lineAndCol[0]][lineAndCol[1]];
+
         if (cell.getCellStatus().equals(CellStatus.FLAGGED)) {
             cell.setCellStatus(CellStatus.UNOPENED);
         } else {
@@ -131,9 +127,9 @@ public class ConsoleGameplay implements Gameplay {
         int flaggedBombs = countCells(cell -> cell.isBomb() && cell.getCellStatus().equals(CellStatus.FLAGGED));
         int totalBombs = countCells(Cell::isBomb);
 
-        boolean userWon = totalBombs == flaggedBombs && allDigits == openedDigits;
+        boolean userWon = (totalBombs == flaggedBombs) && (allDigits == openedDigits);
         if (userWon) {
-            view.show("Congratulations! You won!");
+            view.show("Congratulations! You won!\n");
             reset();
         }
     }
@@ -141,7 +137,7 @@ public class ConsoleGameplay implements Gameplay {
     @Override
     public void lose(Cell cell) {
         if (cell.isBomb()) {
-            openAllBombs();
+            opener.openAllBombs();
             view.showFront();
             view.show("""
                     BOOM!\s
@@ -158,26 +154,6 @@ public class ConsoleGameplay implements Gameplay {
         play();
     }
 
-    private int[] getLineAndCol() {
-        int[] lineAndCol = view.getLineAndCol();
-        while (lineAndCol == null) {
-            lineAndCol = view.getLineAndCol();
-        }
-        return lineAndCol;
-    }
-
-    private void openAllBombs() {
-        Arrays.stream(matrix.getCells()).forEach(array -> Arrays.stream(array).forEach(cell -> {
-            if (cell.isBomb()) cell.setCellStatus(CellStatus.OPENED);
-        }));
-    }
-
-    private void initOnFirstClick(Cell firstOpened) {
-        if (openedCount == 1) {
-            init.setMatrix(matrix, firstOpened);
-        }
-    }
-
     private void play() {
         levelChoice();
         view.showFront();
@@ -191,6 +167,7 @@ public class ConsoleGameplay implements Gameplay {
     private void setupMatrix(Matrix matrix1) {
         matrix = matrix1;
         view.setMatrix(matrix);
+        init.setMatrix(matrix);
         opener.setMatrix(matrix);
     }
 
@@ -230,53 +207,17 @@ public class ConsoleGameplay implements Gameplay {
 
     private int countCells(Predicate<Cell> condition) {
         final int[] count = {0};
-        Arrays.stream(matrix.getCells()).forEach(array -> Arrays.stream(array).forEach(cell -> {
-            if (condition.test(cell)) count[0]++;
-        }));
+        Arrays.stream(matrix.getCells()).flatMap(Arrays::stream).forEach(cell -> {
+                    if (condition.test(cell)) count[0]++;
+                });
         return count[0];
-    }
-
-    public void setView(ConsoleView view) {
-        this.view = view;
     }
 
     public Matrix getMatrix() {
         return matrix;
     }
 
-    public void setOpener(NeighborOpener opener) {
-        this.opener = opener;
-    }
-
     public void setMatrix(Matrix matrix) {
         this.matrix = matrix;
-    }
-
-    public ConsoleView getView() {
-        return view;
-    }
-
-    public Initializer getInit() {
-        return init;
-    }
-
-    public NeighborOpener getOpener() {
-        return opener;
-    }
-
-    public boolean isActiveGame() {
-        return activeGame;
-    }
-
-    public int getOpenedCount() {
-        return openedCount;
-    }
-
-    public void setActiveGame(boolean activeGame) {
-        this.activeGame = activeGame;
-    }
-
-    public void setOpenedCount(int openedCount) {
-        this.openedCount = openedCount;
     }
 }

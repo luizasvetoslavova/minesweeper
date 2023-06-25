@@ -4,6 +4,7 @@ import java.util.Random;
 
 public class Initializer {
     private static Initializer instance = null;
+    private Matrix matrix;
 
     public static Initializer getInstance() {
         if (instance == null) {
@@ -15,12 +16,18 @@ public class Initializer {
     private Initializer() {
     }
 
-    public void setMatrix(Matrix matrix, Cell firstOpened) {
-        setBombs(matrix, firstOpened);
-        setDigits(matrix);
+    public void initOnFirstClick(Cell firstOpened, int openedCount) {
+        if (openedCount == 1) {
+            setMatrix(firstOpened);
+        }
     }
 
-    private void setBombs(Matrix matrix, Cell firstOpened) {
+    private void setMatrix(Cell firstOpened) {
+        setBombs(firstOpened);
+        setDigits();
+    }
+
+    private void setBombs(Cell firstOpened) {
         Random random = new Random();
         int bombCount = 0;
 
@@ -35,36 +42,39 @@ public class Initializer {
         }
     }
 
-    private void setDigits(Matrix matrix) {
+    private void setDigits() {
         for (int line = 0; line < matrix.getCells().length; line++) {
             for (int col = 0; col < matrix.getCells()[line].length; col++) {
-                matrix.getCells()[line][col].setDigit(setDigit(line, col, matrix));
+                matrix.getCells()[line][col].setDigit(setDigit(line, col));
             }
         }
     }
 
-    private int setDigit(int line, int col, Matrix matrix) {
+    private int setDigit(int line, int col) {
         int digit = 0;
+
         if (!matrix.getCells()[line][col].isBomb()) {
-            if (line != 0 && col != 0 && matrix.getCells()[line - 1][col - 1].isBomb())
-                digit++;
-            if (line != 0 && matrix.getCells()[line - 1][col].isBomb())
-                digit++;
-            if (line != 0 && col != matrix.getCells()[line].length - 1 && matrix.getCells()[line - 1][col + 1].isBomb())
-                digit++;
-            if (col != 0 && matrix.getCells()[line][col - 1].isBomb())
-                digit++;
-            if (col != matrix.getCells()[line].length - 1 && matrix.getCells()[line][col + 1].isBomb())
-                digit++;
-            if (line != matrix.getCells().length - 1 && col != 0 && matrix.getCells()[line + 1][col - 1].isBomb())
-                digit++;
-            if (line != matrix.getCells().length - 1 && matrix.getCells()[line + 1][col].isBomb())
-                digit++;
-            if (line != matrix.getCells().length - 1 && col != matrix.getCells()[line].length - 1
-                    && matrix.getCells()[line + 1][col + 1].isBomb())
-                digit++;
+            int[][] directions = {{-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1, -1}, {1, 0}, {1, 1}};
+
+            for (int[] direction : directions) {
+                int neighborLine = line + direction[0];
+                int neighborCol = col + direction[1];
+
+                if (isValidPosition(neighborLine, neighborCol)
+                        && matrix.getCells()[neighborLine][neighborCol].isBomb()) {
+                    digit++;
+                }
+            }
             return digit;
         }
-        return matrix.getCells()[line][col].getDigit();
+        return -1;
+    }
+
+    private boolean isValidPosition(int line, int col) {
+        return line >= 0 && line < matrix.getCells().length && col >= 0 && col < matrix.getCells()[line].length;
+    }
+
+    public void setMatrix(Matrix matrix) {
+        this.matrix = matrix;
     }
 }

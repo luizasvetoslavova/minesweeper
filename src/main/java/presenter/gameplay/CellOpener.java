@@ -6,7 +6,7 @@ import model.mines.Matrix;
 
 import java.util.*;
 
-public class NeighborOpener {
+public class CellOpener {
     private Matrix matrix;
 
     public void openNeighbors(Cell cell) {
@@ -18,16 +18,31 @@ public class NeighborOpener {
         }
     }
 
+    public void openAllBombs() {
+        Arrays.stream(matrix.getCells()).forEach(array -> Arrays.stream(array).forEach(cell -> {
+            if (cell.isBomb()) cell.setCellStatus(CellStatus.OPENED);
+        }));
+    }
+
     public boolean isNeighbor(Cell cell, int line, int col) {
-        return (line != 0 && col != 0 && cell == matrix.getCells()[line - 1][col - 1])
-                || (line != 0 && cell == matrix.getCells()[line - 1][col])
-                || (line != 0 && col != matrix.getCells()[line].length - 1 && cell == matrix.getCells()[line - 1][col + 1])
-                || (col != 0 && cell == matrix.getCells()[line][col - 1])
-                || (col != matrix.getCells()[line].length - 1 && cell == matrix.getCells()[line][col + 1])
-                || (line != matrix.getCells().length - 1 && col != 0 && cell == matrix.getCells()[line + 1][col - 1])
-                || (line != matrix.getCells().length - 1 && cell == matrix.getCells()[line + 1][col])
-                || (line != matrix.getCells().length - 1 && col != matrix.getCells()[line].length - 1
-                && cell == matrix.getCells()[line + 1][col + 1]);
+        for (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
+                if (i == 0 && j == 0) {
+                    continue;
+                }
+                int neighborLine = line + i;
+                int neighborCol = col + j;
+
+                if (isValidPosition(neighborLine, neighborCol) && cell == matrix.getCells()[neighborLine][neighborCol]) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean isValidPosition(int line, int col) {
+        return line >= 0 && line < matrix.getCells().length && col >= 0 && col < matrix.getCells()[line].length;
     }
 
     private void openRandomNeighbors(Cell cell) {
