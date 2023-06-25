@@ -34,6 +34,14 @@ public class ConsoleView {
     }
 
     public int[] getLineAndCol() {
+        int[] lineAndCol = lineAndCol();
+        while (lineAndCol == null) {
+            lineAndCol = lineAndCol();
+        }
+        return lineAndCol;
+    }
+
+    private int[] lineAndCol() {
         show("Specify cell line and column (for ex. 1 and 7) \n" +
                 "Line (horizontal): ");
         try {
@@ -80,18 +88,18 @@ public class ConsoleView {
             Cell currentCell = matrix.getCells()[line][col];
             CellStatus cellStatus = currentCell.getCellStatus();
 
-            if (cellStatus.equals(CellStatus.OPENED)) {
-                if (currentCell.getDigit() == 0) {
-                    show(" ◽");
-                } else if (currentCell.getDigit() > 0) {
-                    show(String.format(" %d", currentCell.getDigit()));
-                } else if (currentCell.isBomb()) {
-                    show(" ⬛");
+            switch (cellStatus) {
+                case OPENED -> {
+                    if (currentCell.getDigit() == 0) {
+                        show(" ◽");
+                    } else if (currentCell.getDigit() > 0) {
+                        show(String.format(" %d", currentCell.getDigit()));
+                    } else if (currentCell.isBomb()) {
+                        show(" ⬛");
+                    }
                 }
-            } else if (cellStatus.equals(CellStatus.UNOPENED)) {
-                show(" ⬜");
-            } else if (cellStatus.equals(CellStatus.FLAGGED)) {
-                show(" ⛳");
+                case UNOPENED -> show(" ⬜");
+                case FLAGGED -> show(" ⛳");
             }
         }
     }

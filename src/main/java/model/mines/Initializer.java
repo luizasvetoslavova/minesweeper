@@ -15,7 +15,13 @@ public class Initializer {
     private Initializer() {
     }
 
-    public void setMatrix(Matrix matrix, Cell firstOpened) {
+    public void initOnFirstClick(Cell firstOpened, int openedCount, Matrix matrix) {
+        if (openedCount == 1) {
+            setMatrix(matrix, firstOpened);
+        }
+    }
+
+    private void setMatrix(Matrix matrix, Cell firstOpened) {
         setBombs(matrix, firstOpened);
         setDigits(matrix);
     }
@@ -58,8 +64,9 @@ public class Initializer {
                     digit++;
                 }
             }
+            return digit;
         }
-        return digit;
+        return -1;
     }
 
     private boolean isValidPosition(int line, int col, Matrix matrix) {

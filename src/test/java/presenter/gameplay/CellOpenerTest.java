@@ -13,13 +13,13 @@ import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class NeighborOpenerTest {
-    private NeighborOpener opener;
+public class CellOpenerTest {
+    private CellOpener opener;
     private Matrix matrix;
 
     @BeforeEach
     private void initOpenerAndMatrix() {
-        opener = new NeighborOpener();
+        opener = new CellOpener();
         matrix = new Easy();
         opener.setMatrix(matrix);
     }
@@ -52,7 +52,7 @@ public class NeighborOpenerTest {
         return matrix.getCells()[line][col];
     }
 
-    private ArrayList<Cell> getAllNeighbors(Cell cell, Matrix matrix, NeighborOpener opener) {
+    private ArrayList<Cell> getAllNeighbors(Cell cell, Matrix matrix, CellOpener opener) {
         ArrayList<Cell> cells = new ArrayList<>();
 
         for (int line = 0; line < matrix.getCells().length; line++) {
