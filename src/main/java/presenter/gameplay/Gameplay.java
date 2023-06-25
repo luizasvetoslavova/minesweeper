@@ -1,14 +1,13 @@
 package presenter.gameplay;
 
 import model.mines.Cell;
-import model.mines.Matrix;
 
 public interface Gameplay {
     void rules();
 
     void start();
 
-    Matrix levelChoice();
+    void levelChoice();
 
     void openCell();
 

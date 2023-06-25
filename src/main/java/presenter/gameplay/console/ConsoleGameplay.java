@@ -1,4 +1,4 @@
-package presenter.gameplay;
+package presenter.gameplay.console;
 
 import model.levels.Easy;
 import model.levels.Expert;
@@ -8,23 +8,27 @@ import model.mines.Cell;
 import model.mines.CellStatus;
 import model.mines.Initializer;
 import model.mines.Matrix;
+import presenter.gameplay.Gameplay;
+import presenter.gameplay.NeighborOpener;
 import view.ConsoleView;
 
+import java.util.Arrays;
 import java.util.function.Predicate;
 
 public class ConsoleGameplay implements Gameplay {
-    private final ConsoleView view;
+    private ConsoleView view;
     private final Initializer init;
-    private final NeighborOpener opener;
+    private NeighborOpener opener;
 
     private Matrix matrix;
     private boolean activeGame;
-    private Cell firstCell;
+    private int openedCount;
 
     public ConsoleGameplay(ConsoleView view, Initializer init, NeighborOpener opener) {
         this.view = view;
         this.init = init;
         this.opener = opener;
+        openedCount = 0;
     }
 
     @Override
@@ -53,7 +57,7 @@ public class ConsoleGameplay implements Gameplay {
     }
 
     @Override
-    public Matrix levelChoice() {
+    public void levelChoice() {
         view.show("""
                 Choose level:\s
                 1. Easy - 9x9, 23 bombs\s
@@ -63,32 +67,28 @@ public class ConsoleGameplay implements Gameplay {
                 Your choice:\s""");
 
         switch (view.userInput()) {
-            case "1":
-                return setupMatrix(new Easy());
-            case "2":
-                return setupMatrix(new Medium());
-            case "3":
-                return setupMatrix(new Hard());
-            case "4":
-                return setupMatrix(new Expert());
-            default: {
+            case "1" -> setupMatrix(new Easy());
+            case "2" -> setupMatrix(new Medium());
+            case "3" -> setupMatrix(new Hard());
+            case "4" -> setupMatrix(new Expert());
+            default  ->  {
                 view.invalidInput();
-                return levelChoice();
+                levelChoice();
             }
         }
     }
 
     @Override
     public void openCell() {
-        int[] lineAndCol = view.getLineAndCol();
+        int[] lineAndCol = getLineAndCol();
+        openedCount++;
         int line = lineAndCol[0];
         int col = lineAndCol[1];
         Cell cell = matrix.getCells()[line][col];
-        firstCell = cell;
-        init.setMatrix(matrix, firstCell);
 
         if (!cell.getCellStatus().equals(CellStatus.OPENED)) {
             cell.setCellStatus(CellStatus.OPENED);
+            initOnFirstClick(cell);
             lose(cell);
             opener.openNeighbors(cell);
             win();
@@ -99,7 +99,7 @@ public class ConsoleGameplay implements Gameplay {
 
     @Override
     public void putFlag() {
-        int[] lineAndCol = view.getLineAndCol();
+        int[] lineAndCol = getLineAndCol();
         int line = lineAndCol[0];
         int col = lineAndCol[1];
         Cell cell = matrix.getCells()[line][col];
@@ -113,7 +113,7 @@ public class ConsoleGameplay implements Gameplay {
 
     @Override
     public void removeFlag() {
-        int[] lineAndCol = view.getLineAndCol();
+        int[] lineAndCol = getLineAndCol();
         int line = lineAndCol[0];
         int col = lineAndCol[1];
         Cell cell = matrix.getCells()[line][col];
@@ -141,7 +141,8 @@ public class ConsoleGameplay implements Gameplay {
     @Override
     public void lose(Cell cell) {
         if (cell.isBomb()) {
-            view.showFront(true);
+            openAllBombs();
+            view.showFront();
             view.show("""
                     BOOM!\s
                     Game over.\s
@@ -152,13 +153,34 @@ public class ConsoleGameplay implements Gameplay {
 
     @Override
     public void reset() {
+        openedCount = 0;
         view.show("\n Game reset! \n");
         play();
     }
 
+    private int[] getLineAndCol() {
+        int[] lineAndCol = view.getLineAndCol();
+        while (lineAndCol == null) {
+            lineAndCol = view.getLineAndCol();
+        }
+        return lineAndCol;
+    }
+
+    private void openAllBombs() {
+        Arrays.stream(matrix.getCells()).forEach(array -> Arrays.stream(array).forEach(cell -> {
+            if (cell.isBomb()) cell.setCellStatus(CellStatus.OPENED);
+        }));
+    }
+
+    private void initOnFirstClick(Cell firstOpened) {
+        if (openedCount == 1) {
+            init.setMatrix(matrix, firstOpened);
+        }
+    }
+
     private void play() {
         levelChoice();
-        view.showFront(false);
+        view.showFront();
         activeGame = true;
 
         while (activeGame) {
@@ -166,11 +188,10 @@ public class ConsoleGameplay implements Gameplay {
         }
     }
 
-    private Matrix setupMatrix(Matrix matrix1) {
+    private void setupMatrix(Matrix matrix1) {
         matrix = matrix1;
         view.setMatrix(matrix);
         opener.setMatrix(matrix);
-        return matrix;
     }
 
     private void optionChoice() {
@@ -185,15 +206,15 @@ public class ConsoleGameplay implements Gameplay {
         switch (view.userInput()) {
             case "1" -> {
                 openCell();
-                view.showFront(false);
+                view.showFront();
             }
             case "2" -> {
                 putFlag();
-                view.showFront(false);
+                view.showFront();
             }
             case "3" -> {
                 removeFlag();
-                view.showFront(false);
+                view.showFront();
             }
             case "4" -> reset();
             case "5" -> {
@@ -208,15 +229,54 @@ public class ConsoleGameplay implements Gameplay {
     }
 
     private int countCells(Predicate<Cell> condition) {
-        int count = 0;
-        for (int line = 0; line < matrix.getCells().length; line++) {
-            for (int col = 0; col < matrix.getCells()[line].length; col++) {
-                Cell cell = matrix.getCells()[line][col];
-                if (condition.test(cell)) {
-                    count++;
-                }
-            }
-        }
-        return count;
+        final int[] count = {0};
+        Arrays.stream(matrix.getCells()).forEach(array -> Arrays.stream(array).forEach(cell -> {
+            if (condition.test(cell)) count[0]++;
+        }));
+        return count[0];
+    }
+
+    public void setView(ConsoleView view) {
+        this.view = view;
+    }
+
+    public Matrix getMatrix() {
+        return matrix;
+    }
+
+    public void setOpener(NeighborOpener opener) {
+        this.opener = opener;
+    }
+
+    public void setMatrix(Matrix matrix) {
+        this.matrix = matrix;
+    }
+
+    public ConsoleView getView() {
+        return view;
+    }
+
+    public Initializer getInit() {
+        return init;
+    }
+
+    public NeighborOpener getOpener() {
+        return opener;
+    }
+
+    public boolean isActiveGame() {
+        return activeGame;
+    }
+
+    public int getOpenedCount() {
+        return openedCount;
+    }
+
+    public void setActiveGame(boolean activeGame) {
+        this.activeGame = activeGame;
+    }
+
+    public void setOpenedCount(int openedCount) {
+        this.openedCount = openedCount;
     }
 }
