@@ -1,4 +1,4 @@
-package view;
+package view.console;
 
 import model.mines.Cell;
 import model.mines.CellStatus;

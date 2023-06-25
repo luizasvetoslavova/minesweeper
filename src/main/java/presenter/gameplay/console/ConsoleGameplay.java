@@ -10,7 +10,7 @@ import model.mines.Initializer;
 import model.mines.Matrix;
 import presenter.gameplay.Gameplay;
 import presenter.gameplay.CellOpener;
-import view.ConsoleView;
+import view.console.ConsoleView;
 
 import java.util.Arrays;
 import java.util.function.Predicate;

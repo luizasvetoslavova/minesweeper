@@ -2,7 +2,7 @@ package presenter.gameplay.console;
 
 import model.mines.Initializer;
 import presenter.gameplay.CellOpener;
-import view.ConsoleView;
+import view.console.ConsoleView;
 
 import java.util.Scanner;
 

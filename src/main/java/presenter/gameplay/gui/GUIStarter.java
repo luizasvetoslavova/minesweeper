@@ -1,7 +1,11 @@
 package presenter.gameplay.gui;
 
-public class Main {
+import view.gui.GUIView;
+
+import javax.swing.*;
+
+public class GUIStarter {
     public static void main(String[] args) {
-        new Table().initFrame();
+        new GUIGameplay(new GUIView()).start();
     }
 }
