@@ -207,11 +207,8 @@ public class ConsoleGameplay implements Gameplay {
 
     private int countCells(Predicate<Cell> condition) {
         final int[] count = {0};
-        Arrays.stream(matrix.getCells()).flatMap(Arrays::stream)
-                .forEach(cell -> {
-                    if (condition.test(cell)) {
-                        count[0]++;
-                    }
+        Arrays.stream(matrix.getCells()).flatMap(Arrays::stream).forEach(cell -> {
+                    if (condition.test(cell)) count[0]++;
                 });
         return count[0];
     }
