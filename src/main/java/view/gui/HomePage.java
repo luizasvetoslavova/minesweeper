@@ -58,8 +58,7 @@ public class HomePage {
         buttonPanel.add(hard);
         buttonPanel.add(expert);
 
-        int topPadding = 50;
-        buttonPanel.setBorder(BorderFactory.createEmptyBorder(topPadding, 100, 200, 100));
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(50, 100, 200, 100));
         mainPanel.add(buttonPanel);
     }
 

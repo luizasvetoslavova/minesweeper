@@ -35,7 +35,7 @@ public class GUIGameplay implements Gameplay {
             @Override
             public void actionPerformed(ActionEvent e) {
                 hideHome();
-                new TablePage(new Easy()).draw();
+                new TablePage(new Easy(), homePage).draw();
             }
         });
 
@@ -43,7 +43,7 @@ public class GUIGameplay implements Gameplay {
             @Override
             public void actionPerformed(ActionEvent e) {
                 hideHome();
-                new TablePage(new Medium()).draw();
+                new TablePage(new Medium(), homePage).draw();
             }
         });
 
@@ -51,7 +51,7 @@ public class GUIGameplay implements Gameplay {
             @Override
             public void actionPerformed(ActionEvent e) {
                 hideHome();
-                new TablePage(new Hard()).draw();
+                new TablePage(new Hard(), homePage).draw();
             }
         });
 
@@ -59,7 +59,7 @@ public class GUIGameplay implements Gameplay {
             @Override
             public void actionPerformed(ActionEvent e) {
                 hideHome();
-                new TablePage(new Expert()).draw();
+                new TablePage(new Expert(), homePage).draw();
             }
         });
     }

@@ -8,18 +8,22 @@ import model.mines.Matrix;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 
 public class TablePage {
     private final Matrix matrix;
     private final JPanel mainPanel;
+    private final HomePage homePage;
     private final JFrame frame;
     private int buttonSize;
 
-    public TablePage(Matrix matrix) {
+    public TablePage(Matrix matrix, HomePage homePage) {
         this.matrix = matrix;
+        this.homePage = homePage;
         frame = new JFrame();
         mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1000, 600);
         frame.setLocationRelativeTo(null);
@@ -28,6 +32,35 @@ public class TablePage {
 
     public void draw() {
         drawTable();
+        addButtons();
+        frame.add(mainPanel);
+    }
+
+    private void addButtons() {
+        JPanel buttonPanel = new JPanel();
+
+        JButton reset = new JButton("RESET");
+        reset.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                draw();
+            }
+        });
+
+        JButton backToHome = new JButton("BACK TO HOME");
+        backToHome.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.setVisible(false);
+                homePage.getFrame().setVisible(true);
+            }
+        });
+
+        buttonPanel.add(reset);
+        buttonPanel.add(backToHome);
+        buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(29, 200, 40, 200));
+        mainPanel.add(buttonPanel, BorderLayout.SOUTH);
     }
 
     private void drawTable() {
@@ -51,7 +84,6 @@ public class TablePage {
 
         contentPanel.add(tablePanel);
         mainPanel.add(contentPanel, BorderLayout.CENTER);
-        frame.add(mainPanel);
     }
 
     private void setButtonSize() {
