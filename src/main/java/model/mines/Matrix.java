@@ -29,4 +29,12 @@ public abstract class Matrix {
     public int getBombCount() {
         return bombCount;
     }
+
+    public int getLines() {
+        return lines;
+    }
+
+    public int getCols() {
+        return cols;
+    }
 }

@@ -1,31 +1,67 @@
 package presenter.gameplay.gui;
 
+import model.levels.Easy;
+import model.levels.Expert;
+import model.levels.Hard;
+import model.levels.Medium;
 import model.mines.Cell;
 import presenter.gameplay.Gameplay;
-import view.gui.GUIView;
+import view.gui.HomePage;
+import view.gui.TablePage;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
 
 public class GUIGameplay implements Gameplay {
-    private final GUIView view;
+    private final HomePage homePage;
 
-    public GUIGameplay(GUIView view) {
-        this.view = view;
+    public GUIGameplay(HomePage homePage) {
+        this.homePage = homePage;
     }
 
     @Override
     public void rules() {
-        view.showRules();
     }
 
     @Override
     public void start() {
-        view.initJFrame();
-        rules();
-        view.addButtons();
+        homePage.initHome();
+        levelChoice();
     }
 
     @Override
     public void levelChoice() {
+        homePage.getEasy().addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                hideHome();
+                new TablePage(new Easy()).draw();
+            }
+        });
 
+        homePage.getMedium().addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                hideHome();
+                new TablePage(new Medium()).draw();
+            }
+        });
+
+        homePage.getHard().addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                hideHome();
+                new TablePage(new Hard()).draw();
+            }
+        });
+
+        homePage.getExpert().addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                hideHome();
+                new TablePage(new Expert()).draw();
+            }
+        });
     }
 
     @Override
@@ -56,5 +92,9 @@ public class GUIGameplay implements Gameplay {
     @Override
     public void reset() {
 
+    }
+
+    private void hideHome() {
+        homePage.getFrame().setVisible(false);
     }
 }

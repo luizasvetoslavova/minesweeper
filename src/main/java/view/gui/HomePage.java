@@ -3,29 +3,35 @@ package view.gui;
 import javax.swing.*;
 import java.awt.*;
 
-public class GUIView {
+public class HomePage {
     private final JFrame frame;
-    private JPanel mainPanel;
+    private final JPanel mainPanel;
 
-    public GUIView() {
-        this.frame = new JFrame();
-    }
+    private JButton easy;
+    private JButton medium;
+    private JButton hard;
+    private JButton expert;
 
-    public void initJFrame() {
+    public HomePage() {
+        frame = new JFrame();
+        mainPanel = new JPanel();
         frame.setTitle("MINESWEEPER");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(1150, 700);
-        frame.setLocation(200, 80);
+        frame.setSize(1000, 600);
+        frame.setLocationRelativeTo(null);
         frame.setLayout(new BorderLayout());
         frame.setVisible(true);
-
-        mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+    }
+
+    public void initHome() {
+        showRules();
+        addButtons();
         frame.add(mainPanel);
     }
 
-    public void showRules() {
-        JLabel rules = new JLabel("<html>" + "<br>" + "<br>" + "<br>" + "<br>" + "<div style='text-align: " +
+    private void showRules() {
+        JLabel rules = new JLabel("<html>" + "<br>" + "<br>" + "<br>" + "<div style='text-align: " +
                 "center;'>" +
                 "Welcome to Minesweeper!" + "<br>" + "<br>" + "Rules:" + "<br>" +
                 "1. The number shown on an unlocked cell is the number of model.mines adjacent to it." + "<br>" +
@@ -41,17 +47,39 @@ public class GUIView {
         mainPanel.add(rulesPanel);
     }
 
-    public void addButtons() {
+    private void addButtons() {
         JPanel buttonPanel = new JPanel();
-        buttonPanel.add(new JButton("EASY"));
-        buttonPanel.add(new JButton("MEDIUM"));
-        buttonPanel.add(new JButton("HARD"));
-        buttonPanel.add(new JButton("EXPERT"));
+        easy = new JButton("EASY");
+        medium = new JButton("MEDIUM");
+        hard = new JButton("HARD");
+        expert = new JButton("EXPERT");
+        buttonPanel.add(easy);
+        buttonPanel.add(medium);
+        buttonPanel.add(hard);
+        buttonPanel.add(expert);
 
         int topPadding = 50;
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(topPadding, 100, 200, 100));
-
         mainPanel.add(buttonPanel);
-        frame.add(mainPanel);
+    }
+
+    public JButton getEasy() {
+        return easy;
+    }
+
+    public JButton getMedium() {
+        return medium;
+    }
+
+    public JButton getHard() {
+        return hard;
+    }
+
+    public JButton getExpert() {
+        return expert;
+    }
+
+    public JFrame getFrame() {
+        return frame;
     }
 }
