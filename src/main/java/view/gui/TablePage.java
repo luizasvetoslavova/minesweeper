@@ -9,18 +9,24 @@ import model.mines.Matrix;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TablePage {
+    private final List<TableButton> tableButtons;
+
     private final Matrix matrix;
     private final JPanel mainPanel;
     private final HomePage homePage;
     private final JFrame frame;
+
     private int buttonSize;
 
-    public TablePage(Matrix matrix, HomePage homePage) {
+    public TablePage(Matrix matrix, HomePage homePage, String heading) {
         this.matrix = matrix;
         this.homePage = homePage;
-        frame = new JFrame();
+        tableButtons = new ArrayList<>();
+        frame = new JFrame(heading);
         mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
@@ -34,6 +40,27 @@ public class TablePage {
         drawTable();
         addButtons();
         frame.add(mainPanel);
+    }
+
+    private void drawTable() {
+        setTableButtonsSize();
+        JPanel contentPanel = new JPanel();
+        contentPanel.setLayout(new GridBagLayout());
+
+        JPanel tablePanel = new JPanel();
+        tablePanel.setLayout(new GridLayout(matrix.getCells().length, matrix.getCells()[0].length));
+
+        for (int line = 0; line < matrix.getCells().length; line++) {
+            for (int col = 0; col < matrix.getCells()[line].length; col++) {
+                JButton button = new JButton();
+                button.setPreferredSize(new Dimension(buttonSize, buttonSize));
+                tablePanel.add(button);
+                tableButtons.add(new TableButton(button, matrix.getCells()[line][col]));
+            }
+        }
+
+        contentPanel.add(tablePanel);
+        mainPanel.add(contentPanel, BorderLayout.CENTER);
     }
 
     private void addButtons() {
@@ -63,30 +90,7 @@ public class TablePage {
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
     }
 
-    private void drawTable() {
-        int numRows = matrix.getCells().length;
-        int numCols = matrix.getCells()[0].length;
-
-        setButtonSize();
-        JPanel contentPanel = new JPanel();
-        contentPanel.setLayout(new GridBagLayout());
-
-        JPanel tablePanel = new JPanel();
-        tablePanel.setLayout(new GridLayout(numRows, numCols));
-
-        for (int row = 0; row < numRows; row++) {
-            for (int col = 0; col < numCols; col++) {
-                JButton button = new JButton();
-                button.setPreferredSize(new Dimension(buttonSize, buttonSize));
-                tablePanel.add(button);
-            }
-        }
-
-        contentPanel.add(tablePanel);
-        mainPanel.add(contentPanel, BorderLayout.CENTER);
-    }
-
-    private void setButtonSize() {
+    private void setTableButtonsSize() {
         if (matrix instanceof Easy) {
             buttonSize = 35;
         } else if (matrix instanceof Medium) {
@@ -96,5 +100,13 @@ public class TablePage {
         } else if (matrix instanceof Expert) {
             buttonSize = 18;
         }
+    }
+
+    public List<TableButton> getButtons() {
+        return tableButtons;
+    }
+
+    public Matrix getMatrix() {
+        return matrix;
     }
 }

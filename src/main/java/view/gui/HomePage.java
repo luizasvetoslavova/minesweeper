@@ -12,6 +12,8 @@ public class HomePage {
     private JButton hard;
     private JButton expert;
 
+    private String rules;
+
     public HomePage() {
         frame = new JFrame();
         mainPanel = new JPanel();
@@ -31,15 +33,8 @@ public class HomePage {
     }
 
     private void showRules() {
-        JLabel rules = new JLabel("<html>" + "<br>" + "<br>" + "<br>" + "<div style='text-align: " +
-                "center;'>" +
-                "Welcome to Minesweeper!" + "<br>" + "<br>" + "Rules:" + "<br>" +
-                "1. The number shown on an unlocked cell is the number of model.mines adjacent to it." + "<br>" +
-                "2. You have to flag all the model.mines and not unlock on a single one, or else you lose and " +
-                "the game ends." +
-                "<br>" + "You can start by clicking at any random cell." + "<br>" + "Signs:" + "<br>" +
-                "◽ - Empty cell. There are no bombs near it." + "<br>" + "⬛ - Bomb." + "<br>" +
-                "⬜ - Unopened cell." + "<br>" + "⛳ - Flag." + "<br>" + "<br>" + "Pick your level:" + "</div> </html>");
+        JLabel rules = new JLabel("<html>" + "<br>" + "<br>" + "<div style='text-align: " + "center;'>" +
+                this.rules + "<br>" + "<br>" + "Pick your level:" + "</div> </html>");
 
         rules.setFont(new Font(rules.getFont().getName(), Font.PLAIN, 17));
         JPanel rulesPanel = new JPanel();
@@ -80,5 +75,9 @@ public class HomePage {
 
     public JFrame getFrame() {
         return frame;
+    }
+
+    public void setRules(String rules) {
+        this.rules = rules;
     }
 }

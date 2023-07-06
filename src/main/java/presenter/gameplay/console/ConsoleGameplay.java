@@ -34,7 +34,6 @@ public class ConsoleGameplay implements Gameplay {
     @Override
     public void rules() {
         view.show("""
-
                  Welcome to Minesweeper!\s
                  Rules:\s
                 ~ The number shown on an unlocked cell is the number of model.mines adjacent to it.\s
