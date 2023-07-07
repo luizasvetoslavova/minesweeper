@@ -3,8 +3,7 @@ package view.gui;
 import javax.swing.*;
 import java.awt.*;
 
-public class HomePage {
-    private final JFrame frame;
+public class HomePage extends JFrame {
     private final JPanel mainPanel;
 
     private JButton easy;
@@ -15,21 +14,20 @@ public class HomePage {
     private String rules;
 
     public HomePage() {
-        frame = new JFrame();
         mainPanel = new JPanel();
-        frame.setTitle("MINESWEEPER");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(1000, 600);
-        frame.setLocationRelativeTo(null);
-        frame.setLayout(new BorderLayout());
-        frame.setVisible(true);
+        setTitle("MINESWEEPER");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(1000, 600);
+        setLocationRelativeTo(null);
+        setLayout(new BorderLayout());
+        setVisible(true);
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
     }
 
     public void initHome() {
         showRules();
         addButtons();
-        frame.add(mainPanel);
+        add(mainPanel);
     }
 
     private void showRules() {
@@ -71,10 +69,6 @@ public class HomePage {
 
     public JButton getExpert() {
         return expert;
-    }
-
-    public JFrame getFrame() {
-        return frame;
     }
 
     public void setRules(String rules) {

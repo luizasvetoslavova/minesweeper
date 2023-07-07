@@ -153,7 +153,7 @@ public class GUIGameplay implements Gameplay {
         currentTablePage.getReset().addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                currentTablePage.getFrame().setVisible(false);
+                currentTablePage.setVisible(false);
 
                 Matrix matrix = null;
                 if (currentMatrix instanceof Easy) {
@@ -189,7 +189,7 @@ public class GUIGameplay implements Gameplay {
                     matrix = new Expert();
                 }
 
-                homePage.getFrame().setVisible(false);
+                homePage.setVisible(false);
                 updateFields(matrix, getClassName(matrix));
                 currentTablePage.draw();
                 activateGameplayActions();

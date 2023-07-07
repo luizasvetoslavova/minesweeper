@@ -12,13 +12,12 @@ import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TablePage {
+public class TablePage extends JFrame {
     private final List<TableButton> tableButtons;
 
     private final Matrix matrix;
     private final JPanel mainPanel;
     private final HomePage homePage;
-    private final JFrame frame;
     private JButton reset;
 
     private int buttonSize;
@@ -27,20 +26,19 @@ public class TablePage {
         this.matrix = matrix;
         this.homePage = homePage;
         tableButtons = new ArrayList<>();
-        frame = new JFrame(heading);
         mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(1000, 600);
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(1000, 600);
+        setLocationRelativeTo(null);
+        setVisible(true);
     }
 
     public void draw() {
         drawTable();
         addButtons();
-        frame.add(mainPanel);
+        add(mainPanel);
     }
 
     private void drawTable() {
@@ -73,8 +71,8 @@ public class TablePage {
         backToHome.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                frame.setVisible(false);
-                homePage.getFrame().setVisible(true);
+                setVisible(false);
+                homePage.setVisible(true);
             }
         });
 
@@ -107,9 +105,5 @@ public class TablePage {
 
     public JButton getReset() {
         return reset;
-    }
-
-    public JFrame getFrame() {
-        return frame;
     }
 }
