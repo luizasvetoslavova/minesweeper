@@ -4,6 +4,6 @@ import model.mines.Matrix;
 
 public class Hard extends Matrix {
     public Hard() {
-        super(16, 30, 115);
+        super(16, 30, 99);
     }
 }

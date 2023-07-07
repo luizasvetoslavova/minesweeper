@@ -8,38 +8,32 @@ import model.mines.Cell;
 import model.mines.CellStatus;
 import model.mines.Initializer;
 import model.mines.Matrix;
+import presenter.gameplay.CellOpener;
 import presenter.gameplay.Gameplay;
+import view.gui.GUIView;
 import view.gui.HomePage;
-import view.gui.TableButton;
 import view.gui.TablePage;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Arrays;
+import java.util.function.Predicate;
 
-public class GUIGameplay implements Gameplay{
-    private final String FLAG_IMAGE = "src/main/resources/flag.png";
-    private final String BOMB_IMAGE = "src/main/resources/bomb.png";
-    private final String ONE_IMAGE = "src/main/resources/one.png";
-    private final String TWO_IMAGE = "src/main/resources/two.png";
-    private final String THREE_IMAGE = "src/main/resources/three.png";
-    private final String FOUR_IMAGE = "src/main/resources/four.png";
-    private final String FIVE_IMAGE = "src/main/resources/five.png";
-    private final String SIX_IMAGE = "src/main/resources/six.png";
-    private final String SEVEN_IMAGE = "src/main/resources/seven.png";
-    private final String EIGHT_IMAGE = "src/main/resources/eight.png";
-
-    private int openedCount;
-
+public class GUIGameplay implements Gameplay {
     private final HomePage homePage;
+    private final CellOpener cellOpener;
+
+    private GUIView view;
     private TablePage currentTablePage;
     private Matrix currentMatrix;
+    private int openedCount;
 
     public GUIGameplay(HomePage homePage) {
         this.homePage = homePage;
         openedCount = 0;
+        cellOpener = new CellOpener();
     }
 
     @Override
@@ -58,7 +52,6 @@ public class GUIGameplay implements Gameplay{
         rules();
         homePage.initHome();
         levelChoice();
-
     }
 
     @Override
@@ -71,37 +64,23 @@ public class GUIGameplay implements Gameplay{
 
     @Override
     public void openCell() {
-        openedCount++;
-
         currentTablePage.getButtons().forEach(tableButton -> {
             tableButton.getButton().addActionListener(new AbstractAction() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    Thread openCellThread = new Thread(() -> {
-                        if (openedCount == 1) {
-                            Initializer.getInstance().initOnFirstClick(tableButton.getCell(), openedCount);
-                        }
-                        tableButton.getCell().setCellStatus(CellStatus.OPENED);
-                        setButtonImage(tableButton, setOpenDigit(tableButton.getCell().getDigit()));
-                    });
-                    openCellThread.start();
+                    openedCount++;
+                    if (openedCount == 1) {
+                        Initializer.getInstance().initOnFirstClick(tableButton.getCell(), openedCount);
+                    }
+                    tableButton.getCell().setCellStatus(CellStatus.OPENED);
+
+                    lose(tableButton.getCell());
+                    cellOpener.openNeighbors(tableButton.getCell());
+                    view.showAllOpened();
+                    win();
                 }
             });
         });
-    }
-
-    private String setOpenDigit(int digit) {
-        return switch (digit) {
-            case 1 -> ONE_IMAGE;
-            case 2 -> TWO_IMAGE;
-            case 3 -> THREE_IMAGE;
-            case 4 -> FOUR_IMAGE;
-            case 5 -> FIVE_IMAGE;
-            case 6 -> SIX_IMAGE;
-            case 7 -> SEVEN_IMAGE;
-            case 8 -> EIGHT_IMAGE;
-            default -> BOMB_IMAGE;
-        };
     }
 
     @Override
@@ -114,7 +93,7 @@ public class GUIGameplay implements Gameplay{
                         if (!isEven(tableButton.getTimesClicked()) &&
                                 !tableButton.getCell().getCellStatus().equals(CellStatus.OPENED)) {
                             tableButton.getCell().setCellStatus(CellStatus.FLAGGED);
-                            setButtonImage(tableButton, FLAG_IMAGE);
+                            view.setButtonImage(tableButton, view.getFLAG_IMAGE());
                         }
                     }
                 }
@@ -142,52 +121,79 @@ public class GUIGameplay implements Gameplay{
 
     @Override
     public void win() {
+        int allDigits = countCells(cell -> cell.getDigit() > 0);
+        int openedDigits = countCells(cell -> cell.getDigit() > 0 && cell.getCellStatus().equals(CellStatus.OPENED));
+        int flaggedBombs = countCells(cell -> cell.isBomb() && cell.getCellStatus().equals(CellStatus.FLAGGED));
+        int totalBombs = countCells(Cell::isBomb);
 
+        boolean userWon = (totalBombs == flaggedBombs) && (allDigits == openedDigits);
+        if (userWon) {
+            JOptionPane.showMessageDialog(null, "CONGRATULATIONS! You won.");
+        }
     }
 
     @Override
     public void lose(Cell cell) {
-
+        if (cell.isBomb()) {
+            cellOpener.openAllBombs();
+            view.showAllBombs();
+            JOptionPane.showMessageDialog(null, "BOOM! You stepped on a mine.");
+            currentTablePage.getButtons().forEach(tableButton -> {
+                tableButton.getButton().removeNotify();
+            });
+        }
     }
 
     @Override
     public void reset() {
-
-    }
-
-    private void hideHome() {
-        homePage.getFrame().setVisible(false);
+//        currentTablePage.getReset().addActionListener(new AbstractAction() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                currentTablePage.getFrame().setVisible(false);
+//                openedCount = 0;
+//                //todo
+//            }
+//        });
     }
 
     private void setupHomeButton(JButton button, Matrix matrix, String heading) {
         button.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                hideHome();
-                currentTablePage = new TablePage(matrix, homePage, heading);
-                currentMatrix = currentTablePage.getMatrix();
-
-                Initializer.getInstance().setMatrix(currentMatrix);
-
+                homePage.getFrame().setVisible(false);
+                initDependencies(matrix, heading);
                 currentTablePage.draw();
-                buttonOperations();
+                activateGameplayActions();
             }
         });
     }
 
-    private void buttonOperations() {
+    private void initDependencies(Matrix matrix, String heading) {
+        openedCount = 0;
+        currentTablePage = new TablePage(matrix, homePage, heading);
+        currentMatrix = currentTablePage.getMatrix();
+        view = new GUIView(currentTablePage);
+        Initializer.getInstance().setMatrix(currentMatrix);
+        cellOpener.setMatrix(matrix);
+        openedCount = 0;
+    }
+
+    private void activateGameplayActions() {
         openCell();
         putFlag();
         removeFlag();
-    }
-
-    private void setButtonImage(TableButton tableButton, String resource) {
-        Image image = new ImageIcon(resource).getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
-        ImageIcon scaledIcon = new ImageIcon(image);
-        tableButton.getButton().setIcon(scaledIcon);
+        reset();
     }
 
     private static boolean isEven(int number) {
         return number % 2 == 0;
+    }
+
+    private int countCells(Predicate<Cell> condition) {
+        final int[] count = {0};
+        Arrays.stream(currentMatrix.getCells()).flatMap(Arrays::stream).forEach(cell -> {
+            if (condition.test(cell)) count[0]++;
+        });
+        return count[0];
     }
 }

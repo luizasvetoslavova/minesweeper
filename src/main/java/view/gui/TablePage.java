@@ -19,6 +19,7 @@ public class TablePage {
     private final JPanel mainPanel;
     private final HomePage homePage;
     private final JFrame frame;
+    private JButton reset;
 
     private int buttonSize;
 
@@ -66,13 +67,7 @@ public class TablePage {
     private void addButtons() {
         JPanel buttonPanel = new JPanel();
 
-        JButton reset = new JButton("RESET");
-        reset.addActionListener(new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                draw();
-            }
-        });
+        reset = new JButton("RESET");
 
         JButton backToHome = new JButton("BACK TO HOME");
         backToHome.addActionListener(new AbstractAction() {
@@ -108,5 +103,13 @@ public class TablePage {
 
     public Matrix getMatrix() {
         return matrix;
+    }
+
+    public JButton getReset() {
+        return reset;
+    }
+
+    public JFrame getFrame() {
+        return frame;
     }
 }
