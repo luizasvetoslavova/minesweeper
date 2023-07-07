@@ -81,7 +81,7 @@ public class ConsoleGameplay implements Gameplay {
         openedCount++;
         Cell cell = matrix.getCells()[lineAndCol[0]][lineAndCol[1]];
 
-        if (!cell.getCellStatus().equals(CellStatus.OPENED)) {
+        if (cell.getCellStatus() != CellStatus.OPENED) {
             cell.setCellStatus(CellStatus.OPENED);
             init.initOnFirstClick(cell, openedCount);
             lose(cell);
@@ -97,7 +97,7 @@ public class ConsoleGameplay implements Gameplay {
         int[] lineAndCol = view.getLineAndCol();
         Cell cell = matrix.getCells()[lineAndCol[0]][lineAndCol[1]];
 
-        if (!cell.getCellStatus().equals(CellStatus.OPENED)) {
+        if (cell.getCellStatus() != CellStatus.OPENED) {
             cell.setCellStatus(CellStatus.FLAGGED);
             if (openedCount > 0) win();
         } else {
@@ -110,7 +110,7 @@ public class ConsoleGameplay implements Gameplay {
         int[] lineAndCol = view.getLineAndCol();
         Cell cell = matrix.getCells()[lineAndCol[0]][lineAndCol[1]];
 
-        if (cell.getCellStatus().equals(CellStatus.FLAGGED)) {
+        if (cell.getCellStatus() == CellStatus.FLAGGED) {
             cell.setCellStatus(CellStatus.UNOPENED);
         } else {
             view.invalidInput();

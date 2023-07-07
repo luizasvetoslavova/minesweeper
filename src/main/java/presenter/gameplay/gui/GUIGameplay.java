@@ -39,14 +39,20 @@ public class GUIGameplay implements Gameplay {
 
     @Override
     public void rules() {
-        homePage.setRules("Welcome to Minesweeper!" + "<br>" + "<br>" + "Rules:" + "<br>" +
-                "1. The number shown on an opened cell is the number of mines (bombs) adjacent to it." + "<br>" +
-                "2. You have to flag all the mines and not unlock on a single one, or else you lose and " +
-                "the game ends." + "<br>" + "You can start by clicking at any random cell." + "<br>" + "<br>" +
-                "Signs:" + "<br>" + "◽ - Empty cell. There are no bombs near it." + "<br>" + "⬛ - Bomb." + "<br>" +
-                "⬜ - Unopened cell." + "<br>" + "⛳ - Flag." + "<br>" + "<br>" + "Left click to open a cell. " +
-                "Right click to flag.");
+        homePage.setRules("Welcome to Minesweeper!<br><br>" +
+                "Rules:<br>" +
+                "1. The number shown on an opened cell is the number of mines (bombs) adjacent to it.<br>" +
+                "2. You have to flag all the mines and not open any. If you do, you lose and the game ends.<br>" +
+                "3. You have to open all numbers. <br>" +
+                "You can start by clicking at any random cell.<br><br>" +
+                "Signs:<br>" +
+                "&#9638; - Empty cell. There are no bombs near it.<br>" +
+                "\uD83D\uDCA3 - Bomb.<br>" +
+                "&#11036; - Unopened cell.<br>" +
+                "&#9873; - Flag.<br><br>" +
+                "Regular click to open a cell. Right click to flag.");
     }
+
 
     @Override
     public void start() {
@@ -69,16 +75,16 @@ public class GUIGameplay implements Gameplay {
             tableButton.getButton().addActionListener(new AbstractAction() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    if (tableButton.getCell().getCellStatus().equals(CellStatus.OPENED)) return;
+                    Cell cell = tableButton.getCell();
+                    if (cell.getCellStatus() == CellStatus.OPENED) return;
 
                     openedCount++;
                     if (openedCount == 1) {
-                        Initializer.getInstance().initOnFirstClick(tableButton.getCell(), openedCount);
+                        Initializer.getInstance().initOnFirstClick(cell, openedCount);
                     }
-
-                    tableButton.getCell().setCellStatus(CellStatus.OPENED);
-                    lose(tableButton.getCell());
-                    cellOpener.openNeighbors(tableButton.getCell());
+                    cell.setCellStatus(CellStatus.OPENED);
+                    lose(cell);
+                    cellOpener.openNeighbors(cell);
                     view.showAllOpened();
                     win();
                 }
@@ -92,10 +98,10 @@ public class GUIGameplay implements Gameplay {
             tableButton.getButton().addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
+                    Cell cell = tableButton.getCell();
                     if (SwingUtilities.isRightMouseButton(e)) {
-                        if (!isEven(tableButton.getTimesClicked()) &&
-                                !tableButton.getCell().getCellStatus().equals(CellStatus.OPENED)) {
-                            tableButton.getCell().setCellStatus(CellStatus.FLAGGED);
+                        if (!isEven(tableButton.getTimesClicked()) && cell.getCellStatus() != CellStatus.OPENED) {
+                            cell.setCellStatus(CellStatus.FLAGGED);
                             view.setButtonImage(tableButton, view.getFLAG_IMAGE());
                             win();
                         }
@@ -111,10 +117,11 @@ public class GUIGameplay implements Gameplay {
             tableButton.getButton().addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
+                    Cell cell = tableButton.getCell();
+
                     if (SwingUtilities.isRightMouseButton(e)) {
-                        if (isEven(tableButton.getTimesClicked())
-                                && tableButton.getCell().getCellStatus().equals(CellStatus.FLAGGED)) {
-                            tableButton.getCell().setCellStatus(CellStatus.UNOPENED);
+                        if (isEven(tableButton.getTimesClicked()) && cell.getCellStatus() == CellStatus.FLAGGED) {
+                            cell.setCellStatus(CellStatus.UNOPENED);
                             tableButton.getButton().setIcon(null);
                         }
                     }

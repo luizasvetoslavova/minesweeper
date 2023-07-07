@@ -31,7 +31,7 @@ public class HomePage extends JFrame {
     }
 
     private void showRules() {
-        JLabel rules = new JLabel("<html>" + "<br>" + "<br>" + "<div style='text-align: " + "center;'>" +
+        JLabel rules = new JLabel("<html>" + "<br>" + "<div style='text-align: " + "center;'>" +
                 this.rules + "<br>" + "<br>" + "Pick your level:" + "</div> </html>");
 
         rules.setFont(new Font(rules.getFont().getName(), Font.PLAIN, 17));
