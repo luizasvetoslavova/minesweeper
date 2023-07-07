@@ -8,7 +8,7 @@ import java.awt.*;
 public class GUIView {
     private final String FLAG_IMAGE = "src/main/resources/flag.png";
     private final String BOMB_IMAGE = "src/main/resources/bomb.png";
-    private final String ZERO_IMAGE = "src/main/resources/zero.png";
+    private final String ZERO_IMAGE = "src/main/resources/none.png";
     private final String ONE_IMAGE = "src/main/resources/one.png";
     private final String TWO_IMAGE = "src/main/resources/two.png";
     private final String THREE_IMAGE = "src/main/resources/three.png";
@@ -38,8 +38,10 @@ public class GUIView {
 
     public void setButtonImage(TableButton tableButton, String resource) {
         Image image = new ImageIcon(resource).getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
-        ImageIcon scaledIcon = new ImageIcon(image);
-        tableButton.getButton().setIcon(scaledIcon);
+        Image newImage = image.getScaledInstance(tableButton.getButton().getWidth(),
+                tableButton.getButton().getHeight(), java.awt.Image.SCALE_SMOOTH);
+        ImageIcon icon = new ImageIcon(newImage);
+        tableButton.getButton().setIcon(icon);
     }
 
     private String setOpenDigit(int digit) {
