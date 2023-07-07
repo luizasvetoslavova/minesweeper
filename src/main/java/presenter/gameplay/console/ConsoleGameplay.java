@@ -10,10 +10,8 @@ import model.mines.Initializer;
 import model.mines.Matrix;
 import presenter.gameplay.Gameplay;
 import presenter.gameplay.CellOpener;
+import presenter.gameplay.WinChecker;
 import view.console.ConsoleView;
-
-import java.util.Arrays;
-import java.util.function.Predicate;
 
 public class ConsoleGameplay implements Gameplay {
     private final ConsoleView view;
@@ -121,13 +119,7 @@ public class ConsoleGameplay implements Gameplay {
 
     @Override
     public void win() {
-        int allDigits = countCells(cell -> cell.getDigit() > 0);
-        int openedDigits = countCells(cell -> cell.getDigit() > 0 && cell.getCellStatus().equals(CellStatus.OPENED));
-        int flaggedBombs = countCells(cell -> cell.isBomb() && cell.getCellStatus().equals(CellStatus.FLAGGED));
-        int totalBombs = countCells(Cell::isBomb);
-
-        boolean userWon = (totalBombs == flaggedBombs) && (allDigits == openedDigits);
-        if (userWon) {
+        if (new WinChecker(matrix).playerWon()) {
             view.show("Congratulations! You won!\n");
             reset();
         }
@@ -202,14 +194,6 @@ public class ConsoleGameplay implements Gameplay {
                 optionChoice();
             }
         }
-    }
-
-    private int countCells(Predicate<Cell> condition) {
-        final int[] count = {0};
-        Arrays.stream(matrix.getCells()).flatMap(Arrays::stream).forEach(cell -> {
-                    if (condition.test(cell)) count[0]++;
-                });
-        return count[0];
     }
 
     public Matrix getMatrix() {

@@ -10,6 +10,7 @@ import model.mines.Initializer;
 import model.mines.Matrix;
 import presenter.gameplay.CellOpener;
 import presenter.gameplay.Gameplay;
+import presenter.gameplay.WinChecker;
 import view.gui.GUIView;
 import view.gui.HomePage;
 import view.gui.TablePage;
@@ -18,9 +19,7 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Arrays;
 import java.util.Locale;
-import java.util.function.Predicate;
 
 public class GUIGameplay implements Gameplay {
     private final HomePage homePage;
@@ -126,13 +125,7 @@ public class GUIGameplay implements Gameplay {
 
     @Override
     public void win() {
-        int allDigits = countCells(cell -> cell.getDigit() > 0);
-        int openedDigits = countCells(cell -> cell.getDigit() > 0 && cell.getCellStatus().equals(CellStatus.OPENED));
-        int flaggedBombs = countCells(cell -> cell.isBomb() && cell.getCellStatus().equals(CellStatus.FLAGGED));
-        int totalBombs = countCells(Cell::isBomb);
-
-        boolean userWon = (totalBombs == flaggedBombs) && (allDigits == openedDigits);
-        if (userWon) {
+        if (new WinChecker(currentMatrix).playerWon()) {
             JOptionPane.showMessageDialog(null, "CONGRATULATIONS! You won.");
             deactivateButtons();
         }
@@ -179,13 +172,13 @@ public class GUIGameplay implements Gameplay {
             public void actionPerformed(ActionEvent e) {
 
                 Matrix matrix = null;
-                if (button.getText().equals(homePage.getEasy().getText())) {
+                if (button.equals(homePage.getEasy())) {
                     matrix = new Easy();
-                } else if (button.getText().equals(homePage.getMedium().getText())) {
+                } else if (button.equals(homePage.getMedium())) {
                     matrix = new Medium();
-                } else if (button.getText().equals(homePage.getHard().getText())) {
+                } else if (button.equals(homePage.getHard())) {
                     matrix = new Hard();
-                } else if (button.getText().equals(homePage.getExpert().getText())) {
+                } else if (button.equals(homePage.getExpert())) {
                     matrix = new Expert();
                 }
 
@@ -215,14 +208,6 @@ public class GUIGameplay implements Gameplay {
 
     private static boolean isEven(int number) {
         return number % 2 == 0;
-    }
-
-    private int countCells(Predicate<Cell> condition) {
-        final int[] count = {0};
-        Arrays.stream(currentMatrix.getCells()).flatMap(Arrays::stream).forEach(cell -> {
-            if (condition.test(cell)) count[0]++;
-        });
-        return count[0];
     }
 
     private void deactivateButtons() {

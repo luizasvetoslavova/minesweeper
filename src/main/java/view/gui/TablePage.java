@@ -32,6 +32,7 @@ public class TablePage extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1000, 600);
         setLocationRelativeTo(null);
+        setTitle(heading);
         setVisible(true);
     }
 
