@@ -18,11 +18,7 @@ public class GUIView {
     private final String SEVEN_IMAGE = "src/main/resources/seven.png";
     private final String EIGHT_IMAGE = "src/main/resources/eight.png";
 
-    private final TablePage tablePage;
-
-    public GUIView(TablePage tablePage) {
-        this.tablePage = tablePage;
-    }
+    private TablePage tablePage;
 
     public void showAllBombs() {
         tablePage.getButtons().forEach(tableButton -> {
@@ -63,5 +59,9 @@ public class GUIView {
 
     public String getFLAG_IMAGE() {
         return FLAG_IMAGE;
+    }
+
+    public void setTablePage(TablePage tablePage) {
+        this.tablePage = tablePage;
     }
 }

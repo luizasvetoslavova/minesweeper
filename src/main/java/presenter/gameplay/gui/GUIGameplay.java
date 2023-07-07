@@ -19,13 +19,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Arrays;
+import java.util.Locale;
 import java.util.function.Predicate;
 
 public class GUIGameplay implements Gameplay {
     private final HomePage homePage;
     private final CellOpener cellOpener;
 
-    private GUIView view;
+    private final GUIView view;
     private TablePage currentTablePage;
     private Matrix currentMatrix;
     private int openedCount;
@@ -34,6 +35,7 @@ public class GUIGameplay implements Gameplay {
         this.homePage = homePage;
         openedCount = 0;
         cellOpener = new CellOpener();
+        view = new GUIView();
     }
 
     @Override
@@ -56,10 +58,10 @@ public class GUIGameplay implements Gameplay {
 
     @Override
     public void levelChoice() {
-        setupHomeButton(homePage.getEasy(), new Easy(), "EASY");
-        setupHomeButton(homePage.getMedium(), new Medium(), "MEDIUM");
-        setupHomeButton(homePage.getHard(), new Hard(), "HARD");
-        setupHomeButton(homePage.getExpert(), new Expert(), "EXPERT");
+        setupHomeButton(homePage.getEasy());
+        setupHomeButton(homePage.getHard());
+        setupHomeButton(homePage.getMedium());
+        setupHomeButton(homePage.getExpert());
     }
 
     @Override
@@ -68,12 +70,14 @@ public class GUIGameplay implements Gameplay {
             tableButton.getButton().addActionListener(new AbstractAction() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
+                    if (tableButton.getCell().getCellStatus().equals(CellStatus.OPENED)) return;
+
                     openedCount++;
                     if (openedCount == 1) {
                         Initializer.getInstance().initOnFirstClick(tableButton.getCell(), openedCount);
                     }
-                    tableButton.getCell().setCellStatus(CellStatus.OPENED);
 
+                    tableButton.getCell().setCellStatus(CellStatus.OPENED);
                     lose(tableButton.getCell());
                     cellOpener.openNeighbors(tableButton.getCell());
                     view.showAllOpened();
@@ -94,6 +98,7 @@ public class GUIGameplay implements Gameplay {
                                 !tableButton.getCell().getCellStatus().equals(CellStatus.OPENED)) {
                             tableButton.getCell().setCellStatus(CellStatus.FLAGGED);
                             view.setButtonImage(tableButton, view.getFLAG_IMAGE());
+                            win();
                         }
                     }
                 }
@@ -129,6 +134,7 @@ public class GUIGameplay implements Gameplay {
         boolean userWon = (totalBombs == flaggedBombs) && (allDigits == openedDigits);
         if (userWon) {
             JOptionPane.showMessageDialog(null, "CONGRATULATIONS! You won.");
+            deactivateButtons();
         }
     }
 
@@ -138,44 +144,66 @@ public class GUIGameplay implements Gameplay {
             cellOpener.openAllBombs();
             view.showAllBombs();
             JOptionPane.showMessageDialog(null, "BOOM! You stepped on a mine.");
-            currentTablePage.getButtons().forEach(tableButton -> {
-                tableButton.getButton().removeNotify();
-            });
+            deactivateButtons();
         }
     }
 
     @Override
     public void reset() {
-//        currentTablePage.getReset().addActionListener(new AbstractAction() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                currentTablePage.getFrame().setVisible(false);
-//                openedCount = 0;
-//                //todo
-//            }
-//        });
-    }
-
-    private void setupHomeButton(JButton button, Matrix matrix, String heading) {
-        button.addActionListener(new AbstractAction() {
+        currentTablePage.getReset().addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                homePage.getFrame().setVisible(false);
-                initDependencies(matrix, heading);
+                currentTablePage.getFrame().setVisible(false);
+
+                Matrix matrix = null;
+                if (currentMatrix instanceof Easy) {
+                    matrix = new Easy();
+                } else if (currentMatrix instanceof Medium) {
+                    matrix = new Medium();
+                } else if (currentMatrix instanceof Hard) {
+                    matrix = new Hard();
+                } else if (currentMatrix instanceof Expert) {
+                    matrix = new Expert();
+                }
+
+                updateFields(matrix, getClassName(matrix));
                 currentTablePage.draw();
                 activateGameplayActions();
             }
         });
     }
 
-    private void initDependencies(Matrix matrix, String heading) {
+    private void setupHomeButton(JButton button) {
+        button.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                Matrix matrix = null;
+                if (button.getText().equals(homePage.getEasy().getText())) {
+                    matrix = new Easy();
+                } else if (button.getText().equals(homePage.getMedium().getText())) {
+                    matrix = new Medium();
+                } else if (button.getText().equals(homePage.getHard().getText())) {
+                    matrix = new Hard();
+                } else if (button.getText().equals(homePage.getExpert().getText())) {
+                    matrix = new Expert();
+                }
+
+                homePage.getFrame().setVisible(false);
+                updateFields(matrix, getClassName(matrix));
+                currentTablePage.draw();
+                activateGameplayActions();
+            }
+        });
+    }
+
+    private void updateFields(Matrix matrix, String heading) {
         openedCount = 0;
         currentTablePage = new TablePage(matrix, homePage, heading);
+        view.setTablePage(currentTablePage);
         currentMatrix = currentTablePage.getMatrix();
-        view = new GUIView(currentTablePage);
         Initializer.getInstance().setMatrix(currentMatrix);
         cellOpener.setMatrix(matrix);
-        openedCount = 0;
     }
 
     private void activateGameplayActions() {
@@ -195,5 +223,15 @@ public class GUIGameplay implements Gameplay {
             if (condition.test(cell)) count[0]++;
         });
         return count[0];
+    }
+
+    private void deactivateButtons() {
+        currentTablePage.getButtons().forEach(tableButton -> {
+            tableButton.getButton().removeNotify();
+        });
+    }
+
+    private String getClassName(Matrix matrix) {
+        return matrix.getClass().getSimpleName().toUpperCase(Locale.ROOT);
     }
 }
