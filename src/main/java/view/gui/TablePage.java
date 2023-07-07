@@ -11,6 +11,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class TablePage extends JFrame {
     private final List<TableButton> tableButtons;
@@ -37,9 +38,18 @@ public class TablePage extends JFrame {
     }
 
     public void draw() {
+        addLabel();
         drawTable();
         addButtons();
         add(mainPanel);
+    }
+
+    private void addLabel() {
+        JLabel levelCaption = new JLabel("<html>" + "<br>" +
+                matrix.getClass().getSimpleName().toUpperCase(Locale.ROOT) + "<html>");
+        JPanel rulesPanel = new JPanel();
+        rulesPanel.add(levelCaption);
+        mainPanel.add(rulesPanel);
     }
 
     private void drawTable() {
