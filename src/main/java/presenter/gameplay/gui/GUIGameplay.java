@@ -79,9 +79,7 @@ public class GUIGameplay implements Gameplay {
                     if (cell.getCellStatus() == CellStatus.OPENED) return;
 
                     openedCount++;
-                    if (openedCount == 1) {
-                        Initializer.getInstance().initOnFirstClick(cell, openedCount);
-                    }
+                    if (openedCount == 1) Initializer.getInstance().initOnFirstClick(cell, openedCount);
                     cell.setCellStatus(CellStatus.OPENED);
                     lose(cell);
                     cellOpener.openNeighbors(cell);
@@ -156,15 +154,10 @@ public class GUIGameplay implements Gameplay {
                 currentTablePage.setVisible(false);
 
                 Matrix matrix = null;
-                if (currentMatrix instanceof Easy) {
-                    matrix = new Easy();
-                } else if (currentMatrix instanceof Medium) {
-                    matrix = new Medium();
-                } else if (currentMatrix instanceof Hard) {
-                    matrix = new Hard();
-                } else if (currentMatrix instanceof Expert) {
-                    matrix = new Expert();
-                }
+                if (currentMatrix instanceof Easy) matrix = new Easy();
+                else if (currentMatrix instanceof Medium) matrix = new Medium();
+                else if (currentMatrix instanceof Hard) matrix = new Hard();
+                else if (currentMatrix instanceof Expert) matrix = new Expert();
 
                 updateFields(matrix, getClassName(matrix));
                 currentTablePage.draw();
@@ -179,15 +172,10 @@ public class GUIGameplay implements Gameplay {
             public void actionPerformed(ActionEvent e) {
 
                 Matrix matrix = null;
-                if (button.equals(homePage.getEasy())) {
-                    matrix = new Easy();
-                } else if (button.equals(homePage.getMedium())) {
-                    matrix = new Medium();
-                } else if (button.equals(homePage.getHard())) {
-                    matrix = new Hard();
-                } else if (button.equals(homePage.getExpert())) {
-                    matrix = new Expert();
-                }
+                if (button.equals(homePage.getEasy())) matrix = new Easy();
+                else if (button.equals(homePage.getMedium())) matrix = new Medium();
+                else if (button.equals(homePage.getHard())) matrix = new Hard();
+                else if (button.equals(homePage.getExpert())) matrix = new Expert();
 
                 homePage.setVisible(false);
                 updateFields(matrix, getClassName(matrix));

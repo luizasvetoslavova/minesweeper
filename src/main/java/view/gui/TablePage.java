@@ -95,15 +95,10 @@ public class TablePage extends JFrame {
     }
 
     private void setTableButtonsSize() {
-        if (matrix instanceof Easy) {
-            buttonSize = 35;
-        } else if (matrix instanceof Medium) {
-            buttonSize = 23;
-        } else if (matrix instanceof Hard) {
-            buttonSize = 20;
-        } else if (matrix instanceof Expert) {
-            buttonSize = 18;
-        }
+        if (matrix instanceof Easy) buttonSize = 35;
+        else if (matrix instanceof Medium) buttonSize = 23;
+        else if (matrix instanceof Hard) buttonSize = 20;
+        else if (matrix instanceof Expert) buttonSize = 18;
     }
 
     public List<TableButton> getButtons() {

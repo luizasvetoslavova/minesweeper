@@ -19,23 +19,21 @@ public class CellOpener {
     }
 
     public void openAllBombs() {
-        Arrays.stream(matrix.getCells()).forEach(array -> Arrays.stream(array).forEach(cell -> {
-            if (cell.isBomb()) cell.setCellStatus(CellStatus.OPENED);
-        }));
+        Arrays.stream(matrix.getCells())
+                .flatMap(Arrays::stream)
+                .filter(Cell::isBomb)
+                .forEach(cell -> cell.setCellStatus(CellStatus.OPENED));
     }
 
     public boolean isNeighbor(Cell cell, int line, int col) {
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
-                if (i == 0 && j == 0) {
-                    continue;
-                }
+                if (i == 0 && j == 0) continue;
                 int neighborLine = line + i;
                 int neighborCol = col + j;
 
-                if (isValidPosition(neighborLine, neighborCol) && cell == matrix.getCells()[neighborLine][neighborCol]) {
+                if (isValidPosition(neighborLine, neighborCol) && cell == matrix.getCells()[neighborLine][neighborCol])
                     return true;
-                }
             }
         }
         return false;
@@ -75,9 +73,7 @@ public class CellOpener {
                         && !currentCell.isBomb()) {
                     currentCell.setCellStatus(CellStatus.OPENED);
 
-                    if (currentCell.getDigit() == 0) {
-                        openEmptyNeighbors(currentCell);
-                    }
+                    if (currentCell.getDigit() == 0) openEmptyNeighbors(currentCell);
                 }
             }
         }
@@ -97,12 +93,9 @@ public class CellOpener {
                 for (int line = 0; line < matrix.getCells().length; line++) {
                     for (int col = 0; col < matrix.getCells()[line].length; col++) {
                         Cell neighbor = matrix.getCells()[line][col];
-                        if (isNeighbor(currentCell, line, col)
-                                && !neighbor.getCellStatus().equals(CellStatus.FLAGGED)
+                        if (isNeighbor(currentCell, line, col) && !neighbor.getCellStatus().equals(CellStatus.FLAGGED)
                                 && !neighbor.isBomb()
-                                && !openedCells.contains(neighbor)) {
-                            queue.offer(neighbor);
-                        }
+                                && !openedCells.contains(neighbor)) queue.offer(neighbor);
                     }
                 }
             }

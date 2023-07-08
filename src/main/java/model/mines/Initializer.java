@@ -17,9 +17,7 @@ public class Initializer {
     }
 
     public void initOnFirstClick(Cell firstOpened, int openedCount) {
-        if (openedCount == 1) {
-            setMatrix(firstOpened);
-        }
+        if (openedCount == 1) setMatrix(firstOpened);
     }
 
     private void setMatrix(Cell firstOpened) {
@@ -60,10 +58,7 @@ public class Initializer {
                 int neighborLine = line + direction[0];
                 int neighborCol = col + direction[1];
 
-                if (isValidPosition(neighborLine, neighborCol)
-                        && matrix.getCells()[neighborLine][neighborCol].isBomb()) {
-                    digit++;
-                }
+                if (isValidPosition(neighborLine, neighborCol) && matrix.getCells()[neighborLine][neighborCol].isBomb()) digit++;
             }
             return digit;
         }

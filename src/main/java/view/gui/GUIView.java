@@ -22,17 +22,14 @@ public class GUIView {
 
     public void showAllBombs() {
         tablePage.getButtons().forEach(tableButton -> {
-            if (tableButton.getCell().isBomb()) {
-                setButtonImage(tableButton, BOMB_IMAGE);
-            }
+            if (tableButton.getCell().isBomb()) setButtonImage(tableButton, BOMB_IMAGE);
         });
     }
 
     public void showAllOpened() {
         tablePage.getButtons().forEach(tableButton -> {
-            if (tableButton.getCell().getCellStatus().equals(CellStatus.OPENED)) {
+            if (tableButton.getCell().getCellStatus().equals(CellStatus.OPENED))
                 setButtonImage(tableButton, setOpenDigit(tableButton.getCell().getDigit()));
-            }
         });
     }
 

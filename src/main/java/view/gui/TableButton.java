@@ -18,9 +18,7 @@ public class TableButton {
         button.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (SwingUtilities.isRightMouseButton(e)) {
-                    timesClicked++;
-                }
+                if (SwingUtilities.isRightMouseButton(e)) timesClicked++;
             }
         });
     }

@@ -16,18 +16,17 @@ public class WinChecker {
 
     public boolean playerWon() {
         int allDigits = countCells(cell -> cell.getDigit() > 0);
-        int openedDigits = countCells(cell -> cell.getDigit() > 0 && cell.getCellStatus().equals(CellStatus.OPENED));
-        int flaggedBombs = countCells(cell -> cell.isBomb() && cell.getCellStatus().equals(CellStatus.FLAGGED));
+        int openedDigits = countCells(cell -> cell.getDigit() > 0 && cell.getCellStatus() == CellStatus.OPENED);
+        int flaggedBombs = countCells(cell -> cell.isBomb() && cell.getCellStatus() == CellStatus.FLAGGED);
         int totalBombs = countCells(Cell::isBomb);
 
         return (totalBombs == flaggedBombs) && (allDigits == openedDigits);
     }
 
     private int countCells(Predicate<Cell> condition) {
-        final int[] count = {0};
-        Arrays.stream(matrix.getCells()).flatMap(Arrays::stream).forEach(cell -> {
-            if (condition.test(cell)) count[0]++;
-        });
-        return count[0];
+        return (int) Arrays.stream(matrix.getCells())
+                .flatMap(Arrays::stream)
+                .filter(condition)
+                .count();
     }
 }

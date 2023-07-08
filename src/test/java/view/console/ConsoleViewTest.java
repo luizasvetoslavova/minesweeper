@@ -1,10 +1,9 @@
-package view;
+package view.console;
 
 import model.levels.Easy;
 import model.levels.Hard;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-import view.console.ConsoleView;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
