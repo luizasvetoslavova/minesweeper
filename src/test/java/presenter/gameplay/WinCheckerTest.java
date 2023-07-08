@@ -41,7 +41,6 @@ public class WinCheckerTest {
                 .flatMap(Arrays::stream)
                 .filter(Cell::isBomb)
                 .forEach(cell -> cell.setCellStatus(CellStatus.FLAGGED));
-
         assertFalse(winChecker.playerWon());
     }
 

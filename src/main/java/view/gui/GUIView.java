@@ -21,16 +21,18 @@ public class GUIView {
     private TablePage tablePage;
 
     public void showAllBombs() {
-        tablePage.getButtons().forEach(tableButton -> {
-            if (tableButton.getCell().isBomb()) setButtonImage(tableButton, BOMB_IMAGE);
-        });
+        tablePage.getButtons()
+                .stream()
+                .filter(tableButton -> tableButton.getCell().isBomb())
+                .forEach(tableButton -> setButtonImage(tableButton, BOMB_IMAGE));
     }
 
     public void showAllOpened() {
-        tablePage.getButtons().forEach(tableButton -> {
-            if (tableButton.getCell().getCellStatus().equals(CellStatus.OPENED))
-                setButtonImage(tableButton, setOpenDigit(tableButton.getCell().getDigit()));
-        });
+        tablePage.getButtons()
+                .stream()
+                .filter(tableButton -> tableButton.getCell().getCellStatus() == CellStatus.OPENED)
+                .forEach(tableButton ->
+                        setButtonImage(tableButton, setOpenDigit(tableButton.getCell().getDigit())));
     }
 
     public void setButtonImage(TableButton tableButton, String resource) {
@@ -62,5 +64,49 @@ public class GUIView {
 
     public void setTablePage(TablePage tablePage) {
         this.tablePage = tablePage;
+    }
+
+    public String getBOMB_IMAGE() {
+        return BOMB_IMAGE;
+    }
+
+    public TablePage getTablePage() {
+        return tablePage;
+    }
+
+    public String getZERO_IMAGE() {
+        return ZERO_IMAGE;
+    }
+
+    public String getONE_IMAGE() {
+        return ONE_IMAGE;
+    }
+
+    public String getTWO_IMAGE() {
+        return TWO_IMAGE;
+    }
+
+    public String getTHREE_IMAGE() {
+        return THREE_IMAGE;
+    }
+
+    public String getFOUR_IMAGE() {
+        return FOUR_IMAGE;
+    }
+
+    public String getFIVE_IMAGE() {
+        return FIVE_IMAGE;
+    }
+
+    public String getSIX_IMAGE() {
+        return SIX_IMAGE;
+    }
+
+    public String getSEVEN_IMAGE() {
+        return SEVEN_IMAGE;
+    }
+
+    public String getEIGHT_IMAGE() {
+        return EIGHT_IMAGE;
     }
 }

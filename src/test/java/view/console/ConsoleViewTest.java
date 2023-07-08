@@ -34,7 +34,7 @@ public class ConsoleViewTest {
     }
 
     @Test
-    void testUserInput_WhenTextGiven_ThenReturnInputToString() {
+    void testUserInput_WhenStringGiven_ThenReturnInputToString() {
         String input = "Hello, World!";
         InputStream inputStream = new ByteArrayInputStream(input.getBytes());
 
@@ -116,7 +116,7 @@ public class ConsoleViewTest {
         view.setMatrix(new Easy());
 
         int[] parameters = view.getLineAndCol();
-        assertArrayEquals(parameters, new int[] {1, 2});
+        assertArrayEquals(parameters, new int[]{1, 2});
         assertTrue(outputStream.toString().contains(expectedOutput));
     }
 }

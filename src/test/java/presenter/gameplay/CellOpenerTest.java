@@ -44,6 +44,15 @@ public class CellOpenerTest {
                         .forEach(neighbor -> assertEquals(neighbor.getCellStatus(), CellStatus.OPENED)));
     }
 
+    @Test
+    void testOpenAllBombs_WhenBombClicked_ThenAllBombsOpened() {
+        opener.openAllBombs();
+        Arrays.stream(matrix.getCells())
+                .flatMap(Arrays::stream)
+                .filter(Cell::isBomb)
+                .forEach(cell -> assertEquals(cell.getCellStatus(), CellStatus.OPENED));
+    }
+
     private ArrayList<Cell> getAllNeighbors(Cell cell, Matrix matrix, CellOpener opener) {
         ArrayList<Cell> cells = new ArrayList<>();
 
