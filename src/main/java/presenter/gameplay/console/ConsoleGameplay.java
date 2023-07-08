@@ -10,10 +10,8 @@ import model.mines.Initializer;
 import model.mines.Matrix;
 import presenter.gameplay.Gameplay;
 import presenter.gameplay.CellOpener;
-import view.ConsoleView;
-
-import java.util.Arrays;
-import java.util.function.Predicate;
+import presenter.gameplay.WinChecker;
+import view.console.ConsoleView;
 
 public class ConsoleGameplay implements Gameplay {
     private final ConsoleView view;
@@ -34,7 +32,6 @@ public class ConsoleGameplay implements Gameplay {
     @Override
     public void rules() {
         view.show("""
-
                  Welcome to Minesweeper!\s
                  Rules:\s
                 ~ The number shown on an unlocked cell is the number of model.mines adjacent to it.\s
@@ -84,7 +81,7 @@ public class ConsoleGameplay implements Gameplay {
         openedCount++;
         Cell cell = matrix.getCells()[lineAndCol[0]][lineAndCol[1]];
 
-        if (!cell.getCellStatus().equals(CellStatus.OPENED)) {
+        if (cell.getCellStatus() != CellStatus.OPENED) {
             cell.setCellStatus(CellStatus.OPENED);
             init.initOnFirstClick(cell, openedCount);
             lose(cell);
@@ -100,7 +97,7 @@ public class ConsoleGameplay implements Gameplay {
         int[] lineAndCol = view.getLineAndCol();
         Cell cell = matrix.getCells()[lineAndCol[0]][lineAndCol[1]];
 
-        if (!cell.getCellStatus().equals(CellStatus.OPENED)) {
+        if (cell.getCellStatus() != CellStatus.OPENED) {
             cell.setCellStatus(CellStatus.FLAGGED);
             if (openedCount > 0) win();
         } else {
@@ -113,7 +110,7 @@ public class ConsoleGameplay implements Gameplay {
         int[] lineAndCol = view.getLineAndCol();
         Cell cell = matrix.getCells()[lineAndCol[0]][lineAndCol[1]];
 
-        if (cell.getCellStatus().equals(CellStatus.FLAGGED)) {
+        if (cell.getCellStatus() == CellStatus.FLAGGED) {
             cell.setCellStatus(CellStatus.UNOPENED);
         } else {
             view.invalidInput();
@@ -122,13 +119,7 @@ public class ConsoleGameplay implements Gameplay {
 
     @Override
     public void win() {
-        int allDigits = countCells(cell -> cell.getDigit() > 0);
-        int openedDigits = countCells(cell -> cell.getDigit() > 0 && cell.getCellStatus().equals(CellStatus.OPENED));
-        int flaggedBombs = countCells(cell -> cell.isBomb() && cell.getCellStatus().equals(CellStatus.FLAGGED));
-        int totalBombs = countCells(Cell::isBomb);
-
-        boolean userWon = (totalBombs == flaggedBombs) && (allDigits == openedDigits);
-        if (userWon) {
+        if (new WinChecker(matrix).playerWon()) {
             view.show("Congratulations! You won!\n");
             reset();
         }
@@ -203,14 +194,6 @@ public class ConsoleGameplay implements Gameplay {
                 optionChoice();
             }
         }
-    }
-
-    private int countCells(Predicate<Cell> condition) {
-        final int[] count = {0};
-        Arrays.stream(matrix.getCells()).flatMap(Arrays::stream).forEach(cell -> {
-                    if (condition.test(cell)) count[0]++;
-                });
-        return count[0];
     }
 
     public Matrix getMatrix() {

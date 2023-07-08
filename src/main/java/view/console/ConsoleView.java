@@ -1,4 +1,4 @@
-package view;
+package view.console;
 
 import model.mines.Cell;
 import model.mines.CellStatus;
@@ -35,9 +35,7 @@ public class ConsoleView {
 
     public int[] getLineAndCol() {
         int[] lineAndCol = lineAndCol();
-        while (lineAndCol == null) {
-            lineAndCol = lineAndCol();
-        }
+        while (lineAndCol == null) lineAndCol = lineAndCol();
         return lineAndCol;
     }
 
@@ -90,13 +88,9 @@ public class ConsoleView {
 
             switch (cellStatus) {
                 case OPENED -> {
-                    if (currentCell.getDigit() == 0) {
-                        show(" ◽");
-                    } else if (currentCell.getDigit() > 0) {
-                        show(String.format(" %d", currentCell.getDigit()));
-                    } else if (currentCell.isBomb()) {
-                        show(" ⬛");
-                    }
+                    if (currentCell.getDigit() == 0) show(" ◽");
+                    else if (currentCell.getDigit() > 0) show(String.format(" %d", currentCell.getDigit()));
+                    else if (currentCell.isBomb()) show(" ⬛");
                 }
                 case UNOPENED -> show(" ⬜");
                 case FLAGGED -> show(" ⛳");

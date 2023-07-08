@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -36,20 +35,22 @@ public class CellOpenerTest {
     void testOpenNeighbors_WhenOpenedCellIsEmpty_ThenOpenAllConnectedEmptyNeighbors() {
         opener.openNeighbors(getFirstEmptyCell(matrix));
 
-        Arrays.stream(matrix.getCells()).forEach(array -> Arrays.stream(array).forEach(cell -> {
-            if (cell.getDigit() == 0 && cell.getCellStatus().equals(CellStatus.OPENED)) {
-                getAllNeighbors(cell, matrix, opener).forEach(neighbor -> {
-                    if (neighbor.getDigit() == 0) assertEquals(neighbor.getCellStatus(), CellStatus.OPENED);
-                });
-            }
-        }));
+        Arrays.stream(matrix.getCells())
+                .flatMap(Arrays::stream)
+                .filter(cell -> cell.getDigit() == 0 && cell.getCellStatus() == CellStatus.OPENED)
+                .forEach(cell -> getAllNeighbors(cell, matrix, opener)
+                        .stream()
+                        .filter(neighbor -> neighbor.getDigit() == 0)
+                        .forEach(neighbor -> assertEquals(neighbor.getCellStatus(), CellStatus.OPENED)));
     }
 
-    private Cell getRandomCell(Matrix matrix) {
-        Random random = new Random();
-        int line = random.nextInt(matrix.getCells().length);
-        int col = random.nextInt(matrix.getCells()[line].length);
-        return matrix.getCells()[line][col];
+    @Test
+    void testOpenAllBombs_WhenBombClicked_ThenAllBombsOpened() {
+        opener.openAllBombs();
+        Arrays.stream(matrix.getCells())
+                .flatMap(Arrays::stream)
+                .filter(Cell::isBomb)
+                .forEach(cell -> assertEquals(cell.getCellStatus(), CellStatus.OPENED));
     }
 
     private ArrayList<Cell> getAllNeighbors(Cell cell, Matrix matrix, CellOpener opener) {

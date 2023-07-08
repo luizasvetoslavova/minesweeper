@@ -19,16 +19,16 @@ public class MatrixTest {
     }
 
     @Test
-    void testSetCells_WhenInvokingConstructor_ThenAllIndexesAreCells() {
-        Arrays.stream(matrix.getCells()).forEach(array -> Arrays.stream(array).forEach(cell1 -> {
-            assertEquals(cell1.getClass(), Cell.class);
-        }));
+    void testConstructor_WhenMatrixCreated_ThenAllIndexesAreCells() {
+        Arrays.stream(matrix.getCells())
+                .flatMap(Arrays::stream)
+                .forEach(cell -> assertEquals(cell.getClass(), Cell.class));
     }
 
     @Test
-    void testSetCells_WhenInvokingConstructor_ThenAllCellsAreUnopened() {
-        Arrays.stream(matrix.getCells()).forEach(array -> Arrays.stream(array).forEach(cell -> {
-            assertEquals(cell.getCellStatus(), CellStatus.UNOPENED);
-        }));
+    void testConstructor_WhenMatrixCreated_ThenAllCellsAreUnopened() {
+        Arrays.stream(matrix.getCells())
+                .flatMap(Arrays::stream)
+                .forEach(cell -> assertEquals(cell.getCellStatus(), CellStatus.UNOPENED));
     }
 }

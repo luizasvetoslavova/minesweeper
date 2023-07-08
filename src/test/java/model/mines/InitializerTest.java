@@ -2,13 +2,12 @@ package model.mines;
 
 import model.levels.Hard;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import presenter.gameplay.CellOpener;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -16,12 +15,17 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class InitializerTest {
+    Initializer initializer;
     private Matrix matrix;
     private Cell firstClicked;
 
     @BeforeAll
-    private void setUpMatrixAndFirstClicked() {
-        Initializer initializer = Initializer.getInstance();
+    private void setUpInitializer() {
+        initializer = Initializer.getInstance();
+    }
+
+    @BeforeEach
+    private void openRandomFirstCell() {
         matrix = new Hard();
         initializer.setMatrix(matrix);
 
@@ -33,27 +37,24 @@ public class InitializerTest {
     }
 
     @Test
-    void testSetMatrix_WhenFirstCellIsOpened_ThenCellIsNotBomb() {
+    void testInitOnFirstClick_WhenFirstCellIsOpened_ThenCellIsNotBomb() {
         assertFalse(firstClicked.isBomb());
     }
 
     @Test
-    void testSetMatrix_WhenInitialized_ThenBombCountEqualsLevelBombCount() {
-        final int[] bombCount = {0};
-        Arrays.stream(matrix.getCells()).forEach(array -> Arrays.stream(array).forEach(cell -> {
-            if (cell.isBomb()) bombCount[0]++;
-        }));
-        assertEquals(matrix.getBombCount(), bombCount[0]);
+    void testInitOnFirstClick_WhenFirstCellIsOpened_ThenBombCountEqualsLevelBombCount() {
+        assertEquals(matrix.getBombCount(), Arrays.stream(matrix.getCells())
+                .flatMap(Arrays::stream)
+                .filter(Cell::isBomb)
+                .count());
     }
 
     @Test
-    void testSetMatrix_WhenInitialized_ThenDigitsMatchSurroundingBombsCount() {
-        List<Cell> digits = new ArrayList<>();
-        Arrays.stream(matrix.getCells()).forEach(array -> Arrays.stream(array).forEach(cell -> {
-            if (cell.getDigit() > 0) digits.add(cell);
-        }));
-
-        digits.forEach(cell -> assertEquals(bombNeighborsCount(cell), cell.getDigit()));
+    void testInitOnFirstClick_WhenFirstCellIsOpened_ThenDigitsMatchSurroundingBombsCount() {
+        Arrays.stream(matrix.getCells())
+                .flatMap(Arrays::stream)
+                .filter(cell -> cell.getDigit() > 0)
+                .forEach(cell -> assertEquals(bombNeighborsCount(cell), cell.getDigit()));
     }
 
     private int bombNeighborsCount(Cell cell) {
