@@ -65,48 +65,4 @@ public class GUIView {
     public void setTablePage(TablePage tablePage) {
         this.tablePage = tablePage;
     }
-
-    public String getBOMB_IMAGE() {
-        return BOMB_IMAGE;
-    }
-
-    public TablePage getTablePage() {
-        return tablePage;
-    }
-
-    public String getZERO_IMAGE() {
-        return ZERO_IMAGE;
-    }
-
-    public String getONE_IMAGE() {
-        return ONE_IMAGE;
-    }
-
-    public String getTWO_IMAGE() {
-        return TWO_IMAGE;
-    }
-
-    public String getTHREE_IMAGE() {
-        return THREE_IMAGE;
-    }
-
-    public String getFOUR_IMAGE() {
-        return FOUR_IMAGE;
-    }
-
-    public String getFIVE_IMAGE() {
-        return FIVE_IMAGE;
-    }
-
-    public String getSIX_IMAGE() {
-        return SIX_IMAGE;
-    }
-
-    public String getSEVEN_IMAGE() {
-        return SEVEN_IMAGE;
-    }
-
-    public String getEIGHT_IMAGE() {
-        return EIGHT_IMAGE;
-    }
 }
