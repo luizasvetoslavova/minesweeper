@@ -6,17 +6,17 @@ import javax.swing.*;
 import java.awt.*;
 
 public class GUIView {
-    private final String FLAG_IMAGE = "src/main/resources/flag.png";
-    private final String BOMB_IMAGE = "src/main/resources/bomb.png";
-    private final String ZERO_IMAGE = "src/main/resources/none.png";
-    private final String ONE_IMAGE = "src/main/resources/one.png";
-    private final String TWO_IMAGE = "src/main/resources/two.png";
-    private final String THREE_IMAGE = "src/main/resources/three.png";
-    private final String FOUR_IMAGE = "src/main/resources/four.png";
-    private final String FIVE_IMAGE = "src/main/resources/five.png";
-    private final String SIX_IMAGE = "src/main/resources/six.png";
-    private final String SEVEN_IMAGE = "src/main/resources/seven.png";
-    private final String EIGHT_IMAGE = "src/main/resources/eight.png";
+    private final String FLAG_IMAGE = "/images/flag.png";
+    private final String BOMB_IMAGE = "/images/bomb.png";
+    private final String ZERO_IMAGE = "/images/none.png";
+    private final String ONE_IMAGE = "/images/one.png";
+    private final String TWO_IMAGE = "/images/two.png";
+    private final String THREE_IMAGE = "/images/three.png";
+    private final String FOUR_IMAGE = "/images/four.png";
+    private final String FIVE_IMAGE = "/images/five.png";
+    private final String SIX_IMAGE = "/images/six.png";
+    private final String SEVEN_IMAGE = "/images/seven.png";
+    private final String EIGHT_IMAGE = "/images/eight.png";
 
     private TablePage tablePage;
 
@@ -36,11 +36,11 @@ public class GUIView {
     }
 
     public void setButtonImage(TableButton tableButton, String resource) {
-        Image image = new ImageIcon(resource).getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
-        Image newImage = image.getScaledInstance(tableButton.getButton().getWidth(),
-                tableButton.getButton().getHeight(), java.awt.Image.SCALE_SMOOTH);
-        ImageIcon icon = new ImageIcon(newImage);
-        tableButton.getButton().setIcon(icon);
+        ImageIcon icon = new ImageIcon(getClass().getResource(resource));
+        Image image = icon.getImage().getScaledInstance(tableButton.getButton().getWidth(),
+                tableButton.getButton().getHeight(), Image.SCALE_SMOOTH);
+        ImageIcon scaledIcon = new ImageIcon(image);
+        tableButton.getButton().setIcon(scaledIcon);
     }
 
     private String setOpenDigit(int digit) {
