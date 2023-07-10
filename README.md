@@ -10,3 +10,5 @@ Tables of different difficulty levels contain different amount of squares.
 
 You can start by clicking at any random cell.
 Regular click to open a cell. Right click to flag.
+
+<a href="https://drive.google.com/file/d/1DXMQZ6MpF0St2fnbEuoQNlFxK4j0nqfQ/view?usp=sharing">**Download JAR**</a>
