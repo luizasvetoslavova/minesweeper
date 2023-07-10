@@ -101,7 +101,7 @@ public class GUIGameplay implements Gameplay {
                         if (!isEven(tableButton.getTimesClicked()) && cell.getCellStatus() != CellStatus.OPENED) {
                             cell.setCellStatus(CellStatus.FLAGGED);
                             view.setButtonImage(tableButton, view.getFLAG_IMAGE());
-                            win();
+                            if (tableButton.getTimesClicked() > 1) win();
                         }
                     }
                 }

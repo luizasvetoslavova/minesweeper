@@ -19,3 +19,11 @@ dependencies {
 test {
     useJUnitPlatform()
 }
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'src.main.java.presenter.gameplay.gui.GUIStarter.java'
+        )
+    }
+}
