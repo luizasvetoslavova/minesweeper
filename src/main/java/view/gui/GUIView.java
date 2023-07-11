@@ -1,6 +1,7 @@
 package view.gui;
 
 import model.mines.CellStatus;
+import presenter.gameplay.GameTimer;
 
 import javax.swing.*;
 import java.awt.*;
@@ -41,6 +42,23 @@ public class GUIView {
                 tableButton.getButton().getHeight(), Image.SCALE_SMOOTH);
         ImageIcon scaledIcon = new ImageIcon(image);
         tableButton.getButton().setIcon(scaledIcon);
+    }
+
+    public String timeMessage(GameTimer gameTimer) {
+        String time = "Time: ";
+        String hour = " hours ";
+        String minute = " minutes ";
+        String second = " seconds";
+
+        if (gameTimer.getHours() == 1) hour = "hour ";
+        if (gameTimer.getSecondsConverted() == 1) second = " second";
+        if (gameTimer.getMinutesConverted() == 1) minute = " minute ";
+
+        if (gameTimer.getHours() > 0) return time + gameTimer.getHours() + hour + gameTimer.getMinutesConverted() +
+                minute + gameTimer.getSecondsConverted() + second;
+        if (gameTimer.getMinutesConverted() > 0) return time + gameTimer.getMinutesConverted() + minute +
+                gameTimer.getSecondsConverted() + second;
+        return time + gameTimer.getSecondsConverted() + second;
     }
 
     private String setOpenDigit(int digit) {
