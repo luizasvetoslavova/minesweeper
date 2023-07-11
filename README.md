@@ -11,4 +11,4 @@ Tables of different difficulty levels contain different amount of squares.
 You can start by clicking at any random cell.
 Regular click to open a cell. Right click to flag.
 
-<a href="https://drive.google.com/u/1/uc?id=1DXMQZ6MpF0St2fnbEuoQNlFxK4j0nqfQ&export=download">**Download JAR**</a>
+<a href="https://github.com/luizasvetoslavova/minesweeper/raw/main/out/artifacts/minesweeper_jar/minesweeper.jar">**Download JAR**</a>
