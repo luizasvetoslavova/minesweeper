@@ -9,6 +9,7 @@ import model.mines.CellStatus;
 import model.mines.Initializer;
 import model.mines.Matrix;
 import presenter.gameplay.CellOpener;
+import presenter.gameplay.GameTimer;
 import presenter.gameplay.Gameplay;
 import presenter.gameplay.WinChecker;
 import view.gui.GUIView;
@@ -24,10 +25,12 @@ import java.util.Locale;
 public class GUIGameplay implements Gameplay {
     private final HomePage homePage;
     private final CellOpener cellOpener;
-
     private final GUIView view;
+
     private TablePage currentTablePage;
     private Matrix currentMatrix;
+    private GameTimer gameTimer;
+
     private int openedCount;
 
     public GUIGameplay(HomePage homePage) {
@@ -131,7 +134,9 @@ public class GUIGameplay implements Gameplay {
     @Override
     public void win() {
         if (new WinChecker(currentMatrix).playerWon()) {
-            JOptionPane.showMessageDialog(null, "CONGRATULATIONS! You won.");
+            JOptionPane.showMessageDialog(null, "CONGRATULATIONS! You won. \n" +
+                    "Time: " + gameTimer.getSeconds() + " seconds");
+            gameTimer.stop();
             deactivateButtons();
         }
     }
@@ -141,7 +146,9 @@ public class GUIGameplay implements Gameplay {
         if (cell.isBomb()) {
             cellOpener.openAllBombs();
             view.showAllBombs();
-            JOptionPane.showMessageDialog(null, "BOOM! You stepped on a mine.");
+            JOptionPane.showMessageDialog(null, "BOOM! You stepped on a mine. \n" +
+                    "Time: " + gameTimer.getSeconds() + " seconds");
+            gameTimer.stop();
             deactivateButtons();
         }
     }
@@ -161,6 +168,8 @@ public class GUIGameplay implements Gameplay {
 
                 updateFields(matrix, getClassName(matrix));
                 currentTablePage.draw();
+
+                startTimer();
                 activateGameplayActions();
             }
         });
@@ -177,12 +186,18 @@ public class GUIGameplay implements Gameplay {
                 else if (button.equals(homePage.getHard())) matrix = new Hard();
                 else if (button.equals(homePage.getExpert())) matrix = new Expert();
 
+                startTimer();
                 homePage.setVisible(false);
                 updateFields(matrix, getClassName(matrix));
                 currentTablePage.draw();
                 activateGameplayActions();
             }
         });
+    }
+
+    private void startTimer() {
+        gameTimer = new GameTimer();
+        gameTimer.start();
     }
 
     private void updateFields(Matrix matrix, String heading) {
