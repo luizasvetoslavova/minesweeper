@@ -1,22 +1,20 @@
 package presenter.gameplay;
 
-import model.levels.Easy;
-
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class GameTimer {
     private Timer timer;
-    private int seconds;
+    private int secondsTotal;
 
     public void start() {
         timer = new Timer();
-        seconds = 0;
+        secondsTotal = 0;
 
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                seconds++;
+                secondsTotal++;
             }
         }, 1000, 1000);
     }
@@ -25,7 +23,18 @@ public class GameTimer {
         timer.cancel();
     }
 
-    public int getSeconds() {
+    public int getSecondsConverted() {
+        int seconds = secondsTotal;
+        if (getMinutesConverted() > 0) seconds = secondsTotal - 60 * getMinutesConverted();
         return seconds;
+    }
+
+    public int getMinutesConverted() {
+        if (getHours() > 0) return getHours() - 60 * secondsTotal / 60;
+        return secondsTotal / 60;
+    }
+
+    public int getHours() {
+        return secondsTotal / 3600;
     }
 }

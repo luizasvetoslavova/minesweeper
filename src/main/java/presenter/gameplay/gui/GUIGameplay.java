@@ -134,10 +134,9 @@ public class GUIGameplay implements Gameplay {
     @Override
     public void win() {
         if (new WinChecker(currentMatrix).playerWon()) {
-            JOptionPane.showMessageDialog(null, "CONGRATULATIONS! You won. \n" +
-                    "Time: " + gameTimer.getSeconds() + " seconds");
-            gameTimer.stop();
-            deactivateButtons();
+            JOptionPane.showMessageDialog(null, "CONGRATULATIONS! You won.\n"
+                    + view.timeMessage(gameTimer));
+            finish();
         }
     }
 
@@ -146,10 +145,9 @@ public class GUIGameplay implements Gameplay {
         if (cell.isBomb()) {
             cellOpener.openAllBombs();
             view.showAllBombs();
-            JOptionPane.showMessageDialog(null, "BOOM! You stepped on a mine. \n" +
-                    "Time: " + gameTimer.getSeconds() + " seconds");
-            gameTimer.stop();
-            deactivateButtons();
+            JOptionPane.showMessageDialog(null, "BOOM! You stepped on a mine.\n"
+                    + view.timeMessage(gameTimer));
+            finish();
         }
     }
 
@@ -168,7 +166,6 @@ public class GUIGameplay implements Gameplay {
 
                 updateFields(matrix, getClassName(matrix));
                 currentTablePage.draw();
-
                 startTimer();
                 activateGameplayActions();
             }
@@ -218,6 +215,11 @@ public class GUIGameplay implements Gameplay {
 
     private static boolean isEven(int number) {
         return number % 2 == 0;
+    }
+
+    private void finish() {
+        gameTimer.stop();
+        deactivateButtons();
     }
 
     private void deactivateButtons() {
