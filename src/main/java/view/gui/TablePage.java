@@ -20,6 +20,7 @@ public class TablePage extends JFrame {
     private final JPanel mainPanel;
     private final HomePage homePage;
     private JButton reset;
+    private JButton nextLevel;
 
     private int buttonSize;
 
@@ -75,7 +76,6 @@ public class TablePage extends JFrame {
 
     private void addButtons() {
         JPanel buttonPanel = new JPanel();
-
         reset = new JButton("RESET");
 
         JButton backToHome = new JButton("BACK TO HOME");
@@ -87,8 +87,13 @@ public class TablePage extends JFrame {
             }
         });
 
+        nextLevel = new JButton("NEXT LEVEL");
+        nextLevel.setVisible(false);
+
         buttonPanel.add(reset);
         buttonPanel.add(backToHome);
+        buttonPanel.add(nextLevel);
+
         buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(29, 200, 40, 200));
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
@@ -111,5 +116,9 @@ public class TablePage extends JFrame {
 
     public JButton getReset() {
         return reset;
+    }
+
+    public JButton getNextLevel() {
+        return nextLevel;
     }
 }

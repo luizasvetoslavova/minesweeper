@@ -137,6 +137,7 @@ public class GUIGameplay implements Gameplay {
             JOptionPane.showMessageDialog(null, "CONGRATULATIONS! You won.\n"
                     + view.timeMessage(gameTimer));
             finish();
+            showNextLevelButton();
         }
     }
 
@@ -168,6 +169,28 @@ public class GUIGameplay implements Gameplay {
                 currentTablePage.draw();
                 startTimer();
                 activateGameplayActions();
+            }
+        });
+    }
+
+    private void showNextLevelButton() {
+        currentTablePage.getNextLevel().setVisible(true);
+        currentTablePage.getNextLevel().addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                currentTablePage.setVisible(false);
+
+                if (!(currentMatrix instanceof Expert)) {
+                    Matrix matrix = null;
+                    if (currentMatrix instanceof Easy) matrix = new Medium();
+                    else if (currentMatrix instanceof Medium) matrix = new Hard();
+                    else if (currentMatrix instanceof Hard) matrix = new Expert();
+
+                    updateFields(matrix, getClassName(matrix));
+                    currentTablePage.draw();
+                    startTimer();
+                    activateGameplayActions();
+                }
             }
         });
     }
