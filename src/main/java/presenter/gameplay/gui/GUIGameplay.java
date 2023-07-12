@@ -66,10 +66,10 @@ public class GUIGameplay implements Gameplay {
 
     @Override
     public void levelChoice() {
-        setupHomeButton(homePage.getEasy());
-        setupHomeButton(homePage.getHard());
-        setupHomeButton(homePage.getMedium());
-        setupHomeButton(homePage.getExpert());
+        setupHomeButton(homePage.getEasyBtn());
+        setupHomeButton(homePage.getHardBtn());
+        setupHomeButton(homePage.getMediumBtn());
+        setupHomeButton(homePage.getExpertBtn());
     }
 
     @Override
@@ -157,40 +157,10 @@ public class GUIGameplay implements Gameplay {
         currentTablePage.getReset().addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                currentTablePage.setVisible(false);
-
-                Matrix matrix = null;
-                if (currentMatrix instanceof Easy) matrix = new Easy();
-                else if (currentMatrix instanceof Medium) matrix = new Medium();
-                else if (currentMatrix instanceof Hard) matrix = new Hard();
-                else if (currentMatrix instanceof Expert) matrix = new Expert();
-
-                updateFields(matrix, getClassName(matrix));
-                currentTablePage.draw();
-                startTimer();
-                activateGameplayActions();
-            }
-        });
-    }
-
-    private void showNextLevelButton() {
-        currentTablePage.getNextLevel().setVisible(true);
-        currentTablePage.getNextLevel().addActionListener(new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                currentTablePage.setVisible(false);
-
-                if (!(currentMatrix instanceof Expert)) {
-                    Matrix matrix = null;
-                    if (currentMatrix instanceof Easy) matrix = new Medium();
-                    else if (currentMatrix instanceof Medium) matrix = new Hard();
-                    else if (currentMatrix instanceof Hard) matrix = new Expert();
-
-                    updateFields(matrix, getClassName(matrix));
-                    currentTablePage.draw();
-                    startTimer();
-                    activateGameplayActions();
-                }
+                if (currentMatrix instanceof Easy) handleButtonAction(new Easy());
+                else if (currentMatrix instanceof Medium) handleButtonAction(new Medium());
+                else if (currentMatrix instanceof Hard) handleButtonAction(new Hard());
+                else if (currentMatrix instanceof Expert) handleButtonAction(new Expert());
             }
         });
     }
@@ -199,20 +169,55 @@ public class GUIGameplay implements Gameplay {
         button.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
                 Matrix matrix = null;
-                if (button.equals(homePage.getEasy())) matrix = new Easy();
-                else if (button.equals(homePage.getMedium())) matrix = new Medium();
-                else if (button.equals(homePage.getHard())) matrix = new Hard();
-                else if (button.equals(homePage.getExpert())) matrix = new Expert();
-
-                startTimer();
+                if (button.equals(homePage.getEasyBtn())) matrix = new Easy();
+                else if (button.equals(homePage.getMediumBtn())) matrix = new Medium();
+                else if (button.equals(homePage.getHardBtn())) matrix = new Hard();
+                else if (button.equals(homePage.getExpertBtn())) matrix = new Expert();
                 homePage.setVisible(false);
-                updateFields(matrix, getClassName(matrix));
-                currentTablePage.draw();
-                activateGameplayActions();
+                handleButtonAction(matrix);
             }
         });
+    }
+
+    private void showPreviousLevelButton() {
+        if (!(currentMatrix instanceof Easy)) {
+            currentTablePage.getPreviousLevel().setVisible(true);
+            currentTablePage.getPreviousLevel().addActionListener(new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    Matrix matrix = null;
+                    if (currentMatrix instanceof Medium) matrix = new Easy();
+                    else if (currentMatrix instanceof Hard) matrix = new Medium();
+                    else if (currentMatrix instanceof Expert) matrix = new Hard();
+                    handleButtonAction(matrix);
+                }
+            });
+        }
+    }
+
+    private void showNextLevelButton() {
+        if (!(currentMatrix instanceof Expert)) {
+            currentTablePage.getNextLevel().setVisible(true);
+            currentTablePage.getNextLevel().addActionListener(new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    Matrix matrix = null;
+                    if (currentMatrix instanceof Easy) matrix = new Medium();
+                    else if (currentMatrix instanceof Medium) matrix = new Hard();
+                    else if (currentMatrix instanceof Hard) matrix = new Expert();
+                    handleButtonAction(matrix);
+                }
+            });
+        }
+    }
+
+    private void handleButtonAction(Matrix matrix) {
+        if (currentTablePage != null) currentTablePage.setVisible(false);
+        updateFields(matrix, getClassName(matrix));
+        currentTablePage.draw();
+        startTimer();
+        activateGameplayActions();
     }
 
     private void startTimer() {
@@ -230,6 +235,7 @@ public class GUIGameplay implements Gameplay {
     }
 
     private void activateGameplayActions() {
+        showPreviousLevelButton();
         openCell();
         putFlag();
         removeFlag();
