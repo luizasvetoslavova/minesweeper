@@ -19,8 +19,10 @@ public class TablePage extends JFrame {
     private final Matrix matrix;
     private final JPanel mainPanel;
     private final HomePage homePage;
+
     private JButton reset;
     private JButton nextLevel;
+    private JButton previousLevel;
 
     private int buttonSize;
 
@@ -75,6 +77,9 @@ public class TablePage extends JFrame {
     }
 
     private void addButtons() {
+        previousLevel = new JButton("PREVIOUS LEVEL");
+        previousLevel.setVisible(false);
+
         JPanel buttonPanel = new JPanel();
         reset = new JButton("RESET");
 
@@ -90,6 +95,7 @@ public class TablePage extends JFrame {
         nextLevel = new JButton("NEXT LEVEL");
         nextLevel.setVisible(false);
 
+        buttonPanel.add(previousLevel);
         buttonPanel.add(reset);
         buttonPanel.add(backToHome);
         buttonPanel.add(nextLevel);
@@ -120,5 +126,9 @@ public class TablePage extends JFrame {
 
     public JButton getNextLevel() {
         return nextLevel;
+    }
+
+    public JButton getPreviousLevel() {
+        return previousLevel;
     }
 }

@@ -55,19 +55,19 @@ public class HomePage extends JFrame {
         mainPanel.add(buttonPanel);
     }
 
-    public JButton getEasy() {
+    public JButton getEasyBtn() {
         return easy;
     }
 
-    public JButton getMedium() {
+    public JButton getMediumBtn() {
         return medium;
     }
 
-    public JButton getHard() {
+    public JButton getHardBtn() {
         return hard;
     }
 
-    public JButton getExpert() {
+    public JButton getExpertBtn() {
         return expert;
     }
 
