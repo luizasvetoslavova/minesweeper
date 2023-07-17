@@ -8,8 +8,8 @@ import model.mines.Matrix;
 import presenter.gameplay.*;
 import view.gui.CustomSizeGetter;
 import view.gui.GUIView;
-import view.gui.HomePage;
-import view.gui.TablePage;
+import view.gui.pages.HomePage;
+import view.gui.pages.TablePage;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -166,17 +166,12 @@ public class GUIGameplay implements Gameplay {
         });
     }
 
-    public void setCustomSize() {
+    private void setCustomSize() {
         customSizeGetter = new CustomSizeGetter();
         customSizeGetter.draw();
     }
 
-    public void startTimer() {
-        gameTimer = new GameTimer();
-        gameTimer.start();
-    }
-
-    public void activateGameplayActions() {
+    private void activateGameplayActions() {
         buttonManager.showPreviousLevelButton();
         openCell();
         putFlag();
@@ -193,21 +188,8 @@ public class GUIGameplay implements Gameplay {
         buttonManager.deactivateButtons();
     }
 
-    public String getClassName(Matrix matrix) {
-        return matrix.getClass().getSimpleName().toUpperCase(Locale.ROOT);
-    }
-
-    public void updateFields(Matrix matrix, String heading) {
-        openedCount = 0;
-        currentTablePage = new TablePage(matrix, homePage, heading);
-        view.setTablePage(currentTablePage);
-        currentMatrix = currentTablePage.getMatrix();
-        Initializer.getInstance().setMatrix(currentMatrix);
-        cellOpener.setMatrix(matrix);
-    }
-
     private class ButtonManager {
-        public void handleButtonAction(Matrix matrix) {
+        private void handleButtonAction(Matrix matrix) {
             if (currentTablePage != null) currentTablePage.setVisible(false);
             updateFields(matrix, getClassName(matrix));
             currentTablePage.draw();
@@ -215,7 +197,7 @@ public class GUIGameplay implements Gameplay {
             activateGameplayActions();
         }
 
-        public void showNextLevelButton() {
+        private void showNextLevelButton() {
             if (!(currentMatrix instanceof Expert) && !(currentMatrix instanceof Custom)) {
                 currentTablePage.getNextLevel().setVisible(true);
                 currentTablePage.getNextLevel().addActionListener(new AbstractAction() {
@@ -231,7 +213,7 @@ public class GUIGameplay implements Gameplay {
             }
         }
 
-        public void setupHomeButton(JButton button) {
+        private void setupHomeButton(JButton button) {
             button.addActionListener(new AbstractAction() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -252,7 +234,7 @@ public class GUIGameplay implements Gameplay {
             });
         }
 
-        public void showPreviousLevelButton() {
+        private void showPreviousLevelButton() {
             if (!(currentMatrix instanceof Easy) && !(currentMatrix instanceof Custom)) {
                 currentTablePage.getPreviousLevel().setVisible(true);
                 currentTablePage.getPreviousLevel().addActionListener(new AbstractAction() {
@@ -268,10 +250,28 @@ public class GUIGameplay implements Gameplay {
             }
         }
 
-        public void deactivateButtons() {
+        private void deactivateButtons() {
             currentTablePage.getButtons().forEach(tableButton -> {
                 tableButton.getButton().removeNotify();
             });
+        }
+
+        private String getClassName(Matrix matrix) {
+            return matrix.getClass().getSimpleName().toUpperCase(Locale.ROOT);
+        }
+
+        private void updateFields(Matrix matrix, String heading) {
+            openedCount = 0;
+            currentTablePage = new TablePage(matrix, homePage, heading);
+            view.setTablePage(currentTablePage);
+            currentMatrix = currentTablePage.getMatrix();
+            Initializer.getInstance().setMatrix(currentMatrix);
+            cellOpener.setMatrix(matrix);
+        }
+
+        private void startTimer() {
+            gameTimer = new GameTimer();
+            gameTimer.start();
         }
     }
 }

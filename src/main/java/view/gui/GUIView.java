@@ -2,6 +2,7 @@ package view.gui;
 
 import model.mines.CellStatus;
 import presenter.gameplay.GameTimer;
+import view.gui.pages.TablePage;
 
 import javax.swing.*;
 import java.awt.*;

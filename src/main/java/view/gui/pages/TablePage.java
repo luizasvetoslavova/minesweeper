@@ -1,7 +1,8 @@
-package view.gui;
+package view.gui.pages;
 
 import model.levels.*;
 import model.mines.Matrix;
+import view.gui.TableButton;
 
 import javax.swing.*;
 import java.awt.*;
