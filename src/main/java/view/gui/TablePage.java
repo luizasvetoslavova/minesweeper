@@ -1,9 +1,6 @@
 package view.gui;
 
-import model.levels.Easy;
-import model.levels.Expert;
-import model.levels.Hard;
-import model.levels.Medium;
+import model.levels.*;
 import model.mines.Matrix;
 
 import javax.swing.*;
@@ -34,10 +31,11 @@ public class TablePage extends JFrame {
         mainPanel.setLayout(new BorderLayout());
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1000, 600);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLocationRelativeTo(null);
         setTitle(heading);
         setVisible(true);
+        setResizable(false);
     }
 
     public void draw() {
@@ -110,6 +108,25 @@ public class TablePage extends JFrame {
         else if (matrix instanceof Medium) buttonSize = 23;
         else if (matrix instanceof Hard) buttonSize = 20;
         else if (matrix instanceof Expert) buttonSize = 18;
+        else if (matrix instanceof Custom) buttonSize = setCustomSize(matrix);
+    }
+
+    private int setCustomSize(Matrix custom) {
+        int rows = custom.getCells().length;
+        int cols = custom.getCells()[0].length;
+
+        if (rows <= 10 && cols <= 10) {
+            return 35;
+        } else if (rows <= 15 && cols <= 15) {
+            return 30;
+        } else if (rows <= 20 && cols <= 20) {
+            return 25;
+        } else if (rows <= 32 && cols <= 32) {
+            return 20;
+        } else if (rows <= 43 && cols <= 43) {
+            return 15;
+        }
+        return 13;
     }
 
     public List<TableButton> getButtons() {

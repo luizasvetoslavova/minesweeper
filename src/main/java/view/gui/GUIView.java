@@ -61,6 +61,12 @@ public class GUIView {
         return time + gameTimer.getSecondsConverted() + second;
     }
 
+    public void showInvalidSizeMessage() {
+        JOptionPane.showMessageDialog(null, "Invalid size! \n" +
+                "Min size: 3x3 \n" +
+                "Max size: 50x50");
+    }
+
     private String setOpenDigit(int digit) {
         return switch (digit) {
             case 0 -> ZERO_IMAGE;

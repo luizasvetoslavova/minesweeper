@@ -10,6 +10,7 @@ public class HomePage extends JFrame {
     private JButton medium;
     private JButton hard;
     private JButton expert;
+    private JButton custom;
 
     private String rules;
 
@@ -17,10 +18,11 @@ public class HomePage extends JFrame {
         mainPanel = new JPanel();
         setTitle("MINESWEEPER");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1000, 600);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
         setVisible(true);
+        setResizable(false);
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
     }
 
@@ -31,7 +33,8 @@ public class HomePage extends JFrame {
     }
 
     private void showRules() {
-        JLabel rules = new JLabel("<html>" + "<br>" + "<div style='text-align: " + "center;'>" +
+        JLabel rules = new JLabel("<html>" + "<br>" + "<br>" + "<br>" + "<br>" + "<br>" + "<br>" +
+                "<div style='text-align: " + "center;'>" +
                 this.rules + "<br>" + "<br>" + "Pick your level:" + "</div> </html>");
 
         rules.setFont(new Font(rules.getFont().getName(), Font.PLAIN, 17));
@@ -46,10 +49,13 @@ public class HomePage extends JFrame {
         medium = new JButton("MEDIUM");
         hard = new JButton("HARD");
         expert = new JButton("EXPERT");
+        custom = new JButton("CUSTOM");
+
         buttonPanel.add(easy);
         buttonPanel.add(medium);
         buttonPanel.add(hard);
         buttonPanel.add(expert);
+        buttonPanel.add(custom);
 
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(50, 100, 200, 100));
         mainPanel.add(buttonPanel);
@@ -69,6 +75,10 @@ public class HomePage extends JFrame {
 
     public JButton getExpertBtn() {
         return expert;
+    }
+
+    public JButton getCustomBtn() {
+        return custom;
     }
 
     public void setRules(String rules) {
