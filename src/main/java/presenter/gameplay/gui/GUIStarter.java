@@ -1,6 +1,6 @@
 package presenter.gameplay.gui;
 
-import view.gui.HomePage;
+import view.gui.pages.HomePage;
 
 public class GUIStarter {
     public static void main(String[] args) {

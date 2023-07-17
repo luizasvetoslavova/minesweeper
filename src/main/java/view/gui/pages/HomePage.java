@@ -1,4 +1,4 @@
-package view.gui;
+package view.gui.pages;
 
 import javax.swing.*;
 import java.awt.*;
