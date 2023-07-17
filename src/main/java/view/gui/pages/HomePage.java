@@ -3,7 +3,7 @@ package view.gui.pages;
 import javax.swing.*;
 import java.awt.*;
 
-public class HomePage extends JFrame {
+public class HomePage extends JPanel {
     private final JPanel mainPanel;
 
     private JButton easy;
@@ -16,13 +16,8 @@ public class HomePage extends JFrame {
 
     public HomePage() {
         mainPanel = new JPanel();
-        setTitle("MINESWEEPER");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
-        setLocationRelativeTo(null);
         setLayout(new BorderLayout());
         setVisible(true);
-        setResizable(false);
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
     }
 

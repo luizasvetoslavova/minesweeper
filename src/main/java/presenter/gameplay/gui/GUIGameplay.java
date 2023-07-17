@@ -8,6 +8,7 @@ import model.mines.Matrix;
 import presenter.gameplay.*;
 import view.gui.CustomSizeGetter;
 import view.gui.GUIView;
+import view.gui.pages.BasePage;
 import view.gui.pages.HomePage;
 import view.gui.pages.TablePage;
 
@@ -18,6 +19,7 @@ import java.awt.event.MouseEvent;
 import java.util.Locale;
 
 public class GUIGameplay implements Gameplay {
+    private final BasePage basePage;
     private final HomePage homePage;
     private final CellOpener cellOpener;
     private final GUIView view;
@@ -30,8 +32,9 @@ public class GUIGameplay implements Gameplay {
 
     private int openedCount;
 
-    public GUIGameplay(HomePage homePage) {
-        this.homePage = homePage;
+    public GUIGameplay() {
+        basePage = new BasePage();
+        homePage = basePage.getHomePage();
         openedCount = 0;
         cellOpener = new CellOpener();
         view = new GUIView();
