@@ -6,7 +6,7 @@ import model.mines.CellStatus;
 import model.mines.Initializer;
 import model.mines.Matrix;
 import presenter.gameplay.*;
-import view.gui.CustomSizeGetter;
+import view.gui.pages.CustomSizeGetter;
 import view.gui.GUIView;
 import view.gui.pages.BasePage;
 import view.gui.pages.HomePage;
