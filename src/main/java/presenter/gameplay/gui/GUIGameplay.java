@@ -40,7 +40,7 @@ public class GUIGameplay implements Gameplay {
     }
 
     @Override
-    public void rules() {
+    public void showRules() {
         homePage.setRules("Welcome to Minesweeper!<br><br>" +
                 "Rules:<br>" +
                 "1. The number shown on an opened cell is the number of mines (bombs) adjacent to it.<br>" +
@@ -58,7 +58,7 @@ public class GUIGameplay implements Gameplay {
 
     @Override
     public void start() {
-        rules();
+        showRules();
         homePage.initHome();
         levelChoice();
     }
@@ -167,28 +167,58 @@ public class GUIGameplay implements Gameplay {
         });
     }
 
-    private void setupHomeButton(JButton button) {
-        button.addActionListener(new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                homePage.setVisible(false);
-                Matrix matrix = null;
-                if (button.equals(homePage.getEasyBtn())) matrix = new Easy();
-                else if (button.equals(homePage.getMediumBtn())) matrix = new Medium();
-                else if (button.equals(homePage.getHardBtn())) matrix = new Hard();
-                else if (button.equals(homePage.getExpertBtn())) matrix = new Expert();
-                else if (button.equals(homePage.getCustomBtn())) {
-                    setCustomSize();
-                    matrix = new Custom(customSizeGetter.getLines(), customSizeGetter.getCols());
-                }
-                handleButtonAction(matrix);
-            }
-        });
-    }
-
     private void setCustomSize() {
         customSizeGetter = new CustomSizeGetter();
         customSizeGetter.draw();
+    }
+
+    private void startTimer() {
+        gameTimer = new GameTimer();
+        gameTimer.start();
+    }
+
+    private void activateGameplayActions() {
+        showPreviousLevelButton();
+        openCell();
+        putFlag();
+        removeFlag();
+        reset();
+    }
+
+    private static boolean isEven(int number) {
+        return number % 2 == 0;
+    }
+
+    private void finish() {
+        gameTimer.stop();
+        deactivateButtons();
+    }
+
+    private void deactivateButtons() {
+        currentTablePage.getButtons().forEach(tableButton -> {
+            tableButton.getButton().removeNotify();
+        });
+    }
+
+    private String getClassName(Matrix matrix) {
+        return matrix.getClass().getSimpleName().toUpperCase(Locale.ROOT);
+    }
+
+    private void handleButtonAction(Matrix matrix) {
+        if (currentTablePage != null) currentTablePage.setVisible(false);
+        updateFields(matrix, getClassName(matrix));
+        currentTablePage.draw();
+        startTimer();
+        activateGameplayActions();
+    }
+
+    private void updateFields(Matrix matrix, String heading) {
+        openedCount = 0;
+        currentTablePage = new TablePage(matrix, homePage, heading);
+        view.setTablePage(currentTablePage);
+        currentMatrix = currentTablePage.getMatrix();
+        Initializer.getInstance().setMatrix(currentMatrix);
+        cellOpener.setMatrix(matrix);
     }
 
     private void showPreviousLevelButton() {
@@ -223,52 +253,29 @@ public class GUIGameplay implements Gameplay {
         }
     }
 
-    private void handleButtonAction(Matrix matrix) {
-        if (currentTablePage != null) currentTablePage.setVisible(false);
-        updateFields(matrix, getClassName(matrix));
-        currentTablePage.draw();
-        startTimer();
-        activateGameplayActions();
-    }
-
-    private void startTimer() {
-        gameTimer = new GameTimer();
-        gameTimer.start();
-    }
-
-    private void updateFields(Matrix matrix, String heading) {
-        openedCount = 0;
-        currentTablePage = new TablePage(matrix, homePage, heading);
-        view.setTablePage(currentTablePage);
-        currentMatrix = currentTablePage.getMatrix();
-        Initializer.getInstance().setMatrix(currentMatrix);
-        cellOpener.setMatrix(matrix);
-    }
-
-    private void activateGameplayActions() {
-        showPreviousLevelButton();
-        openCell();
-        putFlag();
-        removeFlag();
-        reset();
-    }
-
-    private static boolean isEven(int number) {
-        return number % 2 == 0;
-    }
-
-    private void finish() {
-        gameTimer.stop();
-        deactivateButtons();
-    }
-
-    private void deactivateButtons() {
-        currentTablePage.getButtons().forEach(tableButton -> {
-            tableButton.getButton().removeNotify();
+    private void setupHomeButton(JButton button) {
+        button.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Matrix matrix = null;
+                if (button.equals(homePage.getEasyBtn())) {
+                    homePage.setVisible(false);
+                    matrix = new Easy();
+                } else if (button.equals(homePage.getMediumBtn())) {
+                    homePage.setVisible(false);
+                    matrix = new Medium();
+                } else if (button.equals(homePage.getHardBtn())) {
+                    homePage.setVisible(false);
+                    matrix = new Hard();
+                } else if (button.equals(homePage.getExpertBtn())) {
+                    homePage.setVisible(false);
+                    matrix = new Expert();
+                } else if (button.equals(homePage.getCustomBtn())) {
+                    setCustomSize();
+                    matrix = new Custom(customSizeGetter.getLines(), customSizeGetter.getCols());
+                }
+                handleButtonAction(matrix);
+            }
         });
-    }
-
-    private String getClassName(Matrix matrix) {
-        return matrix.getClass().getSimpleName().toUpperCase(Locale.ROOT);
     }
 }

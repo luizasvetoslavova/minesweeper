@@ -18,7 +18,7 @@ public class HomePage extends JFrame {
         mainPanel = new JPanel();
         setTitle("MINESWEEPER");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1000, 600);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
         setVisible(true);
@@ -33,7 +33,8 @@ public class HomePage extends JFrame {
     }
 
     private void showRules() {
-        JLabel rules = new JLabel("<html>" + "<br>" + "<div style='text-align: " + "center;'>" +
+        JLabel rules = new JLabel("<html>" + "<br>" + "<br>" + "<br>" + "<br>" + "<br>" + "<br>" +
+                "<div style='text-align: " + "center;'>" +
                 this.rules + "<br>" + "<br>" + "Pick your level:" + "</div> </html>");
 
         rules.setFont(new Font(rules.getFont().getName(), Font.PLAIN, 17));

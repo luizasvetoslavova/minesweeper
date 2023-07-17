@@ -3,7 +3,7 @@ package presenter.gameplay;
 import model.mines.Cell;
 
 public interface Gameplay {
-    void rules();
+    void showRules();
 
     void start();
 
