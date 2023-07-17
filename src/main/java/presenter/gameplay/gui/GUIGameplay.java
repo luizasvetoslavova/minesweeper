@@ -1,9 +1,6 @@
 package presenter.gameplay.gui;
 
-import model.levels.Easy;
-import model.levels.Expert;
-import model.levels.Hard;
-import model.levels.Medium;
+import model.levels.*;
 import model.mines.Cell;
 import model.mines.CellStatus;
 import model.mines.Initializer;
@@ -12,6 +9,7 @@ import presenter.gameplay.CellOpener;
 import presenter.gameplay.GameTimer;
 import presenter.gameplay.Gameplay;
 import presenter.gameplay.WinChecker;
+import view.gui.CustomSizeGetter;
 import view.gui.GUIView;
 import view.gui.HomePage;
 import view.gui.TablePage;
@@ -30,6 +28,7 @@ public class GUIGameplay implements Gameplay {
     private TablePage currentTablePage;
     private Matrix currentMatrix;
     private GameTimer gameTimer;
+    private CustomSizeGetter customSizeGetter;
 
     private int openedCount;
 
@@ -70,6 +69,7 @@ public class GUIGameplay implements Gameplay {
         setupHomeButton(homePage.getHardBtn());
         setupHomeButton(homePage.getMediumBtn());
         setupHomeButton(homePage.getExpertBtn());
+        setupHomeButton(homePage.getCustomBtn());
     }
 
     @Override
@@ -161,6 +161,8 @@ public class GUIGameplay implements Gameplay {
                 else if (currentMatrix instanceof Medium) handleButtonAction(new Medium());
                 else if (currentMatrix instanceof Hard) handleButtonAction(new Hard());
                 else if (currentMatrix instanceof Expert) handleButtonAction(new Expert());
+                else if (currentMatrix instanceof Custom) handleButtonAction(
+                        new Custom(customSizeGetter.getLines(), customSizeGetter.getCols()));
             }
         });
     }
@@ -169,19 +171,28 @@ public class GUIGameplay implements Gameplay {
         button.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                homePage.setVisible(false);
                 Matrix matrix = null;
                 if (button.equals(homePage.getEasyBtn())) matrix = new Easy();
                 else if (button.equals(homePage.getMediumBtn())) matrix = new Medium();
                 else if (button.equals(homePage.getHardBtn())) matrix = new Hard();
                 else if (button.equals(homePage.getExpertBtn())) matrix = new Expert();
-                homePage.setVisible(false);
+                else if (button.equals(homePage.getCustomBtn())) {
+                    setCustomSize();
+                    matrix = new Custom(customSizeGetter.getLines(), customSizeGetter.getCols());
+                }
                 handleButtonAction(matrix);
             }
         });
     }
 
+    private void setCustomSize() {
+        customSizeGetter = new CustomSizeGetter();
+        customSizeGetter.draw();
+    }
+
     private void showPreviousLevelButton() {
-        if (!(currentMatrix instanceof Easy)) {
+        if (!(currentMatrix instanceof Easy) && !(currentMatrix instanceof Custom)) {
             currentTablePage.getPreviousLevel().setVisible(true);
             currentTablePage.getPreviousLevel().addActionListener(new AbstractAction() {
                 @Override
@@ -197,7 +208,7 @@ public class GUIGameplay implements Gameplay {
     }
 
     private void showNextLevelButton() {
-        if (!(currentMatrix instanceof Expert)) {
+        if (!(currentMatrix instanceof Expert) && !(currentMatrix instanceof Custom)) {
             currentTablePage.getNextLevel().setVisible(true);
             currentTablePage.getNextLevel().addActionListener(new AbstractAction() {
                 @Override

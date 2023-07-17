@@ -1,9 +1,6 @@
 package view.gui;
 
-import model.levels.Easy;
-import model.levels.Expert;
-import model.levels.Hard;
-import model.levels.Medium;
+import model.levels.*;
 import model.mines.Matrix;
 
 import javax.swing.*;
@@ -38,6 +35,7 @@ public class TablePage extends JFrame {
         setLocationRelativeTo(null);
         setTitle(heading);
         setVisible(true);
+        setResizable(false);
     }
 
     public void draw() {
@@ -110,6 +108,8 @@ public class TablePage extends JFrame {
         else if (matrix instanceof Medium) buttonSize = 23;
         else if (matrix instanceof Hard) buttonSize = 20;
         else if (matrix instanceof Expert) buttonSize = 18;
+        else if (matrix instanceof Custom) buttonSize = 20;
+
     }
 
     public List<TableButton> getButtons() {
