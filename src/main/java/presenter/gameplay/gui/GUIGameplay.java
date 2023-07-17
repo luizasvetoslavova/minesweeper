@@ -257,21 +257,16 @@ public class GUIGameplay implements Gameplay {
         button.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if (!button.equals(homePage.getCustomBtn())) homePage.setVisible(false);
+
                 Matrix matrix = null;
-                if (button.equals(homePage.getEasyBtn())) {
-                    homePage.setVisible(false);
-                    matrix = new Easy();
-                } else if (button.equals(homePage.getMediumBtn())) {
-                    homePage.setVisible(false);
-                    matrix = new Medium();
-                } else if (button.equals(homePage.getHardBtn())) {
-                    homePage.setVisible(false);
-                    matrix = new Hard();
-                } else if (button.equals(homePage.getExpertBtn())) {
-                    homePage.setVisible(false);
-                    matrix = new Expert();
-                } else if (button.equals(homePage.getCustomBtn())) {
+                if (button.equals(homePage.getEasyBtn())) matrix = new Easy();
+                else if (button.equals(homePage.getMediumBtn())) matrix = new Medium();
+                else if (button.equals(homePage.getHardBtn())) matrix = new Hard();
+                else if (button.equals(homePage.getExpertBtn())) matrix = new Expert();
+                else if (button.equals(homePage.getCustomBtn())) {
                     setCustomSize();
+                    if (customSizeGetter.isSizeInvalid()) return;
                     matrix = new Custom(customSizeGetter.getLines(), customSizeGetter.getCols());
                 }
                 handleButtonAction(matrix);

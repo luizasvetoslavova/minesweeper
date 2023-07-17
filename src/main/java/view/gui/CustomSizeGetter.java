@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 
 public class CustomSizeGetter extends JDialog {
     private final JPanel mainPanel;
+    private final GUIView view;
 
     private int lines;
     private int cols;
@@ -14,6 +15,7 @@ public class CustomSizeGetter extends JDialog {
     public CustomSizeGetter() {
         super(new JFrame(), "CUSTOM - ENTER LINES AND COLUMNS", true);
         mainPanel = new JPanel();
+        view = new GUIView();
         setSize(180, 135);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
@@ -40,13 +42,21 @@ public class CustomSizeGetter extends JDialog {
                 try {
                     lines = Integer.parseInt(linesField.getText().trim());
                     cols = Integer.parseInt(colsField.getText().trim());
+                    if (isSizeInvalid()) {
+                        view.showInvalidSizeMessage();
+                        return;
+                    }
                     setVisible(false);
                 } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(null, "Invalid input!");
+                    view.showInvalidSizeMessage();
                 }
             }
         });
         panel.add(submitButton);
+    }
+
+    public boolean isSizeInvalid() {
+        return lines < 3 || cols < 3 || lines > 50 || cols > 50;
     }
 
     private JTextField addDigitField(JPanel fieldPanel, String requirement) {
