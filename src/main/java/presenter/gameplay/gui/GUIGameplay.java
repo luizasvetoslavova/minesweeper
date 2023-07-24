@@ -19,11 +19,11 @@ import java.awt.event.MouseEvent;
 import java.util.Locale;
 
 public class GUIGameplay implements Gameplay {
-    private final BasePage basePage;
     private final HomePage homePage;
     private final CellOpener cellOpener;
     private final GUIView view;
     private final ButtonManager buttonManager;
+    private final ScoreSaver scoreSaver;
 
     private TablePage currentTablePage;
     private Matrix currentMatrix;
@@ -31,14 +31,16 @@ public class GUIGameplay implements Gameplay {
     private CustomSizeGetter customSizeGetter;
 
     private int openedCount;
+    private int clickedCount;
 
     public GUIGameplay() {
-        basePage = new BasePage();
+        BasePage basePage = new BasePage();
         homePage = basePage.getHomePage();
         openedCount = 0;
         cellOpener = new CellOpener();
         view = new GUIView();
         buttonManager = new ButtonManager();
+        scoreSaver = new ScoreSaver(this);
     }
 
     @Override
@@ -84,6 +86,7 @@ public class GUIGameplay implements Gameplay {
                     if (cell.getCellStatus() == CellStatus.OPENED) return;
 
                     openedCount++;
+                    clickedCount++;
                     if (openedCount == 1) Initializer.getInstance().initOnFirstClick(cell, openedCount);
                     cell.setCellStatus(CellStatus.OPENED);
                     lose(cell);
@@ -104,6 +107,7 @@ public class GUIGameplay implements Gameplay {
                     Cell cell = tableButton.getCell();
                     if (SwingUtilities.isRightMouseButton(e)) {
                         if (!isEven(tableButton.getTimesClicked()) && cell.getCellStatus() != CellStatus.OPENED) {
+                            clickedCount++;
                             cell.setCellStatus(CellStatus.FLAGGED);
                             view.setButtonImage(tableButton, view.getFLAG_IMAGE());
                             win();
@@ -124,6 +128,7 @@ public class GUIGameplay implements Gameplay {
 
                     if (SwingUtilities.isRightMouseButton(e)) {
                         if (isEven(tableButton.getTimesClicked()) && cell.getCellStatus() == CellStatus.FLAGGED) {
+                            clickedCount++;
                             cell.setCellStatus(CellStatus.UNOPENED);
                             tableButton.getButton().setIcon(null);
                         }
@@ -136,6 +141,7 @@ public class GUIGameplay implements Gameplay {
     @Override
     public void win() {
         if (new WinChecker(currentMatrix).playerWon()) {
+            scoreSaver.saveScores();
             JOptionPane.showMessageDialog(null, "CONGRATULATIONS! You won.\n"
                     + view.timeMessage(gameTimer));
             finish();
@@ -189,6 +195,14 @@ public class GUIGameplay implements Gameplay {
     private void finish() {
         gameTimer.stop();
         buttonManager.deactivateButtons();
+    }
+
+    public int getOpenedCount() {
+        return openedCount;
+    }
+
+    public String getTime() {
+        return view.timeMessage(gameTimer);
     }
 
     private class ButtonManager {
