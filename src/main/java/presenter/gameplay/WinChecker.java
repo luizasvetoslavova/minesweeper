@@ -19,8 +19,10 @@ public class WinChecker {
         int openedDigits = countCells(cell -> cell.getDigit() > 0 && cell.getCellStatus() == CellStatus.OPENED);
         int flaggedBombs = countCells(cell -> cell.isBomb() && cell.getCellStatus() == CellStatus.FLAGGED);
         int totalBombs = countCells(Cell::isBomb);
+        int totalEmpty = countCells(cell -> cell.getDigit() == 0);
+        int openedEmpty = countCells(cell -> cell.getDigit() == 0 && cell.getCellStatus() == CellStatus.OPENED);
 
-        return (totalBombs == flaggedBombs) && (allDigits == openedDigits);
+        return (totalBombs == flaggedBombs) && (allDigits == openedDigits) && (totalEmpty == openedEmpty);
     }
 
     private int countCells(Predicate<Cell> condition) {
