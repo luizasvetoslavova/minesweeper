@@ -23,8 +23,7 @@ public class ScoreSaver {
     public void saveScores() {
         setFilePaths();
         isNewScore = false;
-        oldTimeScore = Integer.parseInt(getContent(timeScorePath));
-        oldClickScore = Integer.parseInt(getContent(clickScorePath));
+        setOldScores();
 
         if (!isFileEmpty(timeScorePath)) {
             if (isCurrentTimeLess(gameplay.getGameTimer().getSecondsTotal())) {
@@ -32,7 +31,6 @@ public class ScoreSaver {
                 isNewScore = true;
             }
         } else {
-            oldTimeScore = 0;
             saveTime();
             isNewScore = true;
         }
@@ -46,6 +44,19 @@ public class ScoreSaver {
             oldClickScore = 0;
             saveClicks();
             isNewScore = true;
+        }
+    }
+
+    private void setOldScores() {
+        if (getContent(timeScorePath) == null) {
+            oldTimeScore = 0;
+        } else {
+            oldTimeScore = Integer.parseInt(getContent(timeScorePath));
+        }
+        if (getContent(clickScorePath) == null) {
+            oldClickScore = 0;
+        } else {
+            oldClickScore = Integer.parseInt(getContent(clickScorePath));
         }
     }
 
