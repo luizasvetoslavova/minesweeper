@@ -34,7 +34,7 @@ public class ScoreSaver {
         if (!isFileEmpty(leastClicksPath)) deleteFileContent(leastClicksPath);
 
         try (FileWriter fileWriter = new FileWriter(leastClicksPath, true)) {
-            fileWriter.write(String.valueOf(gameplay.getOpenedCount()));
+            fileWriter.write(String.valueOf(gameplay.getClickedCount()));
         } catch (IOException e) {
             System.err.println("Error writing to the text file: " + e.getMessage());
         }

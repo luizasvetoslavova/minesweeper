@@ -197,8 +197,8 @@ public class GUIGameplay implements Gameplay {
         buttonManager.deactivateButtons();
     }
 
-    public int getOpenedCount() {
-        return openedCount;
+    public int getClickedCount() {
+        return clickedCount;
     }
 
     public String getTime() {
