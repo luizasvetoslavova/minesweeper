@@ -49,6 +49,20 @@ public class ScoreSaver {
         return getContent(leastClicksPath);
     }
 
+    public String getContent(String filePath) {
+        String content = null;
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                content = line;
+            }
+            return content;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return content;
+    }
+
     private void setFilePaths() {
         if (gameplay.getCurrentMatrix() instanceof Easy) {
             leastClicksPath = "src/main/java/model/scores/easy/clicks";
@@ -104,20 +118,6 @@ public class ScoreSaver {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    private String getContent(String filePath) {
-        String content = null;
-        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                content = line;
-            }
-            return content;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return content;
     }
 
     public boolean isNewScore() {

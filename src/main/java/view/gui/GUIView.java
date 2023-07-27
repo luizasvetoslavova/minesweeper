@@ -70,14 +70,15 @@ public class GUIView {
 
         int hours = timer.getHours(seconds);
         int minutes = timer.getMinutes(seconds, hours);
+        int secondsConverted = timer.getSeconds(seconds, minutes);
 
         if (hours == 1) hour = " hour ";
-        if (seconds == 1) second = " second";
+        if (secondsConverted == 1) second = " second";
         if (minutes == 1) minute = " minute ";
 
-        if (hours > 0) return hours + hour + minutes + minute + seconds + second;
-        if (minutes > 0) return minutes + minute + seconds + second;
-        return seconds + second;
+        if (hours > 0) return hours + hour + minutes + minute + secondsConverted + second;
+        if (minutes > 0) return minutes + minute + secondsConverted + second;
+        return secondsConverted + second;
     }
 
     public void showInvalidSizeMessage() {

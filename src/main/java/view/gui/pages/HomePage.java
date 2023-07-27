@@ -11,6 +11,7 @@ public class HomePage extends JPanel {
     private JButton hard;
     private JButton expert;
     private JButton custom;
+    private JButton scores;
 
     private String rules;
 
@@ -19,6 +20,13 @@ public class HomePage extends JPanel {
         setLayout(new BorderLayout());
         setVisible(true);
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+
+        easy = new JButton("EASY");
+        medium = new JButton("MEDIUM");
+        hard = new JButton("HARD");
+        expert = new JButton("EXPERT");
+        custom = new JButton("CUSTOM");
+        scores = new JButton("SCORES");
     }
 
     public void initHome() {
@@ -28,7 +36,7 @@ public class HomePage extends JPanel {
     }
 
     private void showRules() {
-        JLabel rules = new JLabel("<html>" + "<br>" + "<br>" + "<br>" + "<br>" + "<br>" + "<br>" +
+        JLabel rules = new JLabel("<html>" + "<br>" + "<br>" + "<br>" + "<br>" +
                 "<div style='text-align: " + "center;'>" +
                 this.rules + "<br>" + "<br>" + "Pick your level:" + "</div> </html>");
 
@@ -40,20 +48,26 @@ public class HomePage extends JPanel {
 
     private void addButtons() {
         JPanel buttonPanel = new JPanel();
-        easy = new JButton("EASY");
-        medium = new JButton("MEDIUM");
-        hard = new JButton("HARD");
-        expert = new JButton("EXPERT");
-        custom = new JButton("CUSTOM");
-
         buttonPanel.add(easy);
         buttonPanel.add(medium);
         buttonPanel.add(hard);
         buttonPanel.add(expert);
         buttonPanel.add(custom);
 
-        buttonPanel.setBorder(BorderFactory.createEmptyBorder(50, 100, 200, 100));
+        JPanel scoreBtnPanel = new JPanel();
+        scoreBtnPanel.add(scores);
+
+        alignButtonsInMainPanel(buttonPanel, scoreBtnPanel);
+    }
+
+    private void alignButtonsInMainPanel(JPanel buttonPanel, JPanel scoreBtnPanel) {
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+        mainPanel.add(Box.createVerticalGlue());
         mainPanel.add(buttonPanel);
+        mainPanel.add(Box.createVerticalStrut(0));
+        scoreBtnPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        mainPanel.add(scoreBtnPanel);
+        mainPanel.add(Box.createVerticalGlue());
     }
 
     public JButton getEasyBtn() {
@@ -74,6 +88,10 @@ public class HomePage extends JPanel {
 
     public JButton getCustomBtn() {
         return custom;
+    }
+
+    public JButton getScoreBtn() {
+        return scores;
     }
 
     public void setRules(String rules) {

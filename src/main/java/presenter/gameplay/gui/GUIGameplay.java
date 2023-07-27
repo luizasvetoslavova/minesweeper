@@ -6,11 +6,8 @@ import model.mines.CellStatus;
 import model.mines.Initializer;
 import model.mines.Matrix;
 import presenter.gameplay.*;
-import view.gui.pages.CustomSizeGetter;
+import view.gui.pages.*;
 import view.gui.GUIView;
-import view.gui.pages.BasePage;
-import view.gui.pages.HomePage;
-import view.gui.pages.TablePage;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -42,17 +39,18 @@ public class GUIGameplay implements Gameplay {
         view = new GUIView();
         buttonManager = new ButtonManager();
         scoreSaver = new ScoreSaver(this);
+        new ScorePage(homePage, scoreSaver, view);
     }
 
     @Override
     public void showRules() {
-        homePage.setRules("Welcome to Minesweeper!<br><br>" +
-                "Rules:<br>" +
+        homePage.setRules("<h2>Welcome to Minesweeper!</h2><br><br>" +
+                "<u>Rules:</u><br>" +
                 "1. The number shown on an opened cell is the number of mines (bombs) adjacent to it.<br>" +
                 "2. You have to flag all the mines and not open any. If you do, you lose and the game ends.<br>" +
                 "3. You have to open all numbers. <br>" +
                 "You can start by clicking at any random cell.<br><br>" +
-                "Signs:<br>" +
+                "<u>Signs:</u><br>" +
                 "&#9638; - Empty cell. There are no bombs near it.<br>" +
                 "\uD83D\uDCA3 - Bomb.<br>" +
                 "&#11036; - Unopened cell.<br>" +
@@ -143,12 +141,13 @@ public class GUIGameplay implements Gameplay {
     public void win() {
         if (new WinChecker(currentMatrix).playerWon()) {
             gameTimer.stop();
-            scoreSaver.saveScores();
-            if (scoreSaver.isNewScore()) JOptionPane.showMessageDialog(null, "NEW SCORE!\n"
-                    + getScoreInfo());
-            else JOptionPane.showMessageDialog(null, "CONGRATULATIONS! You won.\n"
-                    + getScoreInfo());
-            buttonManager.showNextLevelButton();
+            if (!(currentMatrix instanceof Custom)) {
+                scoreSaver.saveScores();
+                checkNewScore();
+                buttonManager.showNextLevelButton();
+            } else {
+                JOptionPane.showMessageDialog(null, "CONGRATULATIONS! You won.");
+            }
             buttonManager.deactivateButtons();
         }
     }
@@ -209,6 +208,13 @@ public class GUIGameplay implements Gameplay {
                 "Clicks: " + clickCount + "\n" +
                 "Best time for level: " + view.timeMessage(Integer.parseInt(scoreSaver.getTimeScore())) + "\n" +
                 "Best clicks for level: " + scoreSaver.getClickScore();
+    }
+
+    private void checkNewScore() {
+        if (scoreSaver.isNewScore()) JOptionPane.showMessageDialog(null, "NEW SCORE!\n"
+                + getScoreInfo());
+        else JOptionPane.showMessageDialog(null, "CONGRATULATIONS! You won.\n"
+                + getScoreInfo());
     }
 
     public Matrix getCurrentMatrix() {

@@ -10,7 +10,6 @@ public class GameTimer {
     public void start() {
         timer = new Timer();
         secondsTotal = 0;
-
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
@@ -47,6 +46,11 @@ public class GameTimer {
             return hours - 60 * seconds / 60;
         }
         return seconds / 60;
+    }
+
+    public int getSeconds(int seconds, int minutes) {
+        if (minutes > 0) return seconds - 60 * minutes;
+        return seconds;
     }
 
     public int getSecondsTotal() {
