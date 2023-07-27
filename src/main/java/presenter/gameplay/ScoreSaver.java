@@ -47,19 +47,6 @@ public class ScoreSaver {
         }
     }
 
-    private void setOldScores() {
-        if (getContent(timeScorePath) == null) {
-            oldTimeScore = 0;
-        } else {
-            oldTimeScore = Integer.parseInt(getContent(timeScorePath));
-        }
-        if (getContent(clickScorePath) == null) {
-            oldClickScore = 0;
-        } else {
-            oldClickScore = Integer.parseInt(getContent(clickScorePath));
-        }
-    }
-
     public String getTimeScore() {
         setFilePaths();
         return getContent(timeScorePath);
@@ -82,6 +69,19 @@ public class ScoreSaver {
             e.printStackTrace();
         }
         return content;
+    }
+
+    private void setOldScores() {
+        if (getContent(timeScorePath) == null) {
+            oldTimeScore = 0;
+        } else {
+            oldTimeScore = Integer.parseInt(getContent(timeScorePath));
+        }
+        if (getContent(clickScorePath) == null) {
+            oldClickScore = 0;
+        } else {
+            oldClickScore = Integer.parseInt(getContent(clickScorePath));
+        }
     }
 
     private void setFilePaths() {

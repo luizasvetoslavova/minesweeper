@@ -13,7 +13,6 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Locale;
 
 public class GUIGameplay implements Gameplay {
     private final HomePage homePage;
@@ -31,13 +30,13 @@ public class GUIGameplay implements Gameplay {
     private int clickCount;
 
     public GUIGameplay() {
+        buttonManager = new ButtonManager(this);
         BasePage basePage = new BasePage();
         homePage = basePage.getHomePage();
         openedCount = 0;
         clickCount = 0;
         cellOpener = new CellOpener();
         view = new GUIView();
-        buttonManager = new ButtonManager();
         scoreSaver = new ScoreSaver(this);
         new ScorePage(homePage, scoreSaver, view);
     }
@@ -178,29 +177,16 @@ public class GUIGameplay implements Gameplay {
         });
     }
 
-    private void setCustomSize() {
-        customSizeGetter = new CustomSizeGetter();
-        customSizeGetter.draw();
-    }
-
-    private void activateGameplayActions() {
-        buttonManager.showPreviousLevelButton();
-        openCell();
-        putFlag();
-        removeFlag();
-        reset();
-    }
-
-    private static boolean isEven(int number) {
-        return number % 2 == 0;
-    }
-
     public int getClickCount() {
         return clickCount;
     }
 
     public String getTime() {
         return view.timeMessage(gameTimer);
+    }
+
+    private static boolean isEven(int number) {
+        return number % 2 == 0;
     }
 
     private String getScoreInfo() {
@@ -227,91 +213,56 @@ public class GUIGameplay implements Gameplay {
         return gameTimer;
     }
 
-    private class ButtonManager {
-        private void handleButtonAction(Matrix matrix) {
-            if (currentTablePage != null) currentTablePage.setVisible(false);
-            updateFields(matrix, getClassName(matrix));
-            currentTablePage.draw();
-            startTimer();
-            activateGameplayActions();
-        }
+    public TablePage getCurrentTablePage() {
+        return currentTablePage;
+    }
 
-        private void showNextLevelButton() {
-            if (!(currentMatrix instanceof Expert) && !(currentMatrix instanceof Custom)) {
-                currentTablePage.getNextLevel().setVisible(true);
-                currentTablePage.getNextLevel().addActionListener(new AbstractAction() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        Matrix matrix = null;
-                        if (currentMatrix instanceof Easy) matrix = new Medium();
-                        else if (currentMatrix instanceof Medium) matrix = new Hard();
-                        else if (currentMatrix instanceof Hard) matrix = new Expert();
-                        handleButtonAction(matrix);
-                    }
-                });
-            }
-        }
+    public void setCurrentTablePage(TablePage currentTablePage) {
+        this.currentTablePage = currentTablePage;
+    }
 
-        private void setupHomeButton(JButton button) {
-            button.addActionListener(new AbstractAction() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    if (!button.equals(homePage.getCustomBtn())) homePage.setVisible(false);
+    public void activateGameplayActions() {
+        buttonManager.showPreviousLevelButton();
+        openCell();
+        putFlag();
+        removeFlag();
+        reset();
+    }
 
-                    Matrix matrix = null;
-                    if (button.equals(homePage.getEasyBtn())) matrix = new Easy();
-                    else if (button.equals(homePage.getMediumBtn())) matrix = new Medium();
-                    else if (button.equals(homePage.getHardBtn())) matrix = new Hard();
-                    else if (button.equals(homePage.getExpertBtn())) matrix = new Expert();
-                    else if (button.equals(homePage.getCustomBtn())) {
-                        setCustomSize();
-                        if (customSizeGetter.isSizeInvalid()) return;
-                        matrix = new Custom(customSizeGetter.getLines(), customSizeGetter.getCols());
-                    }
-                    handleButtonAction(matrix);
-                }
-            });
-        }
+    public void setCurrentMatrix(Matrix currentMatrix) {
+        this.currentMatrix = currentMatrix;
+    }
 
-        private void showPreviousLevelButton() {
-            if (!(currentMatrix instanceof Easy) && !(currentMatrix instanceof Custom)) {
-                currentTablePage.getPreviousLevel().setVisible(true);
-                currentTablePage.getPreviousLevel().addActionListener(new AbstractAction() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        Matrix matrix = null;
-                        if (currentMatrix instanceof Medium) matrix = new Easy();
-                        else if (currentMatrix instanceof Hard) matrix = new Medium();
-                        else if (currentMatrix instanceof Expert) matrix = new Hard();
-                        handleButtonAction(matrix);
-                    }
-                });
-            }
-        }
+    public HomePage getHomePage() {
+        return homePage;
+    }
 
-        private void deactivateButtons() {
-            currentTablePage.getButtons().forEach(tableButton -> {
-                tableButton.getButton().removeNotify();
-            });
-        }
+    public void setCustomSize() {
+        customSizeGetter = new CustomSizeGetter();
+        customSizeGetter.draw();
+    }
 
-        private String getClassName(Matrix matrix) {
-            return matrix.getClass().getSimpleName().toUpperCase(Locale.ROOT);
-        }
+    public CustomSizeGetter getCustomSizeGetter() {
+        return customSizeGetter;
+    }
 
-        private void updateFields(Matrix matrix, String heading) {
-            openedCount = 0;
-            clickCount = 0;
-            currentTablePage = new TablePage(matrix, homePage, heading);
-            view.setTablePage(currentTablePage);
-            currentMatrix = currentTablePage.getMatrix();
-            Initializer.getInstance().setMatrix(currentMatrix);
-            cellOpener.setMatrix(matrix);
-        }
+    public void setGameTimer(GameTimer gameTimer) {
+        this.gameTimer = gameTimer;
+    }
 
-        private void startTimer() {
-            gameTimer = new GameTimer();
-            gameTimer.start();
-        }
+    public void setOpenedCount(int openedCount) {
+        this.openedCount = openedCount;
+    }
+
+    public void setClickCount(int clickCount) {
+        this.clickCount = clickCount;
+    }
+
+    public GUIView getView() {
+        return view;
+    }
+
+    public CellOpener getCellOpener() {
+        return cellOpener;
     }
 }
