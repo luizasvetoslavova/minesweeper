@@ -144,7 +144,10 @@ public class GUIGameplay implements Gameplay {
         if (new WinChecker(currentMatrix).playerWon()) {
             gameTimer.stop();
             scoreSaver.saveScores();
-            JOptionPane.showMessageDialog(null, "CONGRATULATIONS! You won.\n" + getScoreInfo());
+            if (scoreSaver.isNewScore()) JOptionPane.showMessageDialog(null, "NEW SCORE!\n"
+                    + getScoreInfo());
+            else JOptionPane.showMessageDialog(null, "CONGRATULATIONS! You won.\n"
+                    + getScoreInfo());
             buttonManager.showNextLevelButton();
             buttonManager.deactivateButtons();
         }
@@ -156,16 +159,9 @@ public class GUIGameplay implements Gameplay {
             gameTimer.stop();
             cellOpener.openAllBombs();
             view.showAllBombs();
-            JOptionPane.showMessageDialog(null, "BOOM! You stepped on a mine.\n" + getScoreInfo());
+            JOptionPane.showMessageDialog(null, "BOOM! You stepped on a mine.\n");
             buttonManager.deactivateButtons();
         }
-    }
-
-    private String getScoreInfo() {
-        return "Time: " + getTime() + "\n" +
-                "Clicks: " + clickCount + "\n" +
-                "Best time for level: " + view.timeMessage(Integer.parseInt(scoreSaver.getTimeScore())) + "\n" +
-                "Best clicks for level: " + scoreSaver.getClickScore();
     }
 
     @Override
@@ -206,6 +202,13 @@ public class GUIGameplay implements Gameplay {
 
     public String getTime() {
         return view.timeMessage(gameTimer);
+    }
+
+    private String getScoreInfo() {
+        return "Time: " + getTime() + "\n" +
+                "Clicks: " + clickCount + "\n" +
+                "Best time for level: " + view.timeMessage(Integer.parseInt(scoreSaver.getTimeScore())) + "\n" +
+                "Best clicks for level: " + scoreSaver.getClickScore();
     }
 
     public Matrix getCurrentMatrix() {

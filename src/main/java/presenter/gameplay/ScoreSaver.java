@@ -12,6 +12,7 @@ public class ScoreSaver {
     private final GUIGameplay gameplay;
     private String leastClicksPath;
     private String leastTimePath;
+    private boolean isNewScore;
 
     public ScoreSaver(GUIGameplay gameplay) {
         this.gameplay = gameplay;
@@ -19,11 +20,23 @@ public class ScoreSaver {
 
     public void saveScores() {
         setFilePaths();
-        if (isFileEmpty(leastTimePath)) saveTime();
-        else if (isCurrentTimeLess(gameplay.getGameTimer().getSecondsTotal())) saveTime();
+        isNewScore = false;
 
-        if (isFileEmpty(leastClicksPath)) saveClicks();
-        else if (areCurrentClicksLess(gameplay.getClickCount())) saveClicks();
+        if (isFileEmpty(leastTimePath)) {
+            saveTime();
+            isNewScore = true;
+        } else if (isCurrentTimeLess(gameplay.getGameTimer().getSecondsTotal())) {
+            saveTime();
+            isNewScore = true;
+        }
+
+        if (isFileEmpty(leastClicksPath)) {
+            saveClicks();
+            isNewScore = true;
+        } else if (areCurrentClicksLess(gameplay.getClickCount())) {
+            saveClicks();
+            isNewScore = true;
+        }
     }
 
     public String getTimeScore() {
@@ -93,7 +106,7 @@ public class ScoreSaver {
         }
     }
 
-    public String getContent(String filePath) {
+    private String getContent(String filePath) {
         String content = null;
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
@@ -105,5 +118,9 @@ public class ScoreSaver {
             e.printStackTrace();
         }
         return content;
+    }
+
+    public boolean isNewScore() {
+        return isNewScore;
     }
 }

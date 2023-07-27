@@ -50,7 +50,7 @@ public class GUIView {
         String minute = " minutes ";
         String second = " seconds";
 
-        if (gameTimer.getHours() == 1) hour = "hour ";
+        if (gameTimer.getHours() == 1) hour = " hour ";
         if (gameTimer.getSecondsConverted() == 1) second = " second";
         if (gameTimer.getMinutesConverted() == 1) minute = " minute ";
 
@@ -71,11 +71,11 @@ public class GUIView {
         int hours = timer.getHours(seconds);
         int minutes = timer.getMinutes(seconds, hours);
 
-        if (hours == 1) hour = "hour ";
+        if (hours == 1) hour = " hour ";
         if (seconds == 1) second = " second";
         if (minutes == 1) minute = " minute ";
 
-        if (hours > 0) return hours + hour + seconds + minute + seconds + second;
+        if (hours > 0) return hours + hour + minutes + minute + seconds + second;
         if (minutes > 0) return minutes + minute + seconds + second;
         return seconds + second;
     }
