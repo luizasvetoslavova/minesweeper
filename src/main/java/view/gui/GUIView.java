@@ -46,20 +46,39 @@ public class GUIView {
     }
 
     public String timeMessage(GameTimer gameTimer) {
-        String time = "Time: ";
         String hour = " hours ";
         String minute = " minutes ";
         String second = " seconds";
 
-        if (gameTimer.getHours() == 1) hour = "hour ";
+        if (gameTimer.getHours() == 1) hour = " hour ";
         if (gameTimer.getSecondsConverted() == 1) second = " second";
         if (gameTimer.getMinutesConverted() == 1) minute = " minute ";
 
-        if (gameTimer.getHours() > 0) return time + gameTimer.getHours() + hour + gameTimer.getMinutesConverted() +
+        if (gameTimer.getHours() > 0) return gameTimer.getHours() + hour + gameTimer.getMinutesConverted() +
                 minute + gameTimer.getSecondsConverted() + second;
-        if (gameTimer.getMinutesConverted() > 0) return time + gameTimer.getMinutesConverted() + minute +
+        if (gameTimer.getMinutesConverted() > 0) return gameTimer.getMinutesConverted() + minute +
                 gameTimer.getSecondsConverted() + second;
-        return time + gameTimer.getSecondsConverted() + second;
+        return gameTimer.getSecondsConverted() + second;
+    }
+
+    public String timeMessage(int seconds) {
+        GameTimer timer = new GameTimer();
+
+        String hour = " hours ";
+        String minute = " minutes ";
+        String second = " seconds";
+
+        int hours = timer.getHours(seconds);
+        int minutes = timer.getMinutes(seconds, hours);
+        int secondsConverted = timer.getSeconds(seconds, minutes);
+
+        if (hours == 1) hour = " hour ";
+        if (secondsConverted == 1) second = " second";
+        if (minutes == 1) minute = " minute ";
+
+        if (hours > 0) return hours + hour + minutes + minute + secondsConverted + second;
+        if (minutes > 0) return minutes + minute + secondsConverted + second;
+        return secondsConverted + second;
     }
 
     public void showInvalidSizeMessage() {

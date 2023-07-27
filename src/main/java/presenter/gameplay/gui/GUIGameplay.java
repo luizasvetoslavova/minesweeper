@@ -6,11 +6,8 @@ import model.mines.CellStatus;
 import model.mines.Initializer;
 import model.mines.Matrix;
 import presenter.gameplay.*;
-import view.gui.pages.CustomSizeGetter;
+import view.gui.pages.*;
 import view.gui.GUIView;
-import view.gui.pages.BasePage;
-import view.gui.pages.HomePage;
-import view.gui.pages.TablePage;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -19,11 +16,11 @@ import java.awt.event.MouseEvent;
 import java.util.Locale;
 
 public class GUIGameplay implements Gameplay {
-    private final BasePage basePage;
     private final HomePage homePage;
     private final CellOpener cellOpener;
     private final GUIView view;
     private final ButtonManager buttonManager;
+    private final ScoreSaver scoreSaver;
 
     private TablePage currentTablePage;
     private Matrix currentMatrix;
@@ -31,25 +28,29 @@ public class GUIGameplay implements Gameplay {
     private CustomSizeGetter customSizeGetter;
 
     private int openedCount;
+    private int clickCount;
 
     public GUIGameplay() {
-        basePage = new BasePage();
+        BasePage basePage = new BasePage();
         homePage = basePage.getHomePage();
         openedCount = 0;
+        clickCount = 0;
         cellOpener = new CellOpener();
         view = new GUIView();
         buttonManager = new ButtonManager();
+        scoreSaver = new ScoreSaver(this);
+        new ScorePage(homePage, scoreSaver, view);
     }
 
     @Override
     public void showRules() {
-        homePage.setRules("Welcome to Minesweeper!<br><br>" +
-                "Rules:<br>" +
+        homePage.setRules("<h2>Welcome to Minesweeper!</h2><br><br>" +
+                "<u>Rules:</u><br>" +
                 "1. The number shown on an opened cell is the number of mines (bombs) adjacent to it.<br>" +
                 "2. You have to flag all the mines and not open any. If you do, you lose and the game ends.<br>" +
                 "3. You have to open all numbers. <br>" +
                 "You can start by clicking at any random cell.<br><br>" +
-                "Signs:<br>" +
+                "<u>Signs:</u><br>" +
                 "&#9638; - Empty cell. There are no bombs near it.<br>" +
                 "\uD83D\uDCA3 - Bomb.<br>" +
                 "&#11036; - Unopened cell.<br>" +
@@ -84,6 +85,7 @@ public class GUIGameplay implements Gameplay {
                     if (cell.getCellStatus() == CellStatus.OPENED) return;
 
                     openedCount++;
+                    clickCount++;
                     if (openedCount == 1) Initializer.getInstance().initOnFirstClick(cell, openedCount);
                     cell.setCellStatus(CellStatus.OPENED);
                     lose(cell);
@@ -104,9 +106,10 @@ public class GUIGameplay implements Gameplay {
                     Cell cell = tableButton.getCell();
                     if (SwingUtilities.isRightMouseButton(e)) {
                         if (!isEven(tableButton.getTimesClicked()) && cell.getCellStatus() != CellStatus.OPENED) {
+                            clickCount++;
                             cell.setCellStatus(CellStatus.FLAGGED);
                             view.setButtonImage(tableButton, view.getFLAG_IMAGE());
-                            win();
+                            if (openedCount != 0) win();
                         }
                     }
                 }
@@ -124,6 +127,7 @@ public class GUIGameplay implements Gameplay {
 
                     if (SwingUtilities.isRightMouseButton(e)) {
                         if (isEven(tableButton.getTimesClicked()) && cell.getCellStatus() == CellStatus.FLAGGED) {
+                            clickCount++;
                             cell.setCellStatus(CellStatus.UNOPENED);
                             tableButton.getButton().setIcon(null);
                         }
@@ -136,21 +140,26 @@ public class GUIGameplay implements Gameplay {
     @Override
     public void win() {
         if (new WinChecker(currentMatrix).playerWon()) {
-            JOptionPane.showMessageDialog(null, "CONGRATULATIONS! You won.\n"
-                    + view.timeMessage(gameTimer));
-            finish();
-            buttonManager.showNextLevelButton();
+            gameTimer.stop();
+            if (!(currentMatrix instanceof Custom)) {
+                scoreSaver.saveScores();
+                checkNewScore();
+                buttonManager.showNextLevelButton();
+            } else {
+                JOptionPane.showMessageDialog(null, "CONGRATULATIONS! You won.");
+            }
+            buttonManager.deactivateButtons();
         }
     }
 
     @Override
     public void lose(Cell cell) {
         if (cell.isBomb()) {
+            gameTimer.stop();
             cellOpener.openAllBombs();
             view.showAllBombs();
-            JOptionPane.showMessageDialog(null, "BOOM! You stepped on a mine.\n"
-                    + view.timeMessage(gameTimer));
-            finish();
+            JOptionPane.showMessageDialog(null, "BOOM! You stepped on a mine.\n");
+            buttonManager.deactivateButtons();
         }
     }
 
@@ -186,9 +195,36 @@ public class GUIGameplay implements Gameplay {
         return number % 2 == 0;
     }
 
-    private void finish() {
-        gameTimer.stop();
-        buttonManager.deactivateButtons();
+    public int getClickCount() {
+        return clickCount;
+    }
+
+    public String getTime() {
+        return view.timeMessage(gameTimer);
+    }
+
+    private String getScoreInfo() {
+        return "Time: " + getTime() + "\n" +
+                "Clicks: " + clickCount + "\n";
+    }
+
+    private void checkNewScore() {
+        if (scoreSaver.isNewScore()) JOptionPane.showMessageDialog(null, "NEW SCORE!\n" +
+                getScoreInfo() +
+                "Old time score for level: " + view.timeMessage(scoreSaver.getOldTimeScore()) + "\n" +
+                "Old click score for level: " + scoreSaver.getOldClickScore());
+        else JOptionPane.showMessageDialog(null, "CONGRATULATIONS! You won.\n" +
+                getScoreInfo() +
+                "Best time score for level: " + view.timeMessage(Integer.parseInt(scoreSaver.getTimeScore())) + "\n" +
+                "Best click score for level: " + scoreSaver.getClickScore());
+    }
+
+    public Matrix getCurrentMatrix() {
+        return currentMatrix;
+    }
+
+    public GameTimer getGameTimer() {
+        return gameTimer;
     }
 
     private class ButtonManager {
@@ -265,6 +301,7 @@ public class GUIGameplay implements Gameplay {
 
         private void updateFields(Matrix matrix, String heading) {
             openedCount = 0;
+            clickCount = 0;
             currentTablePage = new TablePage(matrix, homePage, heading);
             view.setTablePage(currentTablePage);
             currentMatrix = currentTablePage.getMatrix();
