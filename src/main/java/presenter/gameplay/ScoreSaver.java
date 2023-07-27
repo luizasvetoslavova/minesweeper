@@ -10,9 +10,11 @@ import java.io.*;
 
 public class ScoreSaver {
     private final GUIGameplay gameplay;
-    private String leastClicksPath;
-    private String leastTimePath;
+    private String clickScorePath;
+    private String timeScorePath;
     private boolean isNewScore;
+    private int oldTimeScore;
+    private int oldClickScore;
 
     public ScoreSaver(GUIGameplay gameplay) {
         this.gameplay = gameplay;
@@ -21,19 +23,27 @@ public class ScoreSaver {
     public void saveScores() {
         setFilePaths();
         isNewScore = false;
+        oldTimeScore = Integer.parseInt(getContent(timeScorePath));
+        oldClickScore = Integer.parseInt(getContent(clickScorePath));
 
-        if (isFileEmpty(leastTimePath)) {
-            saveTime();
-            isNewScore = true;
-        } else if (isCurrentTimeLess(gameplay.getGameTimer().getSecondsTotal())) {
+        if (!isFileEmpty(timeScorePath)) {
+            if (isCurrentTimeLess(gameplay.getGameTimer().getSecondsTotal())) {
+                saveTime();
+                isNewScore = true;
+            }
+        } else {
+            oldTimeScore = 0;
             saveTime();
             isNewScore = true;
         }
 
-        if (isFileEmpty(leastClicksPath)) {
-            saveClicks();
-            isNewScore = true;
-        } else if (areCurrentClicksLess(gameplay.getClickCount())) {
+        if (!isFileEmpty(clickScorePath)) {
+            if (areCurrentClicksLess(gameplay.getClickCount())) {
+                saveClicks();
+                isNewScore = true;
+            }
+        } else {
+            oldClickScore = 0;
             saveClicks();
             isNewScore = true;
         }
@@ -41,12 +51,12 @@ public class ScoreSaver {
 
     public String getTimeScore() {
         setFilePaths();
-        return getContent(leastTimePath);
+        return getContent(timeScorePath);
     }
 
     public String getClickScore() {
         setFilePaths();
-        return getContent(leastClicksPath);
+        return getContent(clickScorePath);
     }
 
     public String getContent(String filePath) {
@@ -65,24 +75,24 @@ public class ScoreSaver {
 
     private void setFilePaths() {
         if (gameplay.getCurrentMatrix() instanceof Easy) {
-            leastClicksPath = "src/main/java/model/scores/easy/clicks";
-            leastTimePath = "src/main/java/model/scores/easy/time";
+            clickScorePath = "src/main/java/model/scores/easy/clicks";
+            timeScorePath = "src/main/java/model/scores/easy/time";
         } else if (gameplay.getCurrentMatrix() instanceof Medium) {
-            leastClicksPath = "src/main/java/model/scores/medium/clicks";
-            leastTimePath = "src/main/java/model/scores/medium/time";
+            clickScorePath = "src/main/java/model/scores/medium/clicks";
+            timeScorePath = "src/main/java/model/scores/medium/time";
         } else if (gameplay.getCurrentMatrix() instanceof Hard) {
-            leastClicksPath = "src/main/java/model/scores/hard/clicks";
-            leastTimePath = "src/main/java/model/scores/hard/time";
+            clickScorePath = "src/main/java/model/scores/hard/clicks";
+            timeScorePath = "src/main/java/model/scores/hard/time";
         } else if (gameplay.getCurrentMatrix() instanceof Expert) {
-            leastClicksPath = "src/main/java/model/scores/expert/clicks";
-            leastTimePath = "src/main/java/model/scores/expert/time";
+            clickScorePath = "src/main/java/model/scores/expert/clicks";
+            timeScorePath = "src/main/java/model/scores/expert/time";
         }
     }
 
     private void saveTime() {
-        if (!isFileEmpty(leastTimePath)) deleteContent(leastTimePath);
+        if (!isFileEmpty(timeScorePath)) deleteContent(timeScorePath);
 
-        try (FileWriter fileWriter = new FileWriter(leastTimePath, true)) {
+        try (FileWriter fileWriter = new FileWriter(timeScorePath, true)) {
             fileWriter.write(String.valueOf(gameplay.getGameTimer().getSecondsTotal()));
         } catch (IOException e) {
             e.printStackTrace();
@@ -90,9 +100,9 @@ public class ScoreSaver {
     }
 
     private void saveClicks() {
-        if (!isFileEmpty(leastClicksPath)) deleteContent(leastClicksPath);
+        if (!isFileEmpty(clickScorePath)) deleteContent(clickScorePath);
 
-        try (FileWriter fileWriter = new FileWriter(leastClicksPath, true)) {
+        try (FileWriter fileWriter = new FileWriter(clickScorePath, true)) {
             fileWriter.write(String.valueOf(gameplay.getClickCount()));
         } catch (IOException e) {
             e.printStackTrace();
@@ -100,11 +110,11 @@ public class ScoreSaver {
     }
 
     private boolean isCurrentTimeLess(int seconds) {
-        return Integer.parseInt(getContent(leastTimePath)) > seconds;
+        return Integer.parseInt(getContent(timeScorePath)) > seconds;
     }
 
     private boolean areCurrentClicksLess(int clicks) {
-        return Integer.parseInt(getContent(leastClicksPath)) > clicks;
+        return Integer.parseInt(getContent(clickScorePath)) > clicks;
     }
 
     private boolean isFileEmpty(String filePath) {
@@ -122,5 +132,13 @@ public class ScoreSaver {
 
     public boolean isNewScore() {
         return isNewScore;
+    }
+
+    public int getOldClickScore() {
+        return oldClickScore;
+    }
+
+    public int getOldTimeScore() {
+        return oldTimeScore;
     }
 }

@@ -205,16 +205,18 @@ public class GUIGameplay implements Gameplay {
 
     private String getScoreInfo() {
         return "Time: " + getTime() + "\n" +
-                "Clicks: " + clickCount + "\n" +
-                "Best time for level: " + view.timeMessage(Integer.parseInt(scoreSaver.getTimeScore())) + "\n" +
-                "Best clicks for level: " + scoreSaver.getClickScore();
+                "Clicks: " + clickCount + "\n";
     }
 
     private void checkNewScore() {
-        if (scoreSaver.isNewScore()) JOptionPane.showMessageDialog(null, "NEW SCORE!\n"
-                + getScoreInfo());
-        else JOptionPane.showMessageDialog(null, "CONGRATULATIONS! You won.\n"
-                + getScoreInfo());
+        if (scoreSaver.isNewScore()) JOptionPane.showMessageDialog(null, "NEW SCORE!\n" +
+                getScoreInfo() +
+                "Old time score for level: " + view.timeMessage(scoreSaver.getOldTimeScore()) + "\n" +
+                "Old click score for level: " + scoreSaver.getOldClickScore());
+        else JOptionPane.showMessageDialog(null, "CONGRATULATIONS! You won.\n" +
+                getScoreInfo() +
+                "Best time score for level: " + view.timeMessage(Integer.parseInt(scoreSaver.getTimeScore())) + "\n" +
+                "Best click score for level: " + scoreSaver.getClickScore());
     }
 
     public Matrix getCurrentMatrix() {
