@@ -31,12 +31,13 @@ public class GUIGameplay implements Gameplay {
     private CustomSizeGetter customSizeGetter;
 
     private int openedCount;
-    private int clickedCount;
+    private int clickCount;
 
     public GUIGameplay() {
         BasePage basePage = new BasePage();
         homePage = basePage.getHomePage();
         openedCount = 0;
+        clickCount = 0;
         cellOpener = new CellOpener();
         view = new GUIView();
         buttonManager = new ButtonManager();
@@ -86,7 +87,7 @@ public class GUIGameplay implements Gameplay {
                     if (cell.getCellStatus() == CellStatus.OPENED) return;
 
                     openedCount++;
-                    clickedCount++;
+                    clickCount++;
                     if (openedCount == 1) Initializer.getInstance().initOnFirstClick(cell, openedCount);
                     cell.setCellStatus(CellStatus.OPENED);
                     lose(cell);
@@ -107,10 +108,10 @@ public class GUIGameplay implements Gameplay {
                     Cell cell = tableButton.getCell();
                     if (SwingUtilities.isRightMouseButton(e)) {
                         if (!isEven(tableButton.getTimesClicked()) && cell.getCellStatus() != CellStatus.OPENED) {
-                            clickedCount++;
+                            clickCount++;
                             cell.setCellStatus(CellStatus.FLAGGED);
                             view.setButtonImage(tableButton, view.getFLAG_IMAGE());
-                            win();
+                            if (openedCount != 0) win();
                         }
                     }
                 }
@@ -128,7 +129,7 @@ public class GUIGameplay implements Gameplay {
 
                     if (SwingUtilities.isRightMouseButton(e)) {
                         if (isEven(tableButton.getTimesClicked()) && cell.getCellStatus() == CellStatus.FLAGGED) {
-                            clickedCount++;
+                            clickCount++;
                             cell.setCellStatus(CellStatus.UNOPENED);
                             tableButton.getButton().setIcon(null);
                         }
@@ -141,23 +142,30 @@ public class GUIGameplay implements Gameplay {
     @Override
     public void win() {
         if (new WinChecker(currentMatrix).playerWon()) {
+            gameTimer.stop();
             scoreSaver.saveScores();
-            JOptionPane.showMessageDialog(null, "CONGRATULATIONS! You won.\n"
-                    + view.timeMessage(gameTimer));
-            finish();
+            JOptionPane.showMessageDialog(null, "CONGRATULATIONS! You won.\n" + getScoreInfo());
             buttonManager.showNextLevelButton();
+            buttonManager.deactivateButtons();
         }
     }
 
     @Override
     public void lose(Cell cell) {
         if (cell.isBomb()) {
+            gameTimer.stop();
             cellOpener.openAllBombs();
             view.showAllBombs();
-            JOptionPane.showMessageDialog(null, "BOOM! You stepped on a mine.\n"
-                    + view.timeMessage(gameTimer));
-            finish();
+            JOptionPane.showMessageDialog(null, "BOOM! You stepped on a mine.\n" + getScoreInfo());
+            buttonManager.deactivateButtons();
         }
+    }
+
+    private String getScoreInfo() {
+        return "Time: " + getTime() + "\n" +
+                "Clicks: " + clickCount + "\n" +
+                "Best time for level: " + view.timeMessage(Integer.parseInt(scoreSaver.getTimeScore())) + "\n" +
+                "Best clicks for level: " + scoreSaver.getClickScore();
     }
 
     @Override
@@ -192,17 +200,20 @@ public class GUIGameplay implements Gameplay {
         return number % 2 == 0;
     }
 
-    private void finish() {
-        gameTimer.stop();
-        buttonManager.deactivateButtons();
-    }
-
-    public int getClickedCount() {
-        return clickedCount;
+    public int getClickCount() {
+        return clickCount;
     }
 
     public String getTime() {
         return view.timeMessage(gameTimer);
+    }
+
+    public Matrix getCurrentMatrix() {
+        return currentMatrix;
+    }
+
+    public GameTimer getGameTimer() {
+        return gameTimer;
     }
 
     private class ButtonManager {
@@ -279,6 +290,7 @@ public class GUIGameplay implements Gameplay {
 
         private void updateFields(Matrix matrix, String heading) {
             openedCount = 0;
+            clickCount = 0;
             currentTablePage = new TablePage(matrix, homePage, heading);
             view.setTablePage(currentTablePage);
             currentMatrix = currentTablePage.getMatrix();

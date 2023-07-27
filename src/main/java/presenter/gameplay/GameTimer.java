@@ -37,4 +37,19 @@ public class GameTimer {
     public int getHours() {
         return secondsTotal / 3600;
     }
+
+    public int getHours(int seconds) {
+        return seconds / 3600;
+    }
+
+    public int getMinutes(int seconds, int hours) {
+        if (hours > 0) {
+            return hours - 60 * seconds / 60;
+        }
+        return seconds / 60;
+    }
+
+    public int getSecondsTotal() {
+        return secondsTotal;
+    }
 }
