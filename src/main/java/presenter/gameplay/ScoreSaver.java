@@ -75,17 +75,17 @@ public class ScoreSaver {
 
     private void setFilePaths() {
         if (gameplay.getCurrentMatrix() instanceof Easy) {
-            clickScorePath = "src/main/java/model/scores/easy/clicks";
-            timeScorePath = "src/main/java/model/scores/easy/time";
+            clickScorePath = "src/main/resources/scores/easy/clicks";
+            timeScorePath = "src/main/resources/scores/easy/time";
         } else if (gameplay.getCurrentMatrix() instanceof Medium) {
-            clickScorePath = "src/main/java/model/scores/medium/clicks";
-            timeScorePath = "src/main/java/model/scores/medium/time";
+            clickScorePath = "src/main/resources/scores/medium/clicks";
+            timeScorePath = "src/main/resources/scores/medium/time";
         } else if (gameplay.getCurrentMatrix() instanceof Hard) {
-            clickScorePath = "src/main/java/model/scores/hard/clicks";
-            timeScorePath = "src/main/java/model/scores/hard/time";
+            clickScorePath = "src/main/resources/scores/hard/clicks";
+            timeScorePath = "src/main/resources/scores/hard/time";
         } else if (gameplay.getCurrentMatrix() instanceof Expert) {
-            clickScorePath = "src/main/java/model/scores/expert/clicks";
-            timeScorePath = "src/main/java/model/scores/expert/time";
+            clickScorePath = "src/main/resources/scores/expert/clicks";
+            timeScorePath = "src/main/resources/scores/expert/time";
         }
     }
 

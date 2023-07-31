@@ -72,14 +72,14 @@ public class ScorePage extends JFrame {
         JPanel scorePanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
 
-        int easyTimeScore = getAppropriateDigitValue("src/main/java/model/scores/easy/time");
-        int easyClickScore = getAppropriateDigitValue("src/main/java/model/scores/easy/clicks");
-        int mediumTimeScore = getAppropriateDigitValue("src/main/java/model/scores/medium/time");
-        int mediumClickScore = getAppropriateDigitValue("src/main/java/model/scores/medium/time");
-        int hardTimeScore = getAppropriateDigitValue("src/main/java/model/scores/hard/time");
-        int hardClickScore = getAppropriateDigitValue("src/main/java/model/scores/hard/clicks");
-        int expertTimeScore = getAppropriateDigitValue("src/main/java/model/scores/expert/time");
-        int expertClickScore = getAppropriateDigitValue("src/main/java/model/scores/expert/clicks");
+        int easyTimeScore = getAppropriateDigitValue("src/main/resources/scores/easy/time");
+        int easyClickScore = getAppropriateDigitValue("src/main/resources/scores/easy/clicks");
+        int mediumTimeScore = getAppropriateDigitValue("src/main/resources/scores/medium/time");
+        int mediumClickScore = getAppropriateDigitValue("src/main/resources/scores/medium/time");
+        int hardTimeScore = getAppropriateDigitValue("src/main/resources/scores/hard/time");
+        int hardClickScore = getAppropriateDigitValue("src/main/resources/scores/hard/clicks");
+        int expertTimeScore = getAppropriateDigitValue("src/main/resources/scores/expert/time");
+        int expertClickScore = getAppropriateDigitValue("src/main/resources/scores/expert/clicks");
 
         JLabel scores = new JLabel("<html>" + "<br>" + "<br>" + "<div style='text-align: " + "center;'>" +
                 "<h1><u>Best Scores by Levels</u></h1><br>" +
