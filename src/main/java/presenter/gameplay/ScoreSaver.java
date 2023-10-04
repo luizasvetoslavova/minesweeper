@@ -1,133 +1,83 @@
 package presenter.gameplay;
 
+import model.ScoreDao;
 import model.levels.Easy;
 import model.levels.Expert;
 import model.levels.Hard;
 import model.levels.Medium;
 import presenter.gameplay.gui.GUIGameplay;
 
-import java.io.*;
-
 public class ScoreSaver {
+    private ScoreDao scoreDao;
     private final GUIGameplay gameplay;
-    private String clickScorePath;
-    private String timeScorePath;
+    private int timeScore;
+    private int clickScore;
     private boolean isNewScore;
     private int oldTimeScore;
     private int oldClickScore;
 
     public ScoreSaver(GUIGameplay gameplay) {
         this.gameplay = gameplay;
+        scoreDao = ScoreDao.getInstance();
     }
 
     public void saveScores() {
-        setFilePaths();
+        setOldScores();
         isNewScore = false;
+        updateScores(oldTimeScore, gameplay.getGameTimer().getSecondsTotal());
+        updateScores(oldClickScore, gameplay.getClickCount());
+    }
 
-        if (!isFileEmpty(timeScorePath)) {
-            if (isCurrentTimeLess(gameplay.getGameTimer().getSecondsTotal())) {
-                oldTimeScore = Integer.parseInt(getContent(timeScorePath));
-                saveTime();
-                isNewScore = true;
-            }
-        } else {
-            oldTimeScore = 0;
-            saveTime();
+    private void updateScores(int oldScore, int newScore) {
+        timeScore = oldTimeScore;
+        clickScore = oldClickScore;
+
+        if (oldClickScore == 0 || oldTimeScore == 0) {
             isNewScore = true;
-        }
-
-        if (!isFileEmpty(clickScorePath)) {
-            if (areCurrentClicksLess(gameplay.getClickCount())) {
-                oldClickScore = Integer.parseInt(getContent(clickScorePath));
-                saveClicks();
-                isNewScore = true;
-            }
-        } else {
-            oldClickScore = 0;
-            saveClicks();
+            timeScore = gameplay.getGameTimer().getSecondsTotal();
+            clickScore = gameplay.getClickCount();
+        } else if (isCurrentScoreHigher(oldScore, newScore)) {
             isNewScore = true;
+            timeScore = gameplay.getGameTimer().getSecondsTotal();
+            clickScore = gameplay.getClickCount();
         }
+        updateScores();
     }
 
-    public String getTimeScore() {
-        setFilePaths();
-        return getContent(timeScorePath);
-    }
-
-    public String getClickScore() {
-        setFilePaths();
-        return getContent(clickScorePath);
-    }
-
-    public String getContent(String filePath) {
-        String content = null;
-        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                content = line;
-            }
-            return content;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return content;
-    }
-
-    private void setFilePaths() {
+    private void setOldScores() {
         if (gameplay.getCurrentMatrix() instanceof Easy) {
-            clickScorePath = "src/main/java/model/scores/easy/clicks";
-            timeScorePath = "src/main/java/model/scores/easy/time";
+            oldClickScore = scoreDao.getEasyClicks();
+            oldTimeScore = scoreDao.getEasyTime();
         } else if (gameplay.getCurrentMatrix() instanceof Medium) {
-            clickScorePath = "src/main/java/model/scores/medium/clicks";
-            timeScorePath = "src/main/java/model/scores/medium/time";
+            oldClickScore = scoreDao.getMediumClicks();
+            oldTimeScore = scoreDao.getMediumTime();
         } else if (gameplay.getCurrentMatrix() instanceof Hard) {
-            clickScorePath = "src/main/java/model/scores/hard/clicks";
-            timeScorePath = "src/main/java/model/scores/hard/time";
+            oldClickScore = scoreDao.getHardClicks();
+            oldTimeScore = scoreDao.getHardTime();
         } else if (gameplay.getCurrentMatrix() instanceof Expert) {
-            clickScorePath = "src/main/java/model/scores/expert/clicks";
-            timeScorePath = "src/main/java/model/scores/expert/time";
+            oldClickScore = scoreDao.getExpertClicks();
+            oldTimeScore = scoreDao.getExpertTime();
         }
     }
 
-    private void saveTime() {
-        if (!isFileEmpty(timeScorePath)) deleteContent(timeScorePath);
-
-        try (FileWriter fileWriter = new FileWriter(timeScorePath, true)) {
-            fileWriter.write(String.valueOf(gameplay.getGameTimer().getSecondsTotal()));
-        } catch (IOException e) {
-            e.printStackTrace();
+    private void updateScores() {
+        if (gameplay.getCurrentMatrix() instanceof Easy) {
+            scoreDao.setEasyClicks(clickScore);
+            scoreDao.setEasyTime(timeScore);
+        } else if (gameplay.getCurrentMatrix() instanceof Medium) {
+            scoreDao.setMediumClicks(clickScore);
+            scoreDao.setMediumTime(timeScore);
+        } else if (gameplay.getCurrentMatrix() instanceof Hard) {
+            scoreDao.setHardClicks(clickScore);
+            scoreDao.setHardTime(timeScore);
+        } else if (gameplay.getCurrentMatrix() instanceof Expert) {
+            scoreDao.setExpertClicks(clickScore);
+            scoreDao.setExpertTime(timeScore);
         }
     }
 
-    private void saveClicks() {
-        if (!isFileEmpty(clickScorePath)) deleteContent(clickScorePath);
-
-        try (FileWriter fileWriter = new FileWriter(clickScorePath, true)) {
-            fileWriter.write(String.valueOf(gameplay.getClickCount()));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private boolean isCurrentTimeLess(int seconds) {
-        return Integer.parseInt(getContent(timeScorePath)) > seconds;
-    }
-
-    private boolean areCurrentClicksLess(int clicks) {
-        return Integer.parseInt(getContent(clickScorePath)) > clicks;
-    }
-
-    private boolean isFileEmpty(String filePath) {
-        File file = new File(filePath);
-        return file.exists() && file.length() == 0;
-    }
-
-    private void deleteContent(String filePath) {
-        try {
-            new FileWriter(filePath);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private boolean isCurrentScoreHigher(int oldScore, int newScore) {
+        return oldScore > newScore;
     }
 
     public boolean isNewScore() {
@@ -140,5 +90,13 @@ public class ScoreSaver {
 
     public int getOldTimeScore() {
         return oldTimeScore;
+    }
+
+    public int getTimeScore() {
+        return timeScore;
+    }
+
+    public int getClickScore() {
+        return clickScore;
     }
 }
