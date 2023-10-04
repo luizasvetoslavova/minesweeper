@@ -1,6 +1,6 @@
 package view.gui.pages;
 
-import presenter.gameplay.ScoreSaver;
+import model.ScoreDao;
 import view.gui.GUIView;
 
 import javax.swing.*;
@@ -11,13 +11,13 @@ import java.awt.event.ActionEvent;
 public class ScorePage extends JFrame {
     private final JPanel mainPanel;
     private final HomePage homePage;
-    private final ScoreSaver scoreSaver;
     private final GUIView view;
+    private ScoreDao scoreDao;
 
-    public ScorePage(HomePage homePage, ScoreSaver scoreSaver, GUIView view) {
+    public ScorePage(HomePage homePage, GUIView view) {
         this.homePage = homePage;
-        this.scoreSaver = scoreSaver;
         this.view = view;
+        scoreDao = ScoreDao.getInstance();
 
         mainPanel = new JPanel();
         setLayout(new BorderLayout());
@@ -72,21 +72,12 @@ public class ScorePage extends JFrame {
         JPanel scorePanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
 
-        int easyTimeScore = getAppropriateDigitValue("src/main/java/model/scores/easy/time");
-        int easyClickScore = getAppropriateDigitValue("src/main/java/model/scores/easy/clicks");
-        int mediumTimeScore = getAppropriateDigitValue("src/main/java/model/scores/medium/time");
-        int mediumClickScore = getAppropriateDigitValue("src/main/java/model/scores/medium/time");
-        int hardTimeScore = getAppropriateDigitValue("src/main/java/model/scores/hard/time");
-        int hardClickScore = getAppropriateDigitValue("src/main/java/model/scores/hard/clicks");
-        int expertTimeScore = getAppropriateDigitValue("src/main/java/model/scores/expert/time");
-        int expertClickScore = getAppropriateDigitValue("src/main/java/model/scores/expert/clicks");
-
         JLabel scores = new JLabel("<html>" + "<br>" + "<br>" + "<div style='text-align: " + "center;'>" +
                 "<h1><u>Best Scores by Levels</u></h1><br>" +
-                "EASY: " + scoresReadable(easyTimeScore, easyClickScore) + "<br>" +
-                "MEDIUM: " + scoresReadable(mediumTimeScore, mediumClickScore) + "<br>" +
-                "HARD: " + scoresReadable(hardTimeScore, hardClickScore) + "<br>" +
-                "EXPERT: " + scoresReadable(expertTimeScore, expertClickScore) + "</div> </html>");
+                "EASY: " + scoresReadable(scoreDao.getEasyTime(), scoreDao.getEasyClicks()) + "<br>" +
+                "MEDIUM: " + scoresReadable(scoreDao.getMediumTime(), scoreDao.getMediumClicks()) + "<br>" +
+                "HARD: " + scoresReadable(scoreDao.getHardTime(), scoreDao.getHardClicks()) + "<br>" +
+                "EXPERT: " + scoresReadable(scoreDao.getExpertTime(), scoreDao.getExpertClicks()) + "</div> </html>");
 
         scores.setFont(new Font(scores.getFont().getName(), Font.PLAIN, 18));
         scorePanel.add(scores, gbc);
@@ -96,9 +87,5 @@ public class ScorePage extends JFrame {
 
     private String scoresReadable(int timeScore, int clickScore) {
         return "Time - " + view.timeMessage(timeScore) + ", Clicks - " + clickScore + "<br>";
-    }
-
-    private int getAppropriateDigitValue(String filePath) {
-        return (scoreSaver.getContent(filePath) != null) ? Integer.parseInt(scoreSaver.getContent(filePath)) : 0;
     }
 }

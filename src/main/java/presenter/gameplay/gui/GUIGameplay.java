@@ -38,7 +38,7 @@ public class GUIGameplay implements Gameplay {
         cellOpener = new CellOpener();
         view = new GUIView();
         scoreSaver = new ScoreSaver(this);
-        new ScorePage(homePage, scoreSaver, view);
+        new ScorePage(homePage, view);
     }
 
     @Override
@@ -190,8 +190,7 @@ public class GUIGameplay implements Gameplay {
     }
 
     private String getScoreInfo() {
-        return "Time: " + getTime() + "\n" +
-                "Clicks: " + clickCount + "\n";
+        return "Time: " + getTime() + "\n" + "Clicks: " + clickCount + "\n";
     }
 
     private void checkNewScore() {
@@ -201,7 +200,7 @@ public class GUIGameplay implements Gameplay {
                 "Old click score for level: " + scoreSaver.getOldClickScore());
         else JOptionPane.showMessageDialog(null, "CONGRATULATIONS! You won.\n" +
                 getScoreInfo() +
-                "Best time score for level: " + view.timeMessage(Integer.parseInt(scoreSaver.getTimeScore())) + "\n" +
+                "Best time score for level: " + view.timeMessage(scoreSaver.getTimeScore()) + "\n" +
                 "Best click score for level: " + scoreSaver.getClickScore());
     }
 
