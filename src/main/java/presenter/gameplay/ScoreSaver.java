@@ -8,6 +8,7 @@ import model.levels.Medium;
 import presenter.gameplay.gui.GUIGameplay;
 
 public class ScoreSaver {
+    private ScoreDao scoreDao;
     private final GUIGameplay gameplay;
     private int timeScore;
     private int clickScore;
@@ -17,7 +18,7 @@ public class ScoreSaver {
 
     public ScoreSaver(GUIGameplay gameplay) {
         this.gameplay = gameplay;
-        new ScoreDao();
+        scoreDao = ScoreDao.getInstance();
     }
 
     public void saveScores() {
@@ -45,33 +46,33 @@ public class ScoreSaver {
 
     private void setOldScores() {
         if (gameplay.getCurrentMatrix() instanceof Easy) {
-            oldClickScore = ScoreDao.getEasyClicks();
-            oldTimeScore = ScoreDao.getEasyTime();
+            oldClickScore = scoreDao.getEasyClicks();
+            oldTimeScore = scoreDao.getEasyTime();
         } else if (gameplay.getCurrentMatrix() instanceof Medium) {
-            oldClickScore = ScoreDao.getMediumClicks();
-            oldTimeScore = ScoreDao.getMediumTime();
+            oldClickScore = scoreDao.getMediumClicks();
+            oldTimeScore = scoreDao.getMediumTime();
         } else if (gameplay.getCurrentMatrix() instanceof Hard) {
-            oldClickScore = ScoreDao.getHardClicks();
-            oldTimeScore = ScoreDao.getHardTime();
+            oldClickScore = scoreDao.getHardClicks();
+            oldTimeScore = scoreDao.getHardTime();
         } else if (gameplay.getCurrentMatrix() instanceof Expert) {
-            oldClickScore = ScoreDao.getExpertClicks();
-            oldTimeScore = ScoreDao.getExpertTime();
+            oldClickScore = scoreDao.getExpertClicks();
+            oldTimeScore = scoreDao.getExpertTime();
         }
     }
 
     private void updateScores() {
         if (gameplay.getCurrentMatrix() instanceof Easy) {
-            ScoreDao.setEasyClicks(clickScore);
-            ScoreDao.setEasyTime(timeScore);
+            scoreDao.setEasyClicks(clickScore);
+            scoreDao.setEasyTime(timeScore);
         } else if (gameplay.getCurrentMatrix() instanceof Medium) {
-            ScoreDao.setMediumClicks(clickScore);
-            ScoreDao.setMediumTime(timeScore);
+            scoreDao.setMediumClicks(clickScore);
+            scoreDao.setMediumTime(timeScore);
         } else if (gameplay.getCurrentMatrix() instanceof Hard) {
-            ScoreDao.setHardClicks(clickScore);
-            ScoreDao.setHardTime(timeScore);
+            scoreDao.setHardClicks(clickScore);
+            scoreDao.setHardTime(timeScore);
         } else if (gameplay.getCurrentMatrix() instanceof Expert) {
-            ScoreDao.setExpertClicks(clickScore);
-            ScoreDao.setExpertTime(timeScore);
+            scoreDao.setExpertClicks(clickScore);
+            scoreDao.setExpertTime(timeScore);
         }
     }
 

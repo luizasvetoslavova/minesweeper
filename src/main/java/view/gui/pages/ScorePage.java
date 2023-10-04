@@ -1,5 +1,6 @@
 package view.gui.pages;
 
+import model.ScoreDao;
 import view.gui.GUIView;
 
 import javax.swing.*;
@@ -11,10 +12,12 @@ public class ScorePage extends JFrame {
     private final JPanel mainPanel;
     private final HomePage homePage;
     private final GUIView view;
+    private ScoreDao scoreDao;
 
     public ScorePage(HomePage homePage, GUIView view) {
         this.homePage = homePage;
         this.view = view;
+        scoreDao = ScoreDao.getInstance();
 
         mainPanel = new JPanel();
         setLayout(new BorderLayout());
@@ -69,13 +72,12 @@ public class ScorePage extends JFrame {
         JPanel scorePanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
 
-        //TODO get score data from score dao
         JLabel scores = new JLabel("<html>" + "<br>" + "<br>" + "<div style='text-align: " + "center;'>" +
                 "<h1><u>Best Scores by Levels</u></h1><br>" +
-                "EASY: " + scoresReadable(easyTimeScore, easyClickScore) + "<br>" +
-                "MEDIUM: " + scoresReadable(mediumTimeScore, mediumClickScore) + "<br>" +
-                "HARD: " + scoresReadable(hardTimeScore, hardClickScore) + "<br>" +
-                "EXPERT: " + scoresReadable(expertTimeScore, expertClickScore) + "</div> </html>");
+                "EASY: " + scoresReadable(scoreDao.getEasyTime(), scoreDao.getEasyClicks()) + "<br>" +
+                "MEDIUM: " + scoresReadable(scoreDao.getMediumTime(), scoreDao.getMediumClicks()) + "<br>" +
+                "HARD: " + scoresReadable(scoreDao.getHardTime(), scoreDao.getHardClicks()) + "<br>" +
+                "EXPERT: " + scoresReadable(scoreDao.getExpertTime(), scoreDao.getExpertClicks()) + "</div> </html>");
 
         scores.setFont(new Font(scores.getFont().getName(), Font.PLAIN, 18));
         scorePanel.add(scores, gbc);
