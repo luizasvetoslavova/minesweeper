@@ -77,7 +77,8 @@ public class ScorePage extends JFrame {
                 "EASY: " + scoresReadable(scoreDao.getEasyTime(), scoreDao.getEasyClicks()) + "<br>" +
                 "MEDIUM: " + scoresReadable(scoreDao.getMediumTime(), scoreDao.getMediumClicks()) + "<br>" +
                 "HARD: " + scoresReadable(scoreDao.getHardTime(), scoreDao.getHardClicks()) + "<br>" +
-                "EXPERT: " + scoresReadable(scoreDao.getExpertTime(), scoreDao.getExpertClicks()) + "</div> </html>");
+                "EXPERT: " + scoresReadable(scoreDao.getExpertTime(), scoreDao.getExpertClicks()) +
+                "</div> </html>");
 
         scores.setFont(new Font(scores.getFont().getName(), Font.PLAIN, 18));
         scorePanel.add(scores, gbc);

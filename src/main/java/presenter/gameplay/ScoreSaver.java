@@ -8,7 +8,7 @@ import model.levels.Medium;
 import presenter.gameplay.gui.GUIGameplay;
 
 public class ScoreSaver {
-    private ScoreDao scoreDao;
+    private final ScoreDao scoreDao;
     private final GUIGameplay gameplay;
     private int timeScore;
     private int clickScore;
