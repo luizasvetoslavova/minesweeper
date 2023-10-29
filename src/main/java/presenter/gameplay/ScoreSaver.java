@@ -1,14 +1,11 @@
 package presenter.gameplay;
 
 import model.ScoreDao;
-import model.levels.Easy;
-import model.levels.Expert;
-import model.levels.Hard;
-import model.levels.Medium;
+import model.levels.*;
 import presenter.gameplay.gui.GUIGameplay;
 
 public class ScoreSaver {
-    private ScoreDao scoreDao;
+    private final ScoreDao scoreDao;
     private final GUIGameplay gameplay;
     private int timeScore;
     private int clickScore;
@@ -57,6 +54,9 @@ public class ScoreSaver {
         } else if (gameplay.getCurrentMatrix() instanceof Expert) {
             oldClickScore = scoreDao.getExpertClicks();
             oldTimeScore = scoreDao.getExpertTime();
+        } else if (gameplay.getCurrentMatrix() instanceof Custom) {
+            oldClickScore = scoreDao.getCustomClicks();
+            oldTimeScore = scoreDao.getCustomTime();
         }
     }
 
@@ -73,6 +73,9 @@ public class ScoreSaver {
         } else if (gameplay.getCurrentMatrix() instanceof Expert) {
             scoreDao.setExpertClicks(clickScore);
             scoreDao.setExpertTime(timeScore);
+        } else if (gameplay.getCurrentMatrix() instanceof Custom) {
+            scoreDao.setCustomClicks(clickScore);
+            scoreDao.setCustomTime(timeScore);
         }
     }
 

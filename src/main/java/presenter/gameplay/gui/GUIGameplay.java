@@ -140,15 +140,9 @@ public class GUIGameplay implements Gameplay {
     public void win() {
         if (new WinChecker(currentMatrix).playerWon()) {
             gameTimer.stop();
-            if (!(currentMatrix instanceof Custom)) {
-                //scoreSaver.saveScores();
-                //checkNewScore();
-
-                JOptionPane.showMessageDialog(null, "CONGRATULATIONS! You won.\n");
-                buttonManager.showNextLevelButton();
-            } else {
-                JOptionPane.showMessageDialog(null, "CONGRATULATIONS! You won.");
-            }
+            scoreSaver.saveScores();
+            checkNewScore();
+            buttonManager.showNextLevelButton();
             buttonManager.deactivateButtons();
         }
     }
@@ -194,17 +188,17 @@ public class GUIGameplay implements Gameplay {
     private String getScoreInfo() {
         return "Time: " + getTime() + "\n" + "Clicks: " + clickCount + "\n";
     }
-    
-//    private void checkNewScore() {
-//        if (scoreSaver.isNewScore()) JOptionPane.showMessageDialog(null, "NEW SCORE!\n" +
-//                getScoreInfo() +
-//                "Old time score for level: " + view.timeMessage(scoreSaver.getOldTimeScore()) + "\n" +
-//                "Old click score for level: " + scoreSaver.getOldClickScore());
-//        else JOptionPane.showMessageDialog(null, "CONGRATULATIONS! You won.\n" +
-//                getScoreInfo() +
-//                "Best time score for level: " + view.timeMessage(Integer.parseInt(scoreSaver.getTimeScore())) + "\n" +
-//                "Best click score for level: " + scoreSaver.getClickScore());
-//    }
+
+    private void checkNewScore() {
+        if (scoreSaver.isNewScore()) JOptionPane.showMessageDialog(null, "NEW SCORE!\n" +
+                getScoreInfo() +
+                "Old time score for level: " + view.timeMessage(scoreSaver.getOldTimeScore()) + "\n" +
+                "Old click score for level: " + scoreSaver.getOldClickScore());
+        else JOptionPane.showMessageDialog(null, "CONGRATULATIONS! You won.\n" +
+                getScoreInfo() +
+                "Best time score for level: " + view.timeMessage(scoreSaver.getTimeScore()) + "\n" +
+                "Best click score for level: " + scoreSaver.getClickScore());
+    }
 
     public Matrix getCurrentMatrix() {
         return currentMatrix;

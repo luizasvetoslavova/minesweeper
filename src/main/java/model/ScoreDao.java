@@ -1,15 +1,10 @@
 package model;
 
+import java.sql.*;
+
 public class ScoreDao {
+    private final String JDBC_URL = "jdbc:sqlite:mydatabase.db";
     private static ScoreDao instance = null;
-    private static int EASY_TIME = 0;
-    private static int EASY_CLICKS = 0;
-    private static int MEDIUM_TIME = 0;
-    private static int MEDIUM_CLICKS = 0;
-    private static int HARD_TIME = 0;
-    private static int HARD_CLICKS = 0;
-    private static int EXPERT_TIME = 0;
-    private static int EXPERT_CLICKS = 0;
 
     public static ScoreDao getInstance() {
         if (instance == null) return new ScoreDao();
@@ -17,75 +12,186 @@ public class ScoreDao {
     }
 
     private ScoreDao() {
-        //TODO
-        //-> create database
-        //-> save default scores
-        //-> for each 'set' method update database
-        //-> for each 'get' method extract from database
-        //-> add methods for extraction, writing and deletion
+        connectToDb();
+        createDb();
+        setDefaultValues();
+    }
+
+    public void resetDb() {
+        try (Connection connection = DriverManager.getConnection(JDBC_URL)) {
+            String updateSQL = "UPDATE scores SET clicks = 0, time = 0";
+
+            try (PreparedStatement preparedStatement = connection.prepareStatement(updateSQL)) {
+                preparedStatement.executeUpdate();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void connectToDb() {
+        try (Connection connection = DriverManager.getConnection(JDBC_URL)) {
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void createDb() {
+        try (Connection connection = DriverManager.getConnection(JDBC_URL);
+             Statement statement = connection.createStatement()) {
+            String createTableSQL = "CREATE TABLE IF NOT EXISTS scores (" +
+                    "level TEXT, " +
+                    "clicks INTEGER, " +
+                    "time INTEGER)";
+            statement.executeUpdate(createTableSQL);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setDefaultValues() {
+        try (Connection connection = DriverManager.getConnection(JDBC_URL)) {
+            String insertSQL = "INSERT INTO scores (level, clicks, time) VALUES (?, ?, ?)";
+
+            try (PreparedStatement preparedStatement = connection.prepareStatement(insertSQL)) {
+                preparedStatement.setString(1, "easy");
+                preparedStatement.setInt(2, 0);
+                preparedStatement.setInt(3, 0);
+                preparedStatement.executeUpdate();
+                preparedStatement.setString(1, "medium");
+                preparedStatement.executeUpdate();
+                preparedStatement.setString(1, "hard");
+                preparedStatement.executeUpdate();
+                preparedStatement.setString(1, "expert");
+                preparedStatement.executeUpdate();
+                preparedStatement.setString(1, "custom");
+                preparedStatement.executeUpdate();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private int getValue(String level, boolean isTime) {
+        String scoreType;
+        if (isTime) scoreType = "time";
+        else scoreType = "clicks";
+
+        int score = 0;
+        try (Connection connection = DriverManager.getConnection(JDBC_URL)) {
+            String selectSQL = "SELECT " + scoreType + " FROM scores WHERE level = ?";
+
+            try (PreparedStatement preparedStatement = connection.prepareStatement(selectSQL)) {
+                preparedStatement.setString(1, level);
+
+                try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                    if (resultSet.next()) {
+                        score = resultSet.getInt(scoreType);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return score;
+    }
+
+    private void replaceValue(String level, boolean isTime, int value) {
+        String scoreType;
+        if (isTime) scoreType = "time";
+        else scoreType = "clicks";
+
+        try (Connection connection = DriverManager.getConnection(JDBC_URL)) {
+            String updateSQL = "UPDATE scores SET " + scoreType + " = ? WHERE level = ?";
+
+            try (PreparedStatement preparedStatement = connection.prepareStatement(updateSQL)) {
+                preparedStatement.setInt(1, value);
+                preparedStatement.setString(2, level);
+                preparedStatement.executeUpdate();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public int getEasyTime() {
-        return EASY_TIME;
+        return getValue("easy", true);
     }
 
     public int getEasyClicks() {
-        return EASY_CLICKS;
+        return getValue("easy", false);
     }
 
     public int getMediumTime() {
-        return MEDIUM_TIME;
+        return getValue("medium", true);
     }
 
     public int getMediumClicks() {
-        return MEDIUM_CLICKS;
+        return getValue("medium", false);
     }
 
     public int getHardTime() {
-        return HARD_TIME;
+        return getValue("hard", true);
     }
 
     public int getHardClicks() {
-        return HARD_CLICKS;
+        return getValue("hard", false);
     }
 
     public int getExpertTime() {
-        return EXPERT_TIME;
+        return getValue("expert", true);
     }
 
     public int getExpertClicks() {
-        return EXPERT_CLICKS;
+        return getValue("expert", false);
     }
 
-    public void setEasyTime(int easyTime) {
-        EASY_TIME = easyTime;
+    public int getCustomTime() {
+        return getValue("custom", true);
     }
 
-    public void setEasyClicks(int easyClicks) {
-        EASY_CLICKS = easyClicks;
+    public int getCustomClicks() {
+        return getValue("custom", false);
     }
 
-    public void setMediumTime(int mediumTime) {
-        MEDIUM_TIME = mediumTime;
+    public void setEasyTime(int value) {
+        replaceValue("easy", true, value);
     }
 
-    public void setMediumClicks(int mediumClicks) {
-        MEDIUM_CLICKS = mediumClicks;
+    public void setEasyClicks(int value) {
+        replaceValue("easy", false, value);
     }
 
-    public void setHardTime(int hardTime) {
-        HARD_TIME = hardTime;
+    public void setMediumTime(int value) {
+        replaceValue("medium", true, value);
     }
 
-    public void setHardClicks(int hardClicks) {
-        HARD_CLICKS = hardClicks;
+    public void setMediumClicks(int value) {
+        replaceValue("medium", false, value);
     }
 
-    public void setExpertTime(int expertTime) {
-        EXPERT_TIME = expertTime;
+    public void setHardTime(int value) {
+        replaceValue("hard", true, value);
     }
 
-    public void setExpertClicks(int expertClicks) {
-        EXPERT_CLICKS = expertClicks;
+    public void setHardClicks(int value) {
+        replaceValue("hard", false, value);
+    }
+
+    public void setExpertTime(int value) {
+        replaceValue("expert", true, value);
+    }
+
+    public void setExpertClicks(int value) {
+        replaceValue("expert", false, value);
+    }
+
+    public void setCustomTime(int value) {
+        replaceValue("custom", true, value);
+    }
+
+    public void setCustomClicks(int value) {
+        replaceValue("custom", false, value);
     }
 }
