@@ -1,6 +1,5 @@
 package model;
 
-import java.io.File;
 import java.sql.*;
 
 public class ScoreDao {
@@ -13,11 +12,9 @@ public class ScoreDao {
     }
 
     private ScoreDao() {
-        //dropDbWhileTesting();
         connectToDb();
         createDb();
         setDefaultValues();
-
     }
 
     public void resetDb() {
@@ -31,12 +28,6 @@ public class ScoreDao {
             e.printStackTrace();
         }
     }
-
-//    private void dropDbWhileTesting() {
-//        String databaseFileName = "mydatabase.db";
-//        File databaseFile = new File(databaseFileName);
-//        databaseFile.delete();
-//    }
 
     private void connectToDb() {
         try (Connection connection = DriverManager.getConnection(JDBC_URL)) {
@@ -74,6 +65,8 @@ public class ScoreDao {
                 preparedStatement.executeUpdate();
                 preparedStatement.setString(1, "expert");
                 preparedStatement.executeUpdate();
+                preparedStatement.setString(1, "custom");
+                preparedStatement.executeUpdate();
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -110,7 +103,7 @@ public class ScoreDao {
         else scoreType = "clicks";
 
         try (Connection connection = DriverManager.getConnection(JDBC_URL)) {
-            String updateSQL = "UPDATE scores SET " + scoreType +  " = ? WHERE level = ?";
+            String updateSQL = "UPDATE scores SET " + scoreType + " = ? WHERE level = ?";
 
             try (PreparedStatement preparedStatement = connection.prepareStatement(updateSQL)) {
                 preparedStatement.setInt(1, value);
@@ -154,6 +147,14 @@ public class ScoreDao {
         return getValue("expert", false);
     }
 
+    public int getCustomTime() {
+        return getValue("custom", true);
+    }
+
+    public int getCustomClicks() {
+        return getValue("custom", false);
+    }
+
     public void setEasyTime(int value) {
         replaceValue("easy", true, value);
     }
@@ -184,5 +185,13 @@ public class ScoreDao {
 
     public void setExpertClicks(int value) {
         replaceValue("expert", false, value);
+    }
+
+    public void setCustomTime(int value) {
+        replaceValue("custom", true, value);
+    }
+
+    public void setCustomClicks(int value) {
+        replaceValue("custom", false, value);
     }
 }

@@ -62,7 +62,7 @@ public class ScorePage extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 scoreDao.resetDb();
-                JOptionPane.showMessageDialog(null, "Scores reset!");
+                JOptionPane.showMessageDialog(null, "Scores reset successfully!");
                 setupPage();
             }
         });
@@ -98,7 +98,8 @@ public class ScorePage extends JFrame {
                 "EASY: " + scoresReadable(scoreDao.getEasyTime(), scoreDao.getEasyClicks()) + "<br>" +
                 "MEDIUM: " + scoresReadable(scoreDao.getMediumTime(), scoreDao.getMediumClicks()) + "<br>" +
                 "HARD: " + scoresReadable(scoreDao.getHardTime(), scoreDao.getHardClicks()) + "<br>" +
-                "EXPERT: " + scoresReadable(scoreDao.getExpertTime(), scoreDao.getExpertClicks()) +
+                "EXPERT: " + scoresReadable(scoreDao.getExpertTime(), scoreDao.getExpertClicks()) + "<br>" +
+                "CUSTOM: " + scoresReadable(scoreDao.getCustomTime(), scoreDao.getCustomClicks()) +
                 "</div> </html>");
 
         scores.setFont(new Font(scores.getFont().getName(), Font.PLAIN, 18));

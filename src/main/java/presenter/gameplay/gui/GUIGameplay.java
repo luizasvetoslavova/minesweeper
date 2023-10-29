@@ -140,13 +140,9 @@ public class GUIGameplay implements Gameplay {
     public void win() {
         if (new WinChecker(currentMatrix).playerWon()) {
             gameTimer.stop();
-            if (!(currentMatrix instanceof Custom)) {
-                scoreSaver.saveScores();
-                checkNewScore();
-                buttonManager.showNextLevelButton();
-            } else {
-                JOptionPane.showMessageDialog(null, "CONGRATULATIONS! You won.");
-            }
+            scoreSaver.saveScores();
+            checkNewScore();
+            buttonManager.showNextLevelButton();
             buttonManager.deactivateButtons();
         }
     }
