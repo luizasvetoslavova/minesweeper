@@ -20,15 +20,23 @@ public class ScoreDao {
 
     }
 
-    public static void main(String[] args) {
-        System.out.println(System.getProperty("user.dir"));
+    public void resetDb() {
+        try (Connection connection = DriverManager.getConnection(JDBC_URL)) {
+            String updateSQL = "UPDATE scores SET clicks = 0, time = 0";
+
+            try (PreparedStatement preparedStatement = connection.prepareStatement(updateSQL)) {
+                preparedStatement.executeUpdate();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
-    private void dropDbWhileTesting() {
-        String databaseFileName = "mydatabase.db";
-        File databaseFile = new File(databaseFileName);
-        databaseFile.delete();
-    }
+//    private void dropDbWhileTesting() {
+//        String databaseFileName = "mydatabase.db";
+//        File databaseFile = new File(databaseFileName);
+//        databaseFile.delete();
+//    }
 
     private void connectToDb() {
         try (Connection connection = DriverManager.getConnection(JDBC_URL)) {
@@ -107,18 +115,6 @@ public class ScoreDao {
             try (PreparedStatement preparedStatement = connection.prepareStatement(updateSQL)) {
                 preparedStatement.setInt(1, value);
                 preparedStatement.setString(2, level);
-                preparedStatement.executeUpdate();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void resetDb() {
-        try (Connection connection = DriverManager.getConnection(JDBC_URL)) {
-            String updateSQL = "UPDATE scores SET clicks = 0, time = 0";
-
-            try (PreparedStatement preparedStatement = connection.prepareStatement(updateSQL)) {
                 preparedStatement.executeUpdate();
             }
         } catch (SQLException e) {

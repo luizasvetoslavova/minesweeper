@@ -12,6 +12,7 @@ public class ScorePage extends JFrame {
     private final JPanel mainPanel;
     private final HomePage homePage;
     private final GUIView view;
+    private JPanel buttonPanel;
     private ScoreDao scoreDao;
 
     public ScorePage(HomePage homePage, GUIView view) {
@@ -20,6 +21,7 @@ public class ScorePage extends JFrame {
         scoreDao = ScoreDao.getInstance();
 
         mainPanel = new JPanel();
+        buttonPanel = new JPanel();
         setLayout(new BorderLayout());
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -43,11 +45,32 @@ public class ScorePage extends JFrame {
 
     private void setupPage() {
         mainPanel.removeAll();
+        buttonPanel.removeAll();
         mainPanel.revalidate();
         mainPanel.repaint();
 
-        initScorePage();
+        visualizeScores();
         addHomeButton();
+        addResetButton();
+        mainPanel.add(buttonPanel);
+    }
+
+
+    private void addResetButton() {
+        JButton reset = new JButton("RESET SCORES");
+        reset.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                scoreDao.resetDb();
+                JOptionPane.showMessageDialog(null, "Scores reset!");
+                setupPage();
+            }
+        });
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.anchor = GridBagConstraints.CENTER;
+        buttonPanel.add(reset, gbc);
+        buttonPanel.setBorder(new EmptyBorder(20, 0, 500, 0));
     }
 
     private void addHomeButton() {
@@ -59,16 +82,14 @@ public class ScorePage extends JFrame {
                 homePage.setVisible(true);
             }
         });
-        JPanel buttonPanel = new JPanel(new GridBagLayout());
+
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.anchor = GridBagConstraints.CENTER;
-
         buttonPanel.add(backToHome, gbc);
         buttonPanel.setBorder(new EmptyBorder(20, 0, 500, 0));
-        mainPanel.add(buttonPanel);
     }
 
-    private void initScorePage() {
+    private void visualizeScores() {
         JPanel scorePanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
 
