@@ -7,7 +7,9 @@ public class ScoreDao {
     private static ScoreDao instance = null;
 
     public static ScoreDao getInstance() {
-        if (instance == null) return new ScoreDao();
+        if (instance == null) {
+            instance = new ScoreDao();
+        }
         return instance;
     }
 
