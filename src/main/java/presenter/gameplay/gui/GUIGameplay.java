@@ -43,20 +43,20 @@ public class GUIGameplay implements Gameplay {
 
     @Override
     public void showRules() {
-        homePage.setRules("<h2>Welcome to Minesweeper!</h2><br><br>" +
+        homePage.setRules("<h1>Welcome to Minesweeper!</h1><br><br>" +
                 "<u>Rules:</u><br>" +
-                "1. The number shown on an opened cell is the number of mines (bombs) adjacent to it.<br>" +
-                "2. You have to flag all the mines and not open any. If you do, you lose and the game ends.<br>" +
-                "3. You have to open all numbers. <br>" +
-                "You can start by clicking at any random cell.<br><br>" +
-                "<u>Signs:</u><br>" +
-                "&#9638; - Empty cell. There are no bombs near it.<br>" +
-                "\uD83D\uDCA3 - Bomb.<br>" +
+                "1. The number shown on an opened cell is the number of mines (bombs) adjacent to it. " +
+                "<br>If a cell is empty (grey), it means that there are no mines adjacent to it.<br>" +
+                "2. You need to flag all the mines and not open any. If you do, you lose and the game ends. <br>" +
+                "All digit squares need to be opened in order for you to win.<br>" +
+                "You can start by clicking at any random cell.<br>" +
+                "Regular click to open a cell. Right click to flag. <br><br>" +
+                "<u>Icons:</u><br>" +
+                "&#9638; - Empty cell. There are no mines near it.<br>" +
+                "\uD83D\uDCA3 - A mine.<br>" +
                 "&#11036; - Unopened cell.<br>" +
-                "&#9873; - Flag.<br><br>" +
-                "Regular click to open a cell. Right click to flag.");
+                "&#9873; - Flag.<br>");
     }
-
 
     @Override
     public void start() {
