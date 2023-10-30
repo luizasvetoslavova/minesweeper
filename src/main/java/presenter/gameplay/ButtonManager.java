@@ -56,6 +56,7 @@ public class ButtonManager {
                     gameplay.setCustomSize();
                     if (gameplay.getCustomSizeGetter().isSizeInvalid()) return;
                     matrix = new Custom(gameplay.getCustomSizeGetter().getLines(), gameplay.getCustomSizeGetter().getCols());
+                    gameplay.getHomePage().setVisible(false);
                 }
                 handleButtonAction(matrix);
             }

@@ -38,6 +38,7 @@ public class ScorePage extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 setupPage();
                 setVisible(true);
+                homePage.setVisible(false);
             }
         });
     }
