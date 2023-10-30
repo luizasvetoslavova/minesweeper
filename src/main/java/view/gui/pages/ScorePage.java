@@ -26,7 +26,6 @@ public class ScorePage extends JFrame {
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
-        setLocationRelativeTo(null);
         setResizable(false);
         setTitle("SCORES");
         getContentPane().add(mainPanel);

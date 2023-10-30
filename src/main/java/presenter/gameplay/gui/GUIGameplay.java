@@ -31,8 +31,7 @@ public class GUIGameplay implements Gameplay {
 
     public GUIGameplay() {
         buttonManager = new ButtonManager(this);
-        BasePage basePage = new BasePage();
-        homePage = basePage.getHomePage();
+        homePage = new HomePage();
         openedCount = 0;
         clickCount = 0;
         cellOpener = new CellOpener();

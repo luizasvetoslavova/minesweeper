@@ -3,16 +3,14 @@ package view.gui.pages;
 import javax.swing.*;
 import java.awt.*;
 
-public class HomePage extends JPanel {
+public class HomePage extends JFrame {
     private final JPanel mainPanel;
-
     private JButton easy;
     private JButton medium;
     private JButton hard;
     private JButton expert;
     private JButton custom;
     private JButton scores;
-
     private String rules;
 
     public HomePage() {
@@ -20,6 +18,11 @@ public class HomePage extends JPanel {
         setLayout(new BorderLayout());
         setVisible(true);
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+
+        setTitle("MINESWEEPER");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setResizable(false);
 
         easy = new JButton("EASY");
         medium = new JButton("MEDIUM");

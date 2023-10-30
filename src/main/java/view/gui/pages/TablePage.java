@@ -33,10 +33,10 @@ public class TablePage extends JFrame {
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setResizable(false);
         setLocationRelativeTo(null);
         setTitle(heading);
         setVisible(true);
-        setResizable(false);
     }
 
     public void draw() {
