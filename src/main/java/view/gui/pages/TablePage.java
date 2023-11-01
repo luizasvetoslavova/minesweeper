@@ -13,15 +13,22 @@ import java.util.Locale;
 
 public class TablePage extends JFrame {
     private final List<TableButton> tableButtons;
-
-    private final Matrix matrix;
     private final JPanel mainPanel;
+    private final Matrix matrix;
     private final HomePage homePage;
+    private final Color tableBtnColor = Color.decode("#FFFFFF");
+    private final Color btnColor = Color.decode("#F3F3F3");
+
+    private JPanel captionPanel;
+    private JPanel mainContentPanel;
+    private JPanel tablePanel;
+    private JPanel buttonPanel;
 
     private JButton reset;
     private JButton nextLevel;
     private JButton previousLevel;
 
+    private Color bgColor;
     private int buttonSize;
 
     public TablePage(Matrix matrix, HomePage homePage, String heading) {
@@ -31,6 +38,8 @@ public class TablePage extends JFrame {
         mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+        mainPanel.setBackground(bgColor);
+        setBgColor();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setResizable(false);
@@ -46,40 +55,58 @@ public class TablePage extends JFrame {
         add(mainPanel);
     }
 
+    private void setBgColor() {
+        if (matrix instanceof Easy) {
+            bgColor = Color.decode("#E6FFCD");
+        } else if (matrix instanceof Medium) {
+            bgColor = Color.decode("#FCFFDA");
+        } else if (matrix instanceof Hard) {
+            bgColor = Color.decode("#FFDFDF");
+        } else if (matrix instanceof Expert) {
+            bgColor = Color.decode("#FFDFF4");
+        } else if (matrix instanceof Custom) {
+            bgColor = Color.decode("#DFFFFB");
+        }
+    }
+
     private void addLabel() {
         JLabel levelCaption = new JLabel("<html>" + "<br>" +
                 matrix.getClass().getSimpleName().toUpperCase(Locale.ROOT) + "<html>");
-        JPanel rulesPanel = new JPanel();
-        rulesPanel.add(levelCaption);
-        mainPanel.add(rulesPanel);
+        captionPanel = new JPanel();
+        captionPanel.add(levelCaption);
+        captionPanel.setBackground(bgColor);
+        mainPanel.add(captionPanel);
     }
 
     private void drawTable() {
         setTableButtonsSize();
-        JPanel contentPanel = new JPanel();
-        contentPanel.setLayout(new GridBagLayout());
+        mainContentPanel = new JPanel();
+        mainContentPanel.setLayout(new GridBagLayout());
+        mainContentPanel.setBackground(bgColor);
 
-        JPanel tablePanel = new JPanel();
+        tablePanel = new JPanel();
         tablePanel.setLayout(new GridLayout(matrix.getCells().length, matrix.getCells()[0].length));
+        tablePanel.setBackground(bgColor);
 
         for (int line = 0; line < matrix.getCells().length; line++) {
             for (int col = 0; col < matrix.getCells()[line].length; col++) {
                 JButton button = new JButton();
                 button.setPreferredSize(new Dimension(buttonSize, buttonSize));
+                button.setBackground(tableBtnColor);
                 tablePanel.add(button);
                 tableButtons.add(new TableButton(button, matrix.getCells()[line][col]));
             }
         }
 
-        contentPanel.add(tablePanel);
-        mainPanel.add(contentPanel, BorderLayout.CENTER);
+        mainContentPanel.add(tablePanel);
+        mainPanel.add(mainContentPanel, BorderLayout.CENTER);
     }
 
     private void addButtons() {
         previousLevel = new JButton("PREVIOUS LEVEL");
         previousLevel.setVisible(false);
 
-        JPanel buttonPanel = new JPanel();
+        buttonPanel = new JPanel();
         reset = new JButton("RESET");
 
         JButton backToHome = new JButton("BACK TO HOME");
@@ -94,6 +121,16 @@ public class TablePage extends JFrame {
         nextLevel = new JButton("NEXT LEVEL");
         nextLevel.setVisible(false);
 
+        backToHome.setBackground(btnColor);
+        backToHome.setPreferredSize(new Dimension(130, 35));
+        reset.setBackground(btnColor);
+        reset.setPreferredSize(new Dimension(90, 35));
+        nextLevel.setBackground(btnColor);
+        nextLevel.setPreferredSize(new Dimension(110, 35));
+        previousLevel.setBackground(btnColor);
+        previousLevel.setPreferredSize(new Dimension(140, 35));
+
+        buttonPanel.setBackground(bgColor);
         buttonPanel.add(previousLevel);
         buttonPanel.add(reset);
         buttonPanel.add(backToHome);

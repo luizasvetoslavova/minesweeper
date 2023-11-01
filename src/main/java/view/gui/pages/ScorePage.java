@@ -14,6 +14,8 @@ public class ScorePage extends JFrame {
     private final GUIView view;
     private JPanel buttonPanel;
     private ScoreDao scoreDao;
+    private final Color bgColor = Color.decode("#E7E5FF");
+    private final Color btnColor = Color.decode("#FFFFFF");
 
     public ScorePage(HomePage homePage, GUIView view) {
         this.homePage = homePage;
@@ -24,6 +26,7 @@ public class ScorePage extends JFrame {
         buttonPanel = new JPanel();
         setLayout(new BorderLayout());
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+        mainPanel.setBackground(bgColor);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setResizable(false);
@@ -62,15 +65,18 @@ public class ScorePage extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 scoreDao.resetDb();
-                JOptionPane.showMessageDialog(null, "Scores reset successfully!");
+                view.showMessage("Scores reset successfully!");
                 setupPage();
             }
         });
+        reset.setBackground(btnColor);
+        reset.setPreferredSize(new Dimension(130, 35));
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.anchor = GridBagConstraints.CENTER;
         buttonPanel.add(reset, gbc);
         buttonPanel.setBorder(new EmptyBorder(20, 0, 500, 0));
+        buttonPanel.setBackground(bgColor);
     }
 
     private void addHomeButton() {
@@ -82,6 +88,8 @@ public class ScorePage extends JFrame {
                 homePage.setVisible(true);
             }
         });
+        backToHome.setBackground(btnColor);
+        backToHome.setPreferredSize(new Dimension(130, 35));
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.anchor = GridBagConstraints.CENTER;
@@ -91,6 +99,7 @@ public class ScorePage extends JFrame {
 
     private void visualizeScores() {
         JPanel scorePanel = new JPanel(new GridBagLayout());
+        scorePanel.setBackground(bgColor);
         GridBagConstraints gbc = new GridBagConstraints();
 
         JLabel scores = new JLabel("<html>" + "<br>" + "<br>" + "<div style='text-align: " + "center;'>" +

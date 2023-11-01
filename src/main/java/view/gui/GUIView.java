@@ -22,6 +22,15 @@ public class GUIView {
 
     private TablePage tablePage;
 
+    public void showMessage(String message) {
+        UIManager.put("OptionPane.background", Color.decode("#F9E3FF"));
+        UIManager.put("Panel.background", Color.decode("#F9E3FF"));
+        UIManager.put("Button.background", Color.WHITE);
+        UIManager.put("Button.foreground", Color.BLACK);
+
+        JOptionPane.showMessageDialog(null, message, "Message", JOptionPane.INFORMATION_MESSAGE);
+    }
+
     public void showAllBombs() {
         tablePage.getButtons()
                 .stream()
@@ -82,7 +91,7 @@ public class GUIView {
     }
 
     public void showInvalidSizeMessage() {
-        JOptionPane.showMessageDialog(null, "Invalid size! \n" +
+        showMessage("Invalid size! \n" +
                 "Min size: 3x3 \n" +
                 "Max size: 50x50");
     }

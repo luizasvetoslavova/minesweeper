@@ -152,7 +152,7 @@ public class GUIGameplay implements Gameplay {
             gameTimer.stop();
             cellOpener.openAllBombs();
             view.showAllBombs();
-            JOptionPane.showMessageDialog(null, "BOOM! You stepped on a mine.\n");
+            view.showMessage("BOOM! You stepped on a mine.\n");
             buttonManager.deactivateButtons();
         }
     }
@@ -189,14 +189,17 @@ public class GUIGameplay implements Gameplay {
     }
 
     private void checkNewScore() {
-        if (scoreSaver.isNewScore()) JOptionPane.showMessageDialog(null, "NEW SCORE!\n" +
-                getScoreInfo() +
-                "Old time score for level: " + view.timeMessage(scoreSaver.getOldTimeScore()) + "\n" +
-                "Old click score for level: " + scoreSaver.getOldClickScore());
-        else JOptionPane.showMessageDialog(null, "CONGRATULATIONS! You won.\n" +
-                getScoreInfo() +
-                "Best time score for level: " + view.timeMessage(scoreSaver.getTimeScore()) + "\n" +
-                "Best click score for level: " + scoreSaver.getClickScore());
+        if (scoreSaver.isNewScore()) {
+            view.showMessage("NEW SCORE!\n" +
+                    getScoreInfo() +
+                    "Old time score for level: " + view.timeMessage(scoreSaver.getOldTimeScore()) + "\n" +
+                    "Old click score for level: " + scoreSaver.getOldClickScore());
+        } else {
+            view.showMessage("CONGRATULATIONS! You won.\n" +
+                    getScoreInfo() +
+                    "Best time score for level: " + view.timeMessage(scoreSaver.getTimeScore()) + "\n" +
+                    "Best click score for level: " + scoreSaver.getClickScore());
+        }
     }
 
     public Matrix getCurrentMatrix() {

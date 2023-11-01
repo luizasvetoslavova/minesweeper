@@ -20,7 +20,6 @@ public class HomePage extends JFrame {
         mainPanel = new JPanel();
         rulesPanel = new JPanel();
         setLayout(new BorderLayout());
-        setVisible(true);
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 
         setTitle("MINESWEEPER");
@@ -37,6 +36,7 @@ public class HomePage extends JFrame {
         buttonPanel = new JPanel();
         scoreBtnPanel = new JPanel();
         setDesign();
+        setVisible(true);
     }
 
     public void initHome() {
@@ -56,41 +56,7 @@ public class HomePage extends JFrame {
         buttonPanel.setBackground(bgColor);
         rulesPanel.setBackground(bgColor);
         scoreBtnPanel.setBackground(bgColor);
-        getRootPane().setBackground(bgColor);
-
-
     }
-
-    //TODO place text inside the buttons
-    //rounded white buttons
-//    private void designButtons() {
-//        int arc = 35;
-//
-//        BorderFactory.createEmptyBorder(5, 20, 5, 20);
-//        CompoundBorder compoundBorder = BorderFactory.createCompoundBorder(
-//                new LineBorder(Color.decode("#FFF5C5"), 0),
-//                new Border() {
-//                    @Override
-//                    public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
-//                        g.setColor(Color.WHITE);
-//                        g.fillRoundRect(x, y, width - 1, height - 1, arc, arc);
-//                    }
-//
-//                    @Override
-//                    public Insets getBorderInsets(Component c) {
-//                        return new Insets(arc, arc, arc, arc);
-//                    }
-//
-//                    @Override
-//                    public boolean isBorderOpaque() {
-//                        return true;
-//                    }
-//                });
-//
-//        easy.setBorder(compoundBorder);
-//        easy.setBackground(Color.decode("#FFF5C5"));
-//        easy.setPreferredSize(new Dimension(90, 35));
-//    }
 
     private void designButtons() {
         easy.setBackground(Color.WHITE);
