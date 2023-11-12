@@ -16,19 +16,13 @@ public class TablePage extends JFrame {
     private final JPanel mainPanel;
     private final Matrix matrix;
     private final HomePage homePage;
-    private final Color tableBtnColor = Color.decode("#FFFFFF");
-    private final Color btnColor = Color.decode("#F3F3F3");
-    private Font buttonFont = new Font("Georgia", Font.PLAIN, 14);
-
-    private JPanel captionPanel;
-    private JPanel mainContentPanel;
-    private JPanel tablePanel;
-    private JPanel buttonPanel;
+    private final Color tableBtnColor;
+    private final Color btnColor;
+    private final Font buttonFont;
 
     private JButton reset;
     private JButton nextLevel;
     private JButton previousLevel;
-
     private Color bgColor;
     private int buttonSize;
 
@@ -47,6 +41,10 @@ public class TablePage extends JFrame {
         setLocationRelativeTo(null);
         setTitle(heading);
         setVisible(true);
+
+        tableBtnColor = Color.decode("#FFFFFF");
+        btnColor = Color.decode("#F3F3F3");
+        buttonFont = new Font("Georgia", Font.PLAIN, 14);
     }
 
     public void draw() {
@@ -77,7 +75,7 @@ public class TablePage extends JFrame {
                 matrix.getClass().getSimpleName().toUpperCase(Locale.ROOT) + "</html>");
         levelCaption.setFont(timesNewRomanFont);
 
-        captionPanel = new JPanel();
+        JPanel captionPanel = new JPanel();
         captionPanel.add(levelCaption);
         captionPanel.setBackground(bgColor);
         mainPanel.add(captionPanel);
@@ -85,11 +83,11 @@ public class TablePage extends JFrame {
 
     private void drawTable() {
         setTableButtonsSize();
-        mainContentPanel = new JPanel();
+        JPanel mainContentPanel = new JPanel();
         mainContentPanel.setLayout(new GridBagLayout());
         mainContentPanel.setBackground(bgColor);
 
-        tablePanel = new JPanel();
+        JPanel tablePanel = new JPanel();
         tablePanel.setLayout(new GridLayout(matrix.getCells().length, matrix.getCells()[0].length));
         tablePanel.setBackground(bgColor);
 
@@ -112,7 +110,7 @@ public class TablePage extends JFrame {
         previousLevel = new JButton("PREVIOUS LEVEL");
         previousLevel.setVisible(false);
 
-        buttonPanel = new JPanel();
+        JPanel buttonPanel = new JPanel();
         reset = new JButton("RESET");
 
         JButton backToHome = new JButton("BACK TO HOME");
@@ -173,11 +171,11 @@ public class TablePage extends JFrame {
         } else if (rows <= 20 && cols <= 20) {
             return 25;
         } else if (rows <= 32 && cols <= 32) {
-            return 20;
+            return 17;
         } else if (rows <= 43 && cols <= 43) {
-            return 15;
+            return 12;
         }
-        return 13;
+        return 11;
     }
 
     public List<TableButton> getButtons() {

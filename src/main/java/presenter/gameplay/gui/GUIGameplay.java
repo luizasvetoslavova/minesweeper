@@ -35,40 +35,14 @@ public class GUIGameplay implements Gameplay {
         openedCount = 0;
         clickCount = 0;
         cellOpener = new CellOpener();
-        view = new GUIView();
+        view = new GUIView(this);
         scoreSaver = new ScoreSaver(this);
         new ScorePage(homePage, view);
     }
 
     @Override
     public void showRules() {
-        homePage.setRules("<br>" +
-                "<h1 style=\"font-family: 'Times New Roman', serif; font-size: 25px;\">" +
-                "Welcome to Minesweeper!" +
-                "</h1>" +
-                "<br><br>" +
-                "<u style=\"font-family: 'Times New Roman', serif; font-size: 15px;\">" +
-                "Rules:" +
-                "</u><br>" +
-                "<p style=\"font-family: 'Times New Roman', serif; font-size: 15px;\">" +
-                "1. The number shown on an opened cell is the number of mines (bombs) adjacent to it. " +
-                "<br>If a cell is empty (grey), it means that there are no mines adjacent to it.<br>" +
-                "2. You need to flag all the mines and not open any. If you do, you lose and the game ends. <br><br>" +
-                "All digit squares need to be opened in order for you to win.<br>" +
-                "You can start by clicking at any random cell.<br>" +
-                "Regular click to open a cell. Right click to flag." +
-                "<br><br></p>" +
-                "<u style=\"font-family: 'Times New Roman', serif; font-size: 15px;\">" +
-                "Icons:" +
-                "</u><br><p style=\"font-family: 'Times New Roman', serif; font-size: 15px;\">" +
-                "&#9638; - Empty cell. There are no mines near it.<br>" +
-                //"<img src=\"https://github.com/luizasvetoslavova/minesweeper/blob/improve-design/src/main/resources/images/bomb.png\">" +
-                "\uD83D\uDCA3 - A mine.<br>" +
-                "&#11036; - Unopened cell.<br>" +
-                "&#9873; - Flag." +
-                "<br><br><br>" +
-                "Pick your level:" +
-                "<p>");
+        homePage.setRules(homePage.getHomeRuleSet());
     }
 
     @Override
@@ -155,7 +129,7 @@ public class GUIGameplay implements Gameplay {
         if (new WinChecker(currentMatrix).playerWon()) {
             gameTimer.stop();
             scoreSaver.saveScores();
-            checkNewScore();
+            checkNewScoreAndDisplayMessage();
             buttonManager.showNextLevelButton();
             buttonManager.deactivateButtons();
         }
@@ -167,7 +141,7 @@ public class GUIGameplay implements Gameplay {
             gameTimer.stop();
             cellOpener.openAllBombs();
             view.showAllBombs();
-            view.showMessage("BOOM! You stepped on a mine.\n");
+            view.showMessageOnLoss();
             buttonManager.deactivateButtons();
         }
     }
@@ -199,21 +173,11 @@ public class GUIGameplay implements Gameplay {
         return number % 2 == 0;
     }
 
-    private String getScoreInfo() {
-        return "Time: " + getTime() + "\n" + "Clicks: " + clickCount + "\n";
-    }
-
-    private void checkNewScore() {
+    private void checkNewScoreAndDisplayMessage() {
         if (scoreSaver.isNewScore()) {
-            view.showMessage("NEW SCORE!\n" +
-                    getScoreInfo() +
-                    "Old time score for level: " + view.timeMessage(scoreSaver.getOldTimeScore()) + "\n" +
-                    "Old click score for level: " + scoreSaver.getOldClickScore());
+            view.showNewScoreMessage();
         } else {
-            view.showMessage("CONGRATULATIONS! You won.\n" +
-                    getScoreInfo() +
-                    "Best time score for level: " + view.timeMessage(scoreSaver.getTimeScore()) + "\n" +
-                    "Best click score for level: " + scoreSaver.getClickScore());
+            view.showWinMessage();
         }
     }
 
@@ -276,5 +240,9 @@ public class GUIGameplay implements Gameplay {
 
     public CellOpener getCellOpener() {
         return cellOpener;
+    }
+
+    public ScoreSaver getScoreSaver() {
+        return scoreSaver;
     }
 }

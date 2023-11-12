@@ -12,11 +12,11 @@ public class ScorePage extends JFrame {
     private final JPanel mainPanel;
     private final HomePage homePage;
     private final GUIView view;
-    private JPanel buttonPanel;
-    private ScoreDao scoreDao;
-    private final Color bgColor = Color.decode("#E7E5FF");
-    private final Color btnColor = Color.decode("#FFFFFF");
-    private Font buttonFont = new Font("Georgia", Font.PLAIN, 14);
+    private final JPanel buttonPanel;
+    private final ScoreDao scoreDao;
+    private final Color bgColor;
+    private final Color btnColor;
+    private final Font buttonFont;
 
     public ScorePage(HomePage homePage, GUIView view) {
         this.homePage = homePage;
@@ -27,12 +27,16 @@ public class ScorePage extends JFrame {
         buttonPanel = new JPanel();
         setLayout(new BorderLayout());
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-        mainPanel.setBackground(bgColor);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setResizable(false);
         setTitle("SCORES");
         getContentPane().add(mainPanel);
+
+        bgColor = Color.decode("#E7E5FF");
+        btnColor = Color.decode("#FFFFFF");
+        buttonFont = new Font("Georgia", Font.PLAIN, 14);
+        mainPanel.setBackground(bgColor);
         setupScoreButton();
     }
 
@@ -139,10 +143,9 @@ public class ScorePage extends JFrame {
                 "</table>" +
                 "</html>");
 
-
         scores.setFont(new Font(scores.getFont().getName(), Font.PLAIN, 23));
         scorePanel.add(scores, gbc);
-        scorePanel.setBorder(BorderFactory.createEmptyBorder(75, 100, 50, 100));
+        scorePanel.setBorder(BorderFactory.createEmptyBorder(80, 100, 50, 100));
         mainPanel.add(scorePanel);
     }
 }

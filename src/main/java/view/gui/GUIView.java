@@ -2,6 +2,7 @@ package view.gui;
 
 import model.mines.CellStatus;
 import presenter.gameplay.GameTimer;
+import presenter.gameplay.gui.GUIGameplay;
 import view.gui.pages.TablePage;
 
 import javax.swing.*;
@@ -9,19 +10,27 @@ import java.awt.*;
 import java.util.Objects;
 
 public class GUIView {
-    private final String FLAG_IMAGE = "/images/flag.png";
-    private final String BOMB_IMAGE = "/images/bomb.png";
-    private final String ZERO_IMAGE = "/images/none.png";
-    private final String ONE_IMAGE = "/images/one.png";
-    private final String TWO_IMAGE = "/images/two.png";
-    private final String THREE_IMAGE = "/images/three.png";
-    private final String FOUR_IMAGE = "/images/four.png";
-    private final String FIVE_IMAGE = "/images/five.png";
-    private final String SIX_IMAGE = "/images/six.png";
-    private final String SEVEN_IMAGE = "/images/seven.png";
-    private final String EIGHT_IMAGE = "/images/eight.png";
+    private static final String FLAG_IMAGE = "/images/flag.png";
+    private static final String BOMB_IMAGE = "/images/bomb.png";
+    private static final String ZERO_IMAGE = "/images/none.png";
+    private static final String ONE_IMAGE = "/images/one.png";
+    private static final String TWO_IMAGE = "/images/two.png";
+    private static final String THREE_IMAGE = "/images/three.png";
+    private static final String FOUR_IMAGE = "/images/four.png";
+    private static final String FIVE_IMAGE = "/images/five.png";
+    private static final String SIX_IMAGE = "/images/six.png";
+    private static final String SEVEN_IMAGE = "/images/seven.png";
+    private static final String EIGHT_IMAGE = "/images/eight.png";
 
     private TablePage tablePage;
+    private GUIGameplay guiGameplay;
+
+    public GUIView() {
+    }
+
+    public GUIView(GUIGameplay guiGameplay) {
+        this.guiGameplay = guiGameplay;
+    }
 
     public void showMessage(String message) {
         UIManager.put("OptionPane.background", Color.decode("#F9E3FF"));
@@ -29,8 +38,18 @@ public class GUIView {
         UIManager.put("Button.background", Color.WHITE);
         UIManager.put("Button.foreground", Color.BLACK);
 
-        JOptionPane.showMessageDialog(null, message, "Message", JOptionPane.INFORMATION_MESSAGE);
+        message = message.replace("\n", "<br>");
+        JLabel messageLabel = new JLabel("<html><font face='Georgia' size='4'>" + message + "</font></html>");
+        Font messageFont = new Font("Georgia", Font.PLAIN, 14);
+        messageLabel.setFont(messageFont);
+
+        JOptionPane optionPane = new JOptionPane(messageLabel, JOptionPane.INFORMATION_MESSAGE,
+                JOptionPane.DEFAULT_OPTION, null, new Object[]{});
+        optionPane.setFont(messageFont);
+        JDialog dialog = optionPane.createDialog("Message");
+        dialog.setVisible(true);
     }
+
 
     public void showAllBombs() {
         tablePage.getButtons()
@@ -97,6 +116,28 @@ public class GUIView {
         showMessage("Invalid size! \n" +
                 "Min size: 3x3 \n" +
                 "Max size: 50x50");
+    }
+
+    public void showMessageOnLoss() {
+        showMessage("BOOM! You stepped on a mine.\n");
+    }
+
+    public void showNewScoreMessage() {
+        showMessage("NEW SCORE!\n" +
+                getScoreInfo() +
+                "Old time score for level: " + timeMessage(guiGameplay.getScoreSaver().getOldTimeScore()) + "\n" +
+                "Old click score for level: " + guiGameplay.getScoreSaver().getOldClickScore());
+    }
+
+    public void showWinMessage() {
+        showMessage("CONGRATULATIONS! You won.\n" +
+                getScoreInfo() +
+                "Best time score for level: " + timeMessage(guiGameplay.getScoreSaver().getTimeScore()) + "\n" +
+                "Best click score for level: " + guiGameplay.getScoreSaver().getClickScore());
+    }
+
+    private String getScoreInfo() {
+        return "Time: " + guiGameplay.getTime() + "\n" + "Clicks: " + guiGameplay.getClickCount() + "\n";
     }
 
     private String setOpenDigit(int digit) {

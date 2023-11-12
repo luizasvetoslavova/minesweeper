@@ -5,16 +5,18 @@ import java.awt.*;
 
 public class HomePage extends JFrame {
     private final JPanel mainPanel;
-    private JPanel rulesPanel;
-    private JPanel buttonPanel;
-    private JPanel scoreBtnPanel;
-    private JButton easy;
-    private JButton medium;
-    private JButton hard;
-    private JButton expert;
-    private JButton custom;
-    private JButton scores;
+    private final JPanel rulesPanel;
+    private final JPanel buttonPanel;
+    private final JPanel scoreBtnPanel;
+    private final JButton easy;
+    private final JButton medium;
+    private final JButton hard;
+    private final JButton expert;
+    private final JButton custom;
+    private final JButton scores;
     private String rules;
+    private final Color bgColor;
+    private final String btnFontName;
 
     public HomePage() {
         mainPanel = new JPanel();
@@ -35,6 +37,9 @@ public class HomePage extends JFrame {
         scores = new JButton("SCORES");
         buttonPanel = new JPanel();
         scoreBtnPanel = new JPanel();
+
+        bgColor = Color.decode("#FFF5C5");
+        btnFontName = "Georgia";
         setDesign();
         setVisible(true);
     }
@@ -45,13 +50,41 @@ public class HomePage extends JFrame {
         add(mainPanel);
     }
 
+    public String getHomeRuleSet() {
+        return "<br>" +
+                "<h1 style=\"font-family: 'Times New Roman', serif; font-size: 25px;\">" +
+                "Welcome to Minesweeper!" +
+                "</h1>" +
+                "<br><br>" +
+                "<u style=\"font-family: 'Times New Roman', serif; font-size: 15px;\">" +
+                "Rules:" +
+                "</u><br>" +
+                "<p style=\"font-family: 'Times New Roman', serif; font-size: 15px;\">" +
+                "1. The number shown on an opened cell is the number of mines (bombs) adjacent to it. " +
+                "<br>If a cell is empty (grey), it means that there are no mines adjacent to it.<br>" +
+                "2. You need to flag all the mines and not open any. If you do, you lose and the game ends. <br><br>" +
+                "All digit squares need to be opened in order for you to win.<br>" +
+                "You can start by clicking at any random cell.<br>" +
+                "Regular click to open a cell. Right click to flag." +
+                "<br><br></p>" +
+                "<u style=\"font-family: 'Times New Roman', serif; font-size: 15px;\">" +
+                "Icons:" +
+                "</u><br><p style=\"font-family: 'Times New Roman', serif; font-size: 15px;\">" +
+                "&#9638; - Empty cell. There are no mines near it.<br>" +
+                "\uD83D\uDCA3 - A mine.<br>" +
+                "&#11036; - Unopened cell.<br>" +
+                "&#9873; - Flag." +
+                "<br><br><br>" +
+                "Pick your level:" +
+                "<p>";
+    }
+
     private void setDesign() {
         setBackground();
         designButtons();
     }
 
     private void setBackground() {
-        Color bgColor = Color.decode("#FFF5C5");
         mainPanel.setBackground(bgColor);
         buttonPanel.setBackground(bgColor);
         rulesPanel.setBackground(bgColor);
@@ -59,7 +92,7 @@ public class HomePage extends JFrame {
     }
 
     private void designButtons() {
-        Font buttonFont = new Font("Georgia", Font.PLAIN, 14);
+        Font buttonFont = new Font(btnFontName, Font.PLAIN, 14);
         easy.setFont(buttonFont);
         medium.setFont(buttonFont);
         hard.setFont(buttonFont);

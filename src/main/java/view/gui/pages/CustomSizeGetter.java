@@ -10,16 +10,16 @@ import java.awt.event.ActionListener;
 public class CustomSizeGetter extends JDialog {
     private final JPanel mainPanel;
     private final GUIView view;
-    private final Color btnColor = Color.decode("#F3F3F3");
-    private final Color bgColor = Color.decode("#FFFFFF");
-    private final Color textFieldColor = Color.decode("#E3FFF0");
+    private final Color btnColor;
+    private final Color bgColor;
+    private final Color textFieldColor;
+    private final String fontName;
 
     private int lines;
     private int cols;
 
     public CustomSizeGetter() {
         super(new JFrame(), "DIMENSIONS", true);
-        setBackground(bgColor);
         mainPanel = new JPanel();
         view = new GUIView();
         setSize(180, 135);
@@ -27,21 +27,38 @@ public class CustomSizeGetter extends JDialog {
         setLayout(new BorderLayout());
         setResizable(false);
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+
+        fontName = "Times New Roman";
+        bgColor = Color.decode("#FFFFFF");
+        btnColor = Color.decode("#F3F3F3");
+        textFieldColor = Color.decode("#E3FFF0");
+        setBackground(bgColor);
+        UIManager.put("OptionPane.messageFont", new Font(fontName, Font.PLAIN, 18));
+        UIManager.put("OptionPane.buttonFont", new Font(fontName, Font.BOLD, 14));
+        UIManager.put("TextField.font", new Font(fontName, Font.PLAIN, 14));
+
     }
 
     public void draw() {
         JPanel fieldPanel = new JPanel();
         fieldPanel.setBackground(bgColor);
-        JTextField linesField = addDigitField(fieldPanel, "Lines");
-        JTextField colsField = addDigitField(fieldPanel, "Columns");
+        JTextField linesField = addDigitField(fieldPanel, "Lines:");
+        JTextField colsField = addDigitField(fieldPanel, "Columns:");
+        linesField.setFont(new Font(fontName, Font.PLAIN, 16));
+        colsField.setFont(new Font(fontName, Font.PLAIN, 16));
 
         JButton submitButton = new JButton("OK");
         submitButton.setBackground(btnColor);
+        submitButton.setFont(new Font(fontName, Font.BOLD, 14));
         setupButton(submitButton, linesField, colsField, fieldPanel);
 
         mainPanel.add(fieldPanel);
         add(mainPanel);
         setVisible(true);
+    }
+
+    public boolean isSizeInvalid() {
+        return lines < 3 || cols < 3 || lines > 50 || cols > 50;
     }
 
     private void setupButton(JButton submitButton, JTextField linesField, JTextField colsField, JPanel panel) {
@@ -63,16 +80,16 @@ public class CustomSizeGetter extends JDialog {
         panel.add(submitButton);
     }
 
-    public boolean isSizeInvalid() {
-        return lines < 3 || cols < 3 || lines > 50 || cols > 50;
-    }
-
     private JTextField addDigitField(JPanel fieldPanel, String requirement) {
         JTextField digitField = new JTextField();
         digitField.setPreferredSize(new Dimension(70, 25));
         digitField.setBackground(textFieldColor);
-        fieldPanel.add(new JLabel(requirement + ":"));
+        fieldPanel.add(new JLabel(requirement));
         fieldPanel.add(digitField);
+
+        Font fieldFont = new Font(fontName, Font.PLAIN, 14);
+        fieldPanel.getFontMetrics(fieldFont);
+        digitField.setFont(fieldFont);
         return digitField;
     }
 
