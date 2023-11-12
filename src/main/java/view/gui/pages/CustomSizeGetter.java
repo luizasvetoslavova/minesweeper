@@ -8,13 +8,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class CustomSizeGetter extends JDialog {
+    private static final Color btnColor = Color.decode("#F3F3F3");
+    private static final Color bgColor = Color.decode("#FFFFFF");
+    private static final Color textFieldColor = Color.decode("#E3FFF0");
+    private static final String fontName = "Times New Roman";
+
     private final JPanel mainPanel;
     private final GUIView view;
-    private final Color btnColor;
-    private final Color bgColor;
-    private final Color textFieldColor;
-    private final String fontName;
-
     private int lines;
     private int cols;
 
@@ -28,15 +28,10 @@ public class CustomSizeGetter extends JDialog {
         setResizable(false);
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 
-        fontName = "Times New Roman";
-        bgColor = Color.decode("#FFFFFF");
-        btnColor = Color.decode("#F3F3F3");
-        textFieldColor = Color.decode("#E3FFF0");
         setBackground(bgColor);
         UIManager.put("OptionPane.messageFont", new Font(fontName, Font.PLAIN, 18));
         UIManager.put("OptionPane.buttonFont", new Font(fontName, Font.BOLD, 14));
         UIManager.put("TextField.font", new Font(fontName, Font.PLAIN, 14));
-
     }
 
     public void draw() {

@@ -9,14 +9,16 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 
 public class ScorePage extends JFrame {
+    private static final Color bgColor = Color.decode("#E7E5FF");
+    private static final Color btnColor = Color.decode("#FFFFFF");
+    private static final Font buttonFont = new Font("Georgia", Font.PLAIN, 14);
+    private static final String textFont = "Times New Roman";
+
     private final JPanel mainPanel;
     private final HomePage homePage;
     private final GUIView view;
     private final JPanel buttonPanel;
     private final ScoreDao scoreDao;
-    private final Color bgColor;
-    private final Color btnColor;
-    private final Font buttonFont;
 
     public ScorePage(HomePage homePage, GUIView view) {
         this.homePage = homePage;
@@ -32,10 +34,6 @@ public class ScorePage extends JFrame {
         setResizable(false);
         setTitle("SCORES");
         getContentPane().add(mainPanel);
-
-        bgColor = Color.decode("#E7E5FF");
-        btnColor = Color.decode("#FFFFFF");
-        buttonFont = new Font("Georgia", Font.PLAIN, 14);
         mainPanel.setBackground(bgColor);
         setupScoreButton();
     }
@@ -111,10 +109,10 @@ public class ScorePage extends JFrame {
         JLabel scores = new JLabel("<html>" +
                 "<br><br><br><br>" +
                 "<div style='text-align: " + "center;'>" +
-                "<p style=\"font-family: 'Times New Roman', serif; font-size: 27px;\"><br>" +
+                "<p style=\"font-family: '" + textFont + "', serif; font-size: 27px;\"><br>" +
                 "Best Scores by Levels:" +
                 "</p><br><br>" +
-                "<table border=\"\" cellpadding=\"8\" style=\"font-family: 'Times New Roman', serif;\"" +
+                "<table border=\"\" cellpadding=\"8\" style=\"font-family: '" + textFont + "', serif;\"" +
                 "\\\"background-color: #FFFFFF;\\\">\n" +
                 "    <tr>\n" +
                 "        <th></th>\n" +

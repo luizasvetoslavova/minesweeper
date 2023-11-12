@@ -12,14 +12,19 @@ import java.util.List;
 import java.util.Locale;
 
 public class TablePage extends JFrame {
+    private static final Color tableBtnColor = Color.decode("#FFFFFF");
+    private static final Color btnColor = Color.decode("#F3F3F3");
+    private static final String btnFontName = "Georgia";
+    private static final String easyBgColor = "#E6FFCD";
+    private static final String mediumBgColor = "#FCFFDA";
+    private static final String hardBgColor = "#FFDFDF";
+    private static final String expertBgColor = "#FFDFF4";
+    private static final String customBgColor = "#DFFFFB";
+
     private final List<TableButton> tableButtons;
     private final JPanel mainPanel;
     private final Matrix matrix;
     private final HomePage homePage;
-    private final Color tableBtnColor;
-    private final Color btnColor;
-    private final Font buttonFont;
-
     private JButton reset;
     private JButton nextLevel;
     private JButton previousLevel;
@@ -41,10 +46,6 @@ public class TablePage extends JFrame {
         setLocationRelativeTo(null);
         setTitle(heading);
         setVisible(true);
-
-        tableBtnColor = Color.decode("#FFFFFF");
-        btnColor = Color.decode("#F3F3F3");
-        buttonFont = new Font("Georgia", Font.PLAIN, 14);
     }
 
     public void draw() {
@@ -56,24 +57,24 @@ public class TablePage extends JFrame {
 
     private void setBgColor() {
         if (matrix instanceof Easy) {
-            bgColor = Color.decode("#E6FFCD");
+            bgColor = Color.decode(easyBgColor);
         } else if (matrix instanceof Medium) {
-            bgColor = Color.decode("#FCFFDA");
+            bgColor = Color.decode(mediumBgColor);
         } else if (matrix instanceof Hard) {
-            bgColor = Color.decode("#FFDFDF");
+            bgColor = Color.decode(hardBgColor);
         } else if (matrix instanceof Expert) {
-            bgColor = Color.decode("#FFDFF4");
+            bgColor = Color.decode(expertBgColor);
         } else if (matrix instanceof Custom) {
-            bgColor = Color.decode("#DFFFFB");
+            bgColor = Color.decode(customBgColor);
         }
     }
 
     private void addLabel() {
-        Font timesNewRomanFont = new Font("Georgia", Font.PLAIN, 20);
+        Font captionFont = new Font(btnFontName, Font.PLAIN, 20);
 
         JLabel levelCaption = new JLabel("<html>" + "<br><br><br>" +
                 matrix.getClass().getSimpleName().toUpperCase(Locale.ROOT) + "</html>");
-        levelCaption.setFont(timesNewRomanFont);
+        levelCaption.setFont(captionFont);
 
         JPanel captionPanel = new JPanel();
         captionPanel.add(levelCaption);
@@ -121,25 +122,29 @@ public class TablePage extends JFrame {
                 homePage.setVisible(true);
             }
         });
-
         nextLevel = new JButton("NEXT LEVEL");
         nextLevel.setVisible(false);
 
+        designButtons(backToHome, buttonPanel);
+    }
+
+    private void designButtons(JButton backToHome, JPanel buttonPanel) {
+        Font btnFont = new Font(btnFontName, Font.PLAIN, 14);
         backToHome.setBackground(btnColor);
         backToHome.setPreferredSize(new Dimension(150, 35));
-        backToHome.setFont(buttonFont);
+        backToHome.setFont(btnFont);
 
         reset.setBackground(btnColor);
         reset.setPreferredSize(new Dimension(90, 35));
-        reset.setFont(buttonFont);
+        reset.setFont(btnFont);
 
         nextLevel.setBackground(btnColor);
         nextLevel.setPreferredSize(new Dimension(140, 35));
-        nextLevel.setFont(buttonFont);
+        nextLevel.setFont(btnFont);
 
         previousLevel.setBackground(btnColor);
         previousLevel.setPreferredSize(new Dimension(170, 35));
-        previousLevel.setFont(buttonFont);
+        previousLevel.setFont(btnFont);
 
         buttonPanel.setBackground(bgColor);
         buttonPanel.add(previousLevel);

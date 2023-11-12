@@ -4,6 +4,10 @@ import javax.swing.*;
 import java.awt.*;
 
 public class HomePage extends JFrame {
+    private static final Color bgColor = Color.decode("#FFF5C5");
+    private static final String btnFontName = "Georgia";
+    private static final String textFontName = "Times New Roman";
+
     private final JPanel mainPanel;
     private final JPanel rulesPanel;
     private final JPanel buttonPanel;
@@ -15,8 +19,6 @@ public class HomePage extends JFrame {
     private final JButton custom;
     private final JButton scores;
     private String rules;
-    private final Color bgColor;
-    private final String btnFontName;
 
     public HomePage() {
         mainPanel = new JPanel();
@@ -38,8 +40,6 @@ public class HomePage extends JFrame {
         buttonPanel = new JPanel();
         scoreBtnPanel = new JPanel();
 
-        bgColor = Color.decode("#FFF5C5");
-        btnFontName = "Georgia";
         setDesign();
         setVisible(true);
     }
@@ -52,14 +52,14 @@ public class HomePage extends JFrame {
 
     public String getHomeRuleSet() {
         return "<br>" +
-                "<h1 style=\"font-family: 'Times New Roman', serif; font-size: 25px;\">" +
+                "<h1 style=\"font-family: '" + textFontName + "', serif; font-size: 25px;\">" +
                 "Welcome to Minesweeper!" +
                 "</h1>" +
                 "<br><br>" +
-                "<u style=\"font-family: 'Times New Roman', serif; font-size: 15px;\">" +
+                "<u style=\"font-family: '" + textFontName + "', serif; font-size: 15px;\">" +
                 "Rules:" +
                 "</u><br>" +
-                "<p style=\"font-family: 'Times New Roman', serif; font-size: 15px;\">" +
+                "<p style=\"font-family: '" + textFontName + "', serif; font-size: 15px;\">" +
                 "1. The number shown on an opened cell is the number of mines (bombs) adjacent to it. " +
                 "<br>If a cell is empty (grey), it means that there are no mines adjacent to it.<br>" +
                 "2. You need to flag all the mines and not open any. If you do, you lose and the game ends. <br><br>" +
@@ -67,9 +67,9 @@ public class HomePage extends JFrame {
                 "You can start by clicking at any random cell.<br>" +
                 "Regular click to open a cell. Right click to flag." +
                 "<br><br></p>" +
-                "<u style=\"font-family: 'Times New Roman', serif; font-size: 15px;\">" +
+                "<u style=\"font-family: '" + textFontName + "', serif; font-size: 15px;\">" +
                 "Icons:" +
-                "</u><br><p style=\"font-family: 'Times New Roman', serif; font-size: 15px;\">" +
+                "</u><br><p style=\"font-family: '" + textFontName + "', serif; font-size: 15px;\">" +
                 "&#9638; - Empty cell. There are no mines near it.<br>" +
                 "\uD83D\uDCA3 - A mine.<br>" +
                 "&#11036; - Unopened cell.<br>" +
@@ -93,29 +93,30 @@ public class HomePage extends JFrame {
 
     private void designButtons() {
         Font buttonFont = new Font(btnFontName, Font.PLAIN, 14);
-        easy.setFont(buttonFont);
-        medium.setFont(buttonFont);
-        hard.setFont(buttonFont);
-        expert.setFont(buttonFont);
-        custom.setFont(buttonFont);
-        scores.setFont(buttonFont);
+        Color buttonBgColor = Color.WHITE;
 
-        easy.setBackground(Color.WHITE);
+        easy.setBackground(buttonBgColor);
+        easy.setFont(buttonFont);
         easy.setPreferredSize(new Dimension(90, 35));
 
-        medium.setBackground(Color.WHITE);
+        medium.setBackground(buttonBgColor);
+        medium.setFont(buttonFont);
         medium.setPreferredSize(new Dimension(100, 35));
 
-        hard.setBackground(Color.WHITE);
+        hard.setBackground(buttonBgColor);
+        hard.setFont(buttonFont);
         hard.setPreferredSize(new Dimension(90, 35));
 
-        expert.setBackground(Color.WHITE);
+        expert.setBackground(buttonBgColor);
+        expert.setFont(buttonFont);
         expert.setPreferredSize(new Dimension(100, 35));
 
-        custom.setBackground(Color.WHITE);
+        custom.setBackground(buttonBgColor);
+        custom.setFont(buttonFont);
         custom.setPreferredSize(new Dimension(100, 35));
 
-        scores.setBackground(Color.WHITE);
+        scores.setBackground(buttonBgColor);
+        scores.setFont(buttonFont);
         scores.setPreferredSize(new Dimension(90, 35));
     }
 
