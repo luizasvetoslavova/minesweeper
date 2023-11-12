@@ -42,19 +42,33 @@ public class GUIGameplay implements Gameplay {
 
     @Override
     public void showRules() {
-        homePage.setRules("<h1>Welcome to Minesweeper!</h1><br><br>" +
-                "<u>Rules:</u><br>" +
+        homePage.setRules("<br>" +
+                "<h1 style=\"font-family: 'Times New Roman', serif; font-size: 25px;\">" +
+                "Welcome to Minesweeper!" +
+                "</h1>" +
+                "<br><br>" +
+                "<u style=\"font-family: 'Times New Roman', serif; font-size: 15px;\">" +
+                "Rules:" +
+                "</u><br>" +
+                "<p style=\"font-family: 'Times New Roman', serif; font-size: 15px;\">" +
                 "1. The number shown on an opened cell is the number of mines (bombs) adjacent to it. " +
                 "<br>If a cell is empty (grey), it means that there are no mines adjacent to it.<br>" +
-                "2. You need to flag all the mines and not open any. If you do, you lose and the game ends. <br>" +
+                "2. You need to flag all the mines and not open any. If you do, you lose and the game ends. <br><br>" +
                 "All digit squares need to be opened in order for you to win.<br>" +
                 "You can start by clicking at any random cell.<br>" +
-                "Regular click to open a cell. Right click to flag. <br><br>" +
-                "<u>Icons:</u><br>" +
+                "Regular click to open a cell. Right click to flag." +
+                "<br><br></p>" +
+                "<u style=\"font-family: 'Times New Roman', serif; font-size: 15px;\">" +
+                "Icons:" +
+                "</u><br><p style=\"font-family: 'Times New Roman', serif; font-size: 15px;\">" +
                 "&#9638; - Empty cell. There are no mines near it.<br>" +
+                //"<img src=\"https://github.com/luizasvetoslavova/minesweeper/blob/improve-design/src/main/resources/images/bomb.png\">" +
                 "\uD83D\uDCA3 - A mine.<br>" +
                 "&#11036; - Unopened cell.<br>" +
-                "&#9873; - Flag.<br>");
+                "&#9873; - Flag." +
+                "<br><br><br>" +
+                "Pick your level:" +
+                "<p>");
     }
 
     @Override
@@ -87,6 +101,7 @@ public class GUIGameplay implements Gameplay {
                     if (openedCount == 1) Initializer.getInstance().initOnFirstClick(cell, openedCount);
                     cell.setCellStatus(CellStatus.OPENED);
                     lose(cell);
+
                     cellOpener.openNeighbors(cell);
                     view.showAllOpened();
                     win();

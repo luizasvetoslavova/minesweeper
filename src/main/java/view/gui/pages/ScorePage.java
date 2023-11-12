@@ -16,6 +16,7 @@ public class ScorePage extends JFrame {
     private ScoreDao scoreDao;
     private final Color bgColor = Color.decode("#E7E5FF");
     private final Color btnColor = Color.decode("#FFFFFF");
+    private Font buttonFont = new Font("Georgia", Font.PLAIN, 14);
 
     public ScorePage(HomePage homePage, GUIView view) {
         this.homePage = homePage;
@@ -53,11 +54,10 @@ public class ScorePage extends JFrame {
         mainPanel.repaint();
 
         visualizeScores();
-        addHomeButton();
         addResetButton();
+        addHomeButton();
         mainPanel.add(buttonPanel);
     }
-
 
     private void addResetButton() {
         JButton reset = new JButton("RESET SCORES");
@@ -70,7 +70,8 @@ public class ScorePage extends JFrame {
             }
         });
         reset.setBackground(btnColor);
-        reset.setPreferredSize(new Dimension(130, 35));
+        reset.setPreferredSize(new Dimension(150, 35));
+        reset.setFont(buttonFont);
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.anchor = GridBagConstraints.CENTER;
@@ -89,12 +90,13 @@ public class ScorePage extends JFrame {
             }
         });
         backToHome.setBackground(btnColor);
-        backToHome.setPreferredSize(new Dimension(130, 35));
+        backToHome.setPreferredSize(new Dimension(150, 35));
+        backToHome.setFont(buttonFont);
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.anchor = GridBagConstraints.CENTER;
         buttonPanel.add(backToHome, gbc);
-        buttonPanel.setBorder(new EmptyBorder(20, 0, 500, 0));
+        buttonPanel.setBorder(new EmptyBorder(0, 0, 300, 0));
     }
 
     private void visualizeScores() {
@@ -102,22 +104,45 @@ public class ScorePage extends JFrame {
         scorePanel.setBackground(bgColor);
         GridBagConstraints gbc = new GridBagConstraints();
 
-        JLabel scores = new JLabel("<html>" + "<br>" + "<br>" + "<div style='text-align: " + "center;'>" +
-                "<h1><u>Best Scores by Levels</u></h1><br>" +
-                "EASY: " + scoresReadable(scoreDao.getEasyTime(), scoreDao.getEasyClicks()) + "<br>" +
-                "MEDIUM: " + scoresReadable(scoreDao.getMediumTime(), scoreDao.getMediumClicks()) + "<br>" +
-                "HARD: " + scoresReadable(scoreDao.getHardTime(), scoreDao.getHardClicks()) + "<br>" +
-                "EXPERT: " + scoresReadable(scoreDao.getExpertTime(), scoreDao.getExpertClicks()) + "<br>" +
-                "CUSTOM: " + scoresReadable(scoreDao.getCustomTime(), scoreDao.getCustomClicks()) +
-                "</div> </html>");
+        JLabel scores = new JLabel("<html>" +
+                "<br><br><br><br>" +
+                "<div style='text-align: " + "center;'>" +
+                "<p style=\"font-family: 'Times New Roman', serif; font-size: 27px;\"><br>" +
+                "Best Scores by Levels:" +
+                "</p><br><br>" +
+                "<table border=\"\" cellpadding=\"8\" style=\"font-family: 'Times New Roman', serif;\"" +
+                "\\\"background-color: #FFFFFF;\\\">\n" +
+                "    <tr>\n" +
+                "        <th></th>\n" +
+                "        <th>Easy</th>\n" +
+                "        <th>Medium</th>\n" +
+                "        <th>Hard</th>\n" +
+                "        <th>Expert</th>\n" +
+                "        <th>Custom</th>\n" +
+                "    </tr>\n" +
+                "    <tr>\n" +
+                "        <th>Time</th>\n" +
+                "        <td>" + view.timeMessage(scoreDao.getEasyTime()) + "</td>\n" +
+                "        <td>" + view.timeMessage(scoreDao.getMediumTime()) + "</td>\n" +
+                "        <td>" + view.timeMessage(scoreDao.getHardTime()) + "</td>\n" +
+                "        <td>" + view.timeMessage(scoreDao.getExpertTime()) + "</td>\n" +
+                "        <td>" + view.timeMessage(scoreDao.getCustomTime()) + "</td>\n" +
+                "    </tr>\n" +
+                "    <tr>\n" +
+                "        <th>" + "Clicks" + "</th>\n" +
+                "        <td>" + scoreDao.getEasyClicks() + "</td>\n" +
+                "        <td>" + scoreDao.getMediumClicks() + "</td>\n" +
+                "        <td>" + scoreDao.getHardClicks() + "</td>\n" +
+                "        <td>" + scoreDao.getExpertClicks() + "</td>\n" +
+                "        <td>" + scoreDao.getCustomClicks() + "</td>\n" +
+                "    </tr>\n" +
+                "</table>" +
+                "</html>");
 
-        scores.setFont(new Font(scores.getFont().getName(), Font.PLAIN, 18));
+
+        scores.setFont(new Font(scores.getFont().getName(), Font.PLAIN, 23));
         scorePanel.add(scores, gbc);
-        scorePanel.setBorder(new EmptyBorder(180, 0, 50, 0));
+        scorePanel.setBorder(BorderFactory.createEmptyBorder(75, 100, 50, 100));
         mainPanel.add(scorePanel);
-    }
-
-    private String scoresReadable(int timeScore, int clickScore) {
-        return "Time - " + view.timeMessage(timeScore) + ", Clicks - " + clickScore + "<br>";
     }
 }

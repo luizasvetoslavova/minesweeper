@@ -18,6 +18,7 @@ public class TablePage extends JFrame {
     private final HomePage homePage;
     private final Color tableBtnColor = Color.decode("#FFFFFF");
     private final Color btnColor = Color.decode("#F3F3F3");
+    private Font buttonFont = new Font("Georgia", Font.PLAIN, 14);
 
     private JPanel captionPanel;
     private JPanel mainContentPanel;
@@ -70,8 +71,12 @@ public class TablePage extends JFrame {
     }
 
     private void addLabel() {
-        JLabel levelCaption = new JLabel("<html>" + "<br>" +
-                matrix.getClass().getSimpleName().toUpperCase(Locale.ROOT) + "<html>");
+        Font timesNewRomanFont = new Font("Georgia", Font.PLAIN, 20);
+
+        JLabel levelCaption = new JLabel("<html>" + "<br><br><br>" +
+                matrix.getClass().getSimpleName().toUpperCase(Locale.ROOT) + "</html>");
+        levelCaption.setFont(timesNewRomanFont);
+
         captionPanel = new JPanel();
         captionPanel.add(levelCaption);
         captionPanel.setBackground(bgColor);
@@ -98,6 +103,7 @@ public class TablePage extends JFrame {
             }
         }
 
+        tablePanel.setBorder(BorderFactory.createEmptyBorder(25, 200, 40, 200));
         mainContentPanel.add(tablePanel);
         mainPanel.add(mainContentPanel, BorderLayout.CENTER);
     }
@@ -122,13 +128,20 @@ public class TablePage extends JFrame {
         nextLevel.setVisible(false);
 
         backToHome.setBackground(btnColor);
-        backToHome.setPreferredSize(new Dimension(130, 35));
+        backToHome.setPreferredSize(new Dimension(150, 35));
+        backToHome.setFont(buttonFont);
+
         reset.setBackground(btnColor);
         reset.setPreferredSize(new Dimension(90, 35));
+        reset.setFont(buttonFont);
+
         nextLevel.setBackground(btnColor);
-        nextLevel.setPreferredSize(new Dimension(110, 35));
+        nextLevel.setPreferredSize(new Dimension(140, 35));
+        nextLevel.setFont(buttonFont);
+
         previousLevel.setBackground(btnColor);
-        previousLevel.setPreferredSize(new Dimension(140, 35));
+        previousLevel.setPreferredSize(new Dimension(170, 35));
+        previousLevel.setFont(buttonFont);
 
         buttonPanel.setBackground(bgColor);
         buttonPanel.add(previousLevel);
@@ -137,7 +150,7 @@ public class TablePage extends JFrame {
         buttonPanel.add(nextLevel);
 
         buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-        buttonPanel.setBorder(BorderFactory.createEmptyBorder(29, 200, 40, 200));
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(0, 200, 70, 200));
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
     }
 

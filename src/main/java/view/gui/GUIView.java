@@ -6,6 +6,7 @@ import view.gui.pages.TablePage;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Objects;
 
 public class GUIView {
     private final String FLAG_IMAGE = "/images/flag.png";
@@ -41,17 +42,19 @@ public class GUIView {
     public void showAllOpened() {
         tablePage.getButtons()
                 .stream()
-                .filter(tableButton -> tableButton.getCell().getCellStatus() == CellStatus.OPENED)
+                .filter(tableButton -> tableButton.getCell().getCellStatus() == CellStatus.OPENED
+                        && tableButton.getButton().getIcon() == null)
                 .forEach(tableButton ->
                         setButtonImage(tableButton, setOpenDigit(tableButton.getCell().getDigit())));
     }
 
+
     public void setButtonImage(TableButton tableButton, String resource) {
-        ImageIcon icon = new ImageIcon(getClass().getResource(resource));
-        Image image = icon.getImage().getScaledInstance(tableButton.getButton().getWidth(),
-                tableButton.getButton().getHeight(), Image.SCALE_SMOOTH);
-        ImageIcon scaledIcon = new ImageIcon(image);
-        tableButton.getButton().setIcon(scaledIcon);
+        tableButton.getButton().setIcon(
+                new ImageIcon(
+                        new ImageIcon(Objects.requireNonNull(getClass().getResource(resource))).
+                                getImage().getScaledInstance(tableButton.getButton().getWidth(),
+                                        tableButton.getButton().getHeight(), Image.SCALE_SMOOTH)));
     }
 
     public String timeMessage(GameTimer gameTimer) {

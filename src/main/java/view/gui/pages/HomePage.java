@@ -59,32 +59,40 @@ public class HomePage extends JFrame {
     }
 
     private void designButtons() {
+        Font buttonFont = new Font("Georgia", Font.PLAIN, 14);
+        easy.setFont(buttonFont);
+        medium.setFont(buttonFont);
+        hard.setFont(buttonFont);
+        expert.setFont(buttonFont);
+        custom.setFont(buttonFont);
+        scores.setFont(buttonFont);
+
         easy.setBackground(Color.WHITE);
         easy.setPreferredSize(new Dimension(90, 35));
 
         medium.setBackground(Color.WHITE);
-        medium.setPreferredSize(new Dimension(90, 35));
+        medium.setPreferredSize(new Dimension(100, 35));
 
         hard.setBackground(Color.WHITE);
         hard.setPreferredSize(new Dimension(90, 35));
 
         expert.setBackground(Color.WHITE);
-        expert.setPreferredSize(new Dimension(90, 35));
+        expert.setPreferredSize(new Dimension(100, 35));
 
         custom.setBackground(Color.WHITE);
-        custom.setPreferredSize(new Dimension(90, 35));
+        custom.setPreferredSize(new Dimension(100, 35));
 
         scores.setBackground(Color.WHITE);
         scores.setPreferredSize(new Dimension(90, 35));
     }
 
     private void showRules() {
-        JLabel rules = new JLabel("<html>" + "<br>" + "<br>" + "<br>" + "<br>" +
-                "<div style='text-align: " + "center;'>" +
-                this.rules + "<br>" + "<br>" + "Pick your level:" + "</div> </html>");
+        JLabel rules = new JLabel("<html>" + "<br>" + "<br>" + "<br>" + "<div style='text-align: " + "center;'>" +
+                this.rules + "</div> </html>");
 
         rules.setFont(new Font(rules.getFont().getName(), Font.PLAIN, 17));
         rulesPanel.add(rules);
+        rulesPanel.setBorder(BorderFactory.createEmptyBorder(0, 200, 5, 200));
         mainPanel.add(rulesPanel);
     }
 
@@ -94,15 +102,17 @@ public class HomePage extends JFrame {
         buttonPanel.add(hard);
         buttonPanel.add(expert);
         buttonPanel.add(custom);
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(20, 200, 10, 200));
         scoreBtnPanel.add(scores);
+        scoreBtnPanel.setBorder(BorderFactory.createEmptyBorder(0, 200, 40, 200));
         alignButtonsInMainPanel(buttonPanel, scoreBtnPanel);
     }
 
     private void alignButtonsInMainPanel(JPanel buttonPanel, JPanel scoreBtnPanel) {
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-        mainPanel.add(Box.createVerticalGlue());
+        mainPanel.add(Box.createVerticalStrut(-5));
         mainPanel.add(buttonPanel);
-        mainPanel.add(Box.createVerticalStrut(0));
+        mainPanel.add(Box.createVerticalStrut(-5));
         scoreBtnPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
         mainPanel.add(scoreBtnPanel);
         mainPanel.add(Box.createVerticalGlue());

@@ -20,25 +20,47 @@ public class ScoreSaver {
 
     public void saveScores() {
         setOldScores();
-        isNewScore = false;
-        updateScores(oldTimeScore, gameplay.getGameTimer().getSecondsTotal());
-        updateScores(oldClickScore, gameplay.getClickCount());
+        updateScores();
     }
 
-    private void updateScores(int oldScore, int newScore) {
+    private void updateScores() {
         timeScore = oldTimeScore;
         clickScore = oldClickScore;
+        isNewScore = false;
 
-        if (oldClickScore == 0 || oldTimeScore == 0) {
-            isNewScore = true;
-            timeScore = gameplay.getGameTimer().getSecondsTotal();
-            clickScore = gameplay.getClickCount();
-        } else if (isCurrentScoreHigher(oldScore, newScore)) {
+        if (timeScore == 0 || clickScore == 0) {
             isNewScore = true;
             timeScore = gameplay.getGameTimer().getSecondsTotal();
             clickScore = gameplay.getClickCount();
         }
-        updateScores();
+        if (isNewScoreHigher(gameplay.getGameTimer().getSecondsTotal(), timeScore)) {
+            isNewScore = true;
+            timeScore = gameplay.getGameTimer().getSecondsTotal();
+        }
+        if (isNewScoreHigher(gameplay.getClickCount(), clickScore)) {
+            isNewScore = true;
+            clickScore = gameplay.getClickCount();
+        }
+        updateScoresInDao();
+    }
+
+    private void updateScoresInDao() {
+        if (gameplay.getCurrentMatrix() instanceof Easy) {
+            scoreDao.setEasyClicks(clickScore);
+            scoreDao.setEasyTime(timeScore);
+        } else if (gameplay.getCurrentMatrix() instanceof Medium) {
+            scoreDao.setMediumClicks(clickScore);
+            scoreDao.setMediumTime(timeScore);
+        } else if (gameplay.getCurrentMatrix() instanceof Hard) {
+            scoreDao.setHardClicks(clickScore);
+            scoreDao.setHardTime(timeScore);
+        } else if (gameplay.getCurrentMatrix() instanceof Expert) {
+            scoreDao.setExpertClicks(clickScore);
+            scoreDao.setExpertTime(timeScore);
+        } else if (gameplay.getCurrentMatrix() instanceof Custom) {
+            scoreDao.setCustomClicks(clickScore);
+            scoreDao.setCustomTime(timeScore);
+        }
     }
 
     private void setOldScores() {
@@ -60,27 +82,8 @@ public class ScoreSaver {
         }
     }
 
-    private void updateScores() {
-        if (gameplay.getCurrentMatrix() instanceof Easy) {
-            scoreDao.setEasyClicks(clickScore);
-            scoreDao.setEasyTime(timeScore);
-        } else if (gameplay.getCurrentMatrix() instanceof Medium) {
-            scoreDao.setMediumClicks(clickScore);
-            scoreDao.setMediumTime(timeScore);
-        } else if (gameplay.getCurrentMatrix() instanceof Hard) {
-            scoreDao.setHardClicks(clickScore);
-            scoreDao.setHardTime(timeScore);
-        } else if (gameplay.getCurrentMatrix() instanceof Expert) {
-            scoreDao.setExpertClicks(clickScore);
-            scoreDao.setExpertTime(timeScore);
-        } else if (gameplay.getCurrentMatrix() instanceof Custom) {
-            scoreDao.setCustomClicks(clickScore);
-            scoreDao.setCustomTime(timeScore);
-        }
-    }
-
-    private boolean isCurrentScoreHigher(int oldScore, int newScore) {
-        return oldScore > newScore;
+    private boolean isNewScoreHigher(int newScore, int oldScore) {
+        return newScore < oldScore;
     }
 
     public boolean isNewScore() {
