@@ -15,6 +15,7 @@ public class CustomSizeGetter extends JDialog {
 
     private final JPanel mainPanel;
     private final GUIView view;
+    private JButton submitButton;
     private int lines;
     private int cols;
 
@@ -22,7 +23,7 @@ public class CustomSizeGetter extends JDialog {
         super(new JFrame(), "DIMENSIONS", true);
         mainPanel = new JPanel();
         view = new GUIView();
-        setSize(180, 135);
+        setSize(320, 170);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
         setResizable(false);
@@ -35,21 +36,52 @@ public class CustomSizeGetter extends JDialog {
     }
 
     public void draw() {
-        JPanel fieldPanel = new JPanel();
+        JPanel fieldPanel = new JPanel(new GridBagLayout());
         fieldPanel.setBackground(bgColor);
-        JTextField linesField = addDigitField(fieldPanel, "Lines:");
-        JTextField colsField = addDigitField(fieldPanel, "Columns:");
-        linesField.setFont(new Font(fontName, Font.PLAIN, 16));
-        colsField.setFont(new Font(fontName, Font.PLAIN, 16));
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridy = 0;
+        JTextField linesField = addDimensionField(gbc, fieldPanel, "Lines");
+        gbc.gridy = 1;
+        JTextField colsField = addDimensionField(gbc, fieldPanel, "Columns");
+        addSubmitButton(fieldPanel, gbc);
 
-        JButton submitButton = new JButton("OK");
-        submitButton.setBackground(btnColor);
-        submitButton.setFont(new Font(fontName, Font.BOLD, 14));
         setupButton(submitButton, linesField, colsField, fieldPanel);
-
         mainPanel.add(fieldPanel);
         add(mainPanel);
         setVisible(true);
+    }
+
+    private JTextField addDimensionField(GridBagConstraints gbc, JPanel fieldPanel, String text) {
+        gbc.gridx = 0;
+        gbc.anchor = GridBagConstraints.WEST;
+
+        JLabel lineRequirement = new JLabel(text + ": ");
+        lineRequirement.setFont(new Font(fontName, Font.PLAIN, 18));
+        gbc.insets = new Insets(7, 0, 8, 7);
+        fieldPanel.add(lineRequirement, gbc);
+
+        gbc.gridx = 1;
+        JTextField dimensionField = addDigitField(fieldPanel, "");
+        dimensionField.setFont(new Font(fontName, Font.PLAIN, 16));
+        dimensionField.setPreferredSize(new Dimension(75, dimensionField.getPreferredSize().height));
+        gbc.insets = new Insets(0, 0, 8, 7);
+        fieldPanel.add(dimensionField, gbc);
+        return dimensionField;
+    }
+
+    private void addSubmitButton(JPanel fieldPanel, GridBagConstraints gbc) {
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.gridwidth = 2;
+        gbc.insets = new Insets(10, 50, 10, 0);
+
+        JButton submitButton = new JButton("OK");
+        Dimension buttonSize = new Dimension(65, 30);
+        submitButton.setPreferredSize(buttonSize);
+        submitButton.setBackground(btnColor);
+        submitButton.setFont(new Font(fontName, Font.BOLD, 14));
+        fieldPanel.add(submitButton, gbc);
+        this.submitButton = submitButton;
     }
 
     public boolean isSizeInvalid() {
@@ -72,12 +104,11 @@ public class CustomSizeGetter extends JDialog {
                 }
             }
         });
-        panel.add(submitButton);
     }
 
     private JTextField addDigitField(JPanel fieldPanel, String requirement) {
         JTextField digitField = new JTextField();
-        digitField.setPreferredSize(new Dimension(70, 25));
+        digitField.setPreferredSize(new Dimension(90, 30));
         digitField.setBackground(textFieldColor);
         fieldPanel.add(new JLabel(requirement));
         fieldPanel.add(digitField);
