@@ -46,7 +46,7 @@ public class GUIView {
         JOptionPane optionPane = new JOptionPane(messageLabel, JOptionPane.INFORMATION_MESSAGE,
                 JOptionPane.DEFAULT_OPTION, null, new Object[]{});
         optionPane.setFont(messageFont);
-        JDialog dialog = optionPane.createDialog("Message");
+        JDialog dialog = optionPane.createDialog("MESSAGE");
         dialog.setVisible(true);
     }
 
