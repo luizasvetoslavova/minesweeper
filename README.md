@@ -24,30 +24,21 @@ Custom - Anything you choose from <b>3 up to 50</b> squares, <b>20%</b> of which
 </h3>
 The program stores your highest score for each level - best performance time and clicks.
 As you update your score by taking less time or using less clicks to finish a game, it gets 
-updated on the 'scores' page section as well, and stored in a database. As you hit a new score you're being shown
+updated on the 'scores' page section as well, and stored in an SQL database. As you hit a new score you're being shown
 your old one, and as you win but can't beat your own best score you see a comparison 
-between your current score and your best one. By default all scores are zero, but they 
+between your current score and your best score. By default all scores are zero, but they 
 get automatically updated as you win your first game. <br> 
 
 <h3>
-  UI/UX:
+  UX:
 </h3>
-As stated above, you can choose any level to start with from home page, which also exposes the rules.
+As stated above, you can choose any level to start with from home page that also exposes the rules.
 The game could be reset both when one is done playing and before that. When there is a win, you can move on to the next
-level directly from the page you're on at the moment. If you're impatient, though, you can navigate to a higher or 
-a custom level from the home page that you have access to all the time. It's way more fun to work your way out to expert
+level directly from the page you're on at the moment. If you're impatient, you can navigate to a higher or 
+a custom size level from the home page that you have access to all the time. It's way more fun to work your way out to expert
 level, though!
 So, unlike next level buttons, previous level navigation is always available. <br>
-You can navigate to score page as well, where you're be able to see all scores for each level that you've set so far. You've got the option to reset your scores in order to be able to start setting them from scratch, just like when you downloaded the game first. <br>
-
-<h3>
-  To do:
-</h3>
-- Random shaped tables <br>
-- Timer visualization and flag counter <br>
-- Improved UI design <br>
-- Faster opening of the cells <br>
-- Save scores in JAR file <br>
-<br> <br>
+You can navigate to score page as well, where you're be able to see all your best scores for each level that you've set so far. You've got the option to reset your scores in order to be able to start setting them from scratch, just like when you downloaded the game at first. <br>
+<br>
 
 > <a href="https://github.com/luizasvetoslavova/minesweeper/raw/main/out/artifacts/minesweeper_jar/minesweeper.jar">**DOWNLOAD JAR**</a> <p>(scores not saving properly in JAR)</p>
