@@ -70,9 +70,12 @@ public class TablePage extends JFrame {
     }
 
     private void addLabel() {
-        Font captionFont = new Font(btnFontName, Font.PLAIN, 20);
+        String upperSpace;
+        if (matrix instanceof Expert || matrix instanceof Custom) upperSpace = "<br><br>";
+        else upperSpace = "<br><br><br>";
 
-        JLabel levelCaption = new JLabel("<html>" + "<br><br><br>" +
+        Font captionFont = new Font(btnFontName, Font.PLAIN, 24);
+        JLabel levelCaption = new JLabel("<html>" + upperSpace +
                 matrix.getClass().getSimpleName().toUpperCase(Locale.ROOT) + "</html>");
         levelCaption.setFont(captionFont);
 
@@ -129,21 +132,21 @@ public class TablePage extends JFrame {
     }
 
     private void designButtons(JButton backToHome, JPanel buttonPanel) {
-        Font btnFont = new Font(btnFontName, Font.PLAIN, 14);
+        Font btnFont = new Font(btnFontName, Font.PLAIN, 17);
         backToHome.setBackground(btnColor);
-        backToHome.setPreferredSize(new Dimension(150, 35));
+        backToHome.setPreferredSize(new Dimension(165, 42));
         backToHome.setFont(btnFont);
 
         reset.setBackground(btnColor);
-        reset.setPreferredSize(new Dimension(90, 35));
+        reset.setPreferredSize(new Dimension(90, 42));
         reset.setFont(btnFont);
 
         nextLevel.setBackground(btnColor);
-        nextLevel.setPreferredSize(new Dimension(140, 35));
+        nextLevel.setPreferredSize(new Dimension(140, 42));
         nextLevel.setFont(btnFont);
 
         previousLevel.setBackground(btnColor);
-        previousLevel.setPreferredSize(new Dimension(170, 35));
+        previousLevel.setPreferredSize(new Dimension(180, 42));
         previousLevel.setFont(btnFont);
 
         buttonPanel.setBackground(bgColor);
@@ -158,10 +161,10 @@ public class TablePage extends JFrame {
     }
 
     private void setTableButtonsSize() {
-        if (matrix instanceof Easy) buttonSize = 35;
-        else if (matrix instanceof Medium) buttonSize = 23;
-        else if (matrix instanceof Hard) buttonSize = 20;
-        else if (matrix instanceof Expert) buttonSize = 18;
+        if (matrix instanceof Easy) buttonSize = 40;
+        else if (matrix instanceof Medium) buttonSize = 29;
+        else if (matrix instanceof Hard) buttonSize = 28;
+        else if (matrix instanceof Expert) buttonSize = 23;
         else if (matrix instanceof Custom) buttonSize = setCustomSize(matrix);
     }
 
@@ -170,17 +173,17 @@ public class TablePage extends JFrame {
         int cols = custom.getCells()[0].length;
 
         if (rows <= 10 && cols <= 10) {
-            return 35;
+            return 38;
         } else if (rows <= 15 && cols <= 15) {
-            return 30;
+            return 33;
         } else if (rows <= 20 && cols <= 20) {
-            return 25;
+            return 26;
+        } else if (rows <= 25 && cols <= 25) {
+            return 22;
         } else if (rows <= 32 && cols <= 32) {
-            return 17;
-        } else if (rows <= 43 && cols <= 43) {
-            return 12;
+            return 19;
         }
-        return 11;
+        return 13;
     }
 
     public List<TableButton> getButtons() {

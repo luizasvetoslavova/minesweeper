@@ -6,7 +6,8 @@ import java.awt.*;
 public class HomePage extends JFrame {
     private static final Color bgColor = Color.decode("#FFF5C5");
     private static final String btnFontName = "Georgia";
-    private static final String textFontName = "Times New Roman";
+    private static final String textFontName = //"Times New Roman";
+     "Baskerville";
 
     private final JPanel mainPanel;
     private final JPanel rulesPanel;
@@ -51,32 +52,23 @@ public class HomePage extends JFrame {
     }
 
     public String getHomeRuleSet() {
-        return "<br>" +
-                "<h1 style=\"font-family: '" + textFontName + "', serif; font-size: 25px;\">" +
-                "Welcome to Minesweeper!" +
-                "</h1>" +
+        return "<html>" + "<br>" + "<br>" + "<br>" + "<div style='text-align: " + "center;'>" +
+                "<br>" +
+                "<h3 style=\"font-family: '" + textFontName + "', serif; font-size: 28px;\">" +
+                "<br>Welcome to Minesweeper!" +
+                "</h3>" +
                 "<br><br>" +
-                "<u style=\"font-family: '" + textFontName + "', serif; font-size: 15px;\">" +
-                "Rules:" +
-                "</u><br>" +
-                "<p style=\"font-family: '" + textFontName + "', serif; font-size: 15px;\">" +
-                "1. The number shown on an opened cell is the number of mines (bombs) adjacent to it. " +
-                "<br>If a cell is empty (grey), it means that there are no mines adjacent to it.<br>" +
-                "2. You need to flag all the mines and not open any. If you do, you lose and the game ends. <br><br>" +
+                "<p style=\"font-family: '" + textFontName + "', serif; font-size: 16px;\">" +
+                "The number shown on an opened cell is the number of mines adjacent to it. " +
+                "<br>If a cell is empty, it means that there are no mines near it.<br>" +
+                "You need to flag all the mines and not open any. If you do open a mine, you die. <br><br>" +
                 "All digit squares need to be opened in order for you to win.<br>" +
-                "You can start by clicking at any random cell.<br>" +
-                "Regular click to open a cell. Right click to flag." +
-                "<br><br></p>" +
-                "<u style=\"font-family: '" + textFontName + "', serif; font-size: 15px;\">" +
-                "Icons:" +
-                "</u><br><p style=\"font-family: '" + textFontName + "', serif; font-size: 15px;\">" +
-                "&#9638; - Empty cell. There are no mines near it.<br>" +
-                "\uD83D\uDCA3 - A mine.<br>" +
-                "&#11036; - Unopened cell.<br>" +
-                "&#9873; - Flag." +
-                "<br><br><br>" +
-                "Pick your level:" +
-                "<p>";
+                "You can start by clicking at any random cell.<br><br>" +
+                "Regular click to open a cell. Right click to flag. <br> Be fast for a good score!" +
+                "<br><br>" +
+                "<br><br>START:" +
+                "</p>" +
+                "</div> </html>";
     }
 
     private void setDesign() {
@@ -92,41 +84,39 @@ public class HomePage extends JFrame {
     }
 
     private void designButtons() {
-        Font buttonFont = new Font(btnFontName, Font.PLAIN, 14);
+        Font buttonFont = new Font(btnFontName, Font.PLAIN, 17);
         Color buttonBgColor = Color.WHITE;
 
         easy.setBackground(buttonBgColor);
         easy.setFont(buttonFont);
-        easy.setPreferredSize(new Dimension(90, 35));
+        easy.setPreferredSize(new Dimension(106, 42));
 
         medium.setBackground(buttonBgColor);
         medium.setFont(buttonFont);
-        medium.setPreferredSize(new Dimension(100, 35));
+        medium.setPreferredSize(new Dimension(112, 42));
 
         hard.setBackground(buttonBgColor);
         hard.setFont(buttonFont);
-        hard.setPreferredSize(new Dimension(90, 35));
+        hard.setPreferredSize(new Dimension(106, 42));
 
         expert.setBackground(buttonBgColor);
         expert.setFont(buttonFont);
-        expert.setPreferredSize(new Dimension(100, 35));
+        expert.setPreferredSize(new Dimension(106, 42));
 
         custom.setBackground(buttonBgColor);
         custom.setFont(buttonFont);
-        custom.setPreferredSize(new Dimension(100, 35));
+        custom.setPreferredSize(new Dimension(106, 42));
 
         scores.setBackground(buttonBgColor);
         scores.setFont(buttonFont);
-        scores.setPreferredSize(new Dimension(90, 35));
+        scores.setPreferredSize(new Dimension(106, 42));
     }
 
     private void showRules() {
-        JLabel rules = new JLabel("<html>" + "<br>" + "<br>" + "<br>" + "<div style='text-align: " + "center;'>" +
-                this.rules + "</div> </html>");
-
+        JLabel rules = new JLabel(this.rules);
         rules.setFont(new Font(rules.getFont().getName(), Font.PLAIN, 17));
         rulesPanel.add(rules);
-        rulesPanel.setBorder(BorderFactory.createEmptyBorder(0, 200, 5, 200));
+        rulesPanel.setBorder(BorderFactory.createEmptyBorder(0, 200, -35, 200));
         mainPanel.add(rulesPanel);
     }
 
@@ -136,7 +126,7 @@ public class HomePage extends JFrame {
         buttonPanel.add(hard);
         buttonPanel.add(expert);
         buttonPanel.add(custom);
-        buttonPanel.setBorder(BorderFactory.createEmptyBorder(20, 200, 10, 200));
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(2, 200, -40, 200));
         scoreBtnPanel.add(scores);
         scoreBtnPanel.setBorder(BorderFactory.createEmptyBorder(0, 200, 40, 200));
         alignButtonsInMainPanel(buttonPanel, scoreBtnPanel);

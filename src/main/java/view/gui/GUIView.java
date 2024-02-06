@@ -115,7 +115,7 @@ public class GUIView {
     public void showInvalidSizeMessage() {
         showMessage("Invalid size! \n" +
                 "Min size: 3x3 \n" +
-                "Max size: 50x50");
+                "Max size: 43x43");
     }
 
     public void showMessageOnLoss() {

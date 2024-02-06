@@ -11,7 +11,7 @@ import java.awt.event.ActionEvent;
 public class ScorePage extends JFrame {
     private static final Color bgColor = Color.decode("#E7E5FF");
     private static final Color btnColor = Color.decode("#FFFFFF");
-    private static final Font buttonFont = new Font("Georgia", Font.PLAIN, 14);
+    private static final Font buttonFont = new Font("Georgia", Font.PLAIN, 17);
     private static final String textFont = "Times New Roman";
 
     private final JPanel mainPanel;
@@ -72,7 +72,7 @@ public class ScorePage extends JFrame {
             }
         });
         reset.setBackground(btnColor);
-        reset.setPreferredSize(new Dimension(150, 35));
+        reset.setPreferredSize(new Dimension(160, 42));
         reset.setFont(buttonFont);
 
         GridBagConstraints gbc = new GridBagConstraints();
@@ -92,7 +92,7 @@ public class ScorePage extends JFrame {
             }
         });
         backToHome.setBackground(btnColor);
-        backToHome.setPreferredSize(new Dimension(150, 35));
+        backToHome.setPreferredSize(new Dimension(165, 42));
         backToHome.setFont(buttonFont);
 
         GridBagConstraints gbc = new GridBagConstraints();
@@ -107,12 +107,12 @@ public class ScorePage extends JFrame {
         GridBagConstraints gbc = new GridBagConstraints();
 
         JLabel scores = new JLabel("<html>" +
-                "<br><br><br><br>" +
+                "<br><br>" +
                 "<div style='text-align: " + "center;'>" +
                 "<p style=\"font-family: '" + textFont + "', serif; font-size: 27px;\"><br>" +
-                "Best Scores by Levels:" +
-                "</p><br><br>" +
-                "<table border=\"\" cellpadding=\"8\" style=\"font-family: '" + textFont + "', serif;\"" +
+                "Best Scores by Levels" +
+                "</p><br>" +
+                "<table border=\"\" cellpadding=\"25\" style=\"font-family: '" + textFont + "', serif;\"" +
                 "\\\"background-color: #FFFFFF;\\\">\n" +
                 "    <tr>\n" +
                 "        <th></th>\n" +
@@ -141,7 +141,7 @@ public class ScorePage extends JFrame {
                 "</table>" +
                 "</html>");
 
-        scores.setFont(new Font(scores.getFont().getName(), Font.PLAIN, 23));
+        scores.setFont(new Font(scores.getFont().getName(), Font.PLAIN, 28));
         scorePanel.add(scores, gbc);
         scorePanel.setBorder(BorderFactory.createEmptyBorder(80, 100, 50, 100));
         mainPanel.add(scorePanel);

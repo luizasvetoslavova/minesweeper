@@ -73,9 +73,10 @@ public class GUIGameplay implements Gameplay {
                     openedCount++;
                     clickCount++;
                     if (openedCount == 1) Initializer.getInstance().initOnFirstClick(cell, openedCount);
+                    if(cell.getCellStatus() == CellStatus.FLAGGED) tableButton.getButton().setIcon(null);
+
                     cell.setCellStatus(CellStatus.OPENED);
                     lose(cell);
-
                     cellOpener.openNeighbors(cell);
                     view.showAllOpened();
                     win();

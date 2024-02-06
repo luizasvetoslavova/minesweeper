@@ -85,7 +85,7 @@ public class CustomSizeGetter extends JDialog {
     }
 
     public boolean isSizeInvalid() {
-        return lines < 3 || cols < 3 || lines > 50 || cols > 50;
+        return lines < 3 || cols < 3 || lines > 43 || cols > 43;
     }
 
     private void setupButton(JButton submitButton, JTextField linesField, JTextField colsField, JPanel panel) {
