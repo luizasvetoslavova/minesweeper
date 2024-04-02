@@ -72,15 +72,35 @@ public class TablePage extends JFrame {
     private void addLabel() {
         String upperSpace;
         if (matrix instanceof Expert || matrix instanceof Custom) upperSpace = "<br><br>";
-        else upperSpace = "<br><br><br>";
+        else upperSpace = "<br><br>";
 
         Font captionFont = new Font(btnFontName, Font.PLAIN, 24);
         JLabel levelCaption = new JLabel("<html>" + upperSpace +
                 matrix.getClass().getSimpleName().toUpperCase(Locale.ROOT) + "</html>");
         levelCaption.setFont(captionFont);
 
-        JPanel captionPanel = new JPanel();
-        captionPanel.add(levelCaption);
+        JButton backArrow = new JButton("<--");
+        backArrow.setContentAreaFilled(false);
+        backArrow.setBorderPainted(false);
+
+        backArrow.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setVisible(false);
+                homePage.setVisible(true);
+            }
+        });
+
+        JPanel levelCaptionPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        levelCaptionPanel.add(levelCaption);
+
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        buttonPanel.add(backArrow);
+
+        JPanel captionPanel = new JPanel(new BorderLayout());
+        captionPanel.add(levelCaptionPanel, BorderLayout.CENTER);
+        captionPanel.add(buttonPanel, BorderLayout.WEST);
+
         captionPanel.setBackground(bgColor);
         mainPanel.add(captionPanel);
     }
@@ -116,27 +136,14 @@ public class TablePage extends JFrame {
 
         JPanel buttonPanel = new JPanel();
         reset = new JButton("RESET");
-
-        JButton backToHome = new JButton("BACK TO HOME");
-        backToHome.addActionListener(new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                setVisible(false);
-                homePage.setVisible(true);
-            }
-        });
         nextLevel = new JButton("NEXT LEVEL");
         nextLevel.setVisible(false);
 
-        designButtons(backToHome, buttonPanel);
+        designButtons( buttonPanel);
     }
 
-    private void designButtons(JButton backToHome, JPanel buttonPanel) {
+    private void designButtons(JPanel buttonPanel) {
         Font btnFont = new Font(btnFontName, Font.PLAIN, 17);
-        backToHome.setBackground(btnColor);
-        backToHome.setPreferredSize(new Dimension(165, 42));
-        backToHome.setFont(btnFont);
-
         reset.setBackground(btnColor);
         reset.setPreferredSize(new Dimension(90, 42));
         reset.setFont(btnFont);
@@ -152,7 +159,6 @@ public class TablePage extends JFrame {
         buttonPanel.setBackground(bgColor);
         buttonPanel.add(previousLevel);
         buttonPanel.add(reset);
-        buttonPanel.add(backToHome);
         buttonPanel.add(nextLevel);
 
         buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
