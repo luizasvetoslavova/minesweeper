@@ -55,9 +55,9 @@ public class ScorePage extends JFrame {
         mainPanel.revalidate();
         mainPanel.repaint();
 
+        addHomeButton();
         visualizeScores();
         addResetButton();
-        addHomeButton();
         mainPanel.add(buttonPanel);
     }
 
@@ -83,22 +83,22 @@ public class ScorePage extends JFrame {
     }
 
     private void addHomeButton() {
-        JButton backToHome = new JButton("BACK TO HOME");
-        backToHome.addActionListener(new AbstractAction() {
+        JButton backArrow = new JButton("<--");
+        backArrow.setContentAreaFilled(false);
+        backArrow.setBorderPainted(false);
+
+        backArrow.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setVisible(false);
                 homePage.setVisible(true);
             }
         });
-        backToHome.setBackground(btnColor);
-        backToHome.setPreferredSize(new Dimension(165, 42));
-        backToHome.setFont(buttonFont);
 
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.anchor = GridBagConstraints.CENTER;
-        buttonPanel.add(backToHome, gbc);
-        buttonPanel.setBorder(new EmptyBorder(0, 0, 300, 0));
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        buttonPanel.add(backArrow);
+        buttonPanel.setBackground(bgColor);
+        mainPanel.add(buttonPanel);
     }
 
     private void visualizeScores() {
