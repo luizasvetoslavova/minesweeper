@@ -76,7 +76,7 @@ public class TablePage extends JFrame {
 
         Font captionFont = new Font(btnFontName, Font.PLAIN, 24);
         JLabel levelCaption = new JLabel("<html>" + upperSpace +
-                matrix.getClass().getSimpleName().toUpperCase(Locale.ROOT) + "</html>");
+                matrix.getClass().getSimpleName().toUpperCase(Locale.ROOT), SwingConstants.CENTER);
         levelCaption.setFont(captionFont);
 
         JButton backArrow = new JButton("<--");
@@ -93,9 +93,11 @@ public class TablePage extends JFrame {
 
         JPanel levelCaptionPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         levelCaptionPanel.add(levelCaption);
+        levelCaptionPanel.setBackground(bgColor);
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         buttonPanel.add(backArrow);
+        buttonPanel.setBackground(bgColor);
 
         JPanel captionPanel = new JPanel(new BorderLayout());
         captionPanel.add(levelCaptionPanel, BorderLayout.CENTER);
