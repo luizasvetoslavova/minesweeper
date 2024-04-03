@@ -76,21 +76,10 @@ public class TablePage extends JFrame {
 
         Font captionFont = new Font(btnFontName, Font.PLAIN, 24);
         JLabel levelCaption = new JLabel("<html>" + upperSpace +
-                matrix.getClass().getSimpleName().toUpperCase(Locale.ROOT), SwingConstants.CENTER);
+                matrix.getClass().getSimpleName().toUpperCase());
         levelCaption.setFont(captionFont);
 
-        JButton backArrow = new JButton("<--");
-        backArrow.setContentAreaFilled(false);
-        backArrow.setBorderPainted(false);
-
-        backArrow.addActionListener(new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                setVisible(false);
-                homePage.setVisible(true);
-            }
-        });
-
+        JButton backArrow = createBackArrow();
         JPanel levelCaptionPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         levelCaptionPanel.add(levelCaption);
         levelCaptionPanel.setBackground(bgColor);
@@ -105,6 +94,23 @@ public class TablePage extends JFrame {
 
         captionPanel.setBackground(bgColor);
         mainPanel.add(captionPanel);
+    }
+
+    private JButton createBackArrow() {
+        Font arrowFont = new Font("Arial", Font.PLAIN, 24);
+        JButton backArrow = new JButton("\u2190");
+        backArrow.setFont(arrowFont);
+        backArrow.setContentAreaFilled(false);
+        backArrow.setBorderPainted(false);
+
+        backArrow.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setVisible(false);
+                homePage.setVisible(true);
+            }
+        });
+        return backArrow;
     }
 
     private void drawTable() {

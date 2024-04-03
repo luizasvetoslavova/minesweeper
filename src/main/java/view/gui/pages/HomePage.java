@@ -52,7 +52,7 @@ public class HomePage extends JFrame {
     }
 
     public String getHomeRuleSet() {
-        return "<html>" + "<br>" + "<br>" + "<br>" + "<div style='text-align: " + "center;'>" +
+        return "<html>" + "<br>" + "<br>" + "<div style='text-align: " + "center;'>" +
                 "<br>" +
                 "<h3 style=\"font-family: '" + textFontName + "', serif; font-size: 28px;\">" +
                 "<br>Welcome to Minesweeper!" +
@@ -126,9 +126,9 @@ public class HomePage extends JFrame {
         buttonPanel.add(hard);
         buttonPanel.add(expert);
         buttonPanel.add(custom);
-        buttonPanel.setBorder(BorderFactory.createEmptyBorder(2, 200, -40, 200));
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(7, 200, -40, 200));
         scoreBtnPanel.add(scores);
-        scoreBtnPanel.setBorder(BorderFactory.createEmptyBorder(0, 200, 40, 200));
+        scoreBtnPanel.setBorder(BorderFactory.createEmptyBorder(15, 200, 40, 200));
         alignButtonsInMainPanel(buttonPanel, scoreBtnPanel);
     }
 

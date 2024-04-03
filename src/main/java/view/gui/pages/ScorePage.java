@@ -83,7 +83,9 @@ public class ScorePage extends JFrame {
     }
 
     private void addHomeButton() {
-        JButton backArrow = new JButton("<--");
+        Font arrowFont = new Font("Arial", Font.PLAIN, 24);
+        JButton backArrow = new JButton("\u2190");
+        backArrow.setFont(arrowFont);
         backArrow.setContentAreaFilled(false);
         backArrow.setBorderPainted(false);
 
@@ -94,7 +96,6 @@ public class ScorePage extends JFrame {
                 homePage.setVisible(true);
             }
         });
-
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         buttonPanel.add(backArrow);
         buttonPanel.setBackground(bgColor);
@@ -107,7 +108,6 @@ public class ScorePage extends JFrame {
         GridBagConstraints gbc = new GridBagConstraints();
 
         JLabel scores = new JLabel("<html>" +
-                "<br><br>" +
                 "<div style='text-align: " + "center;'>" +
                 "<p style=\"font-family: '" + textFont + "', serif; font-size: 27px;\"><br>" +
                 "Best Scores by Levels" +
