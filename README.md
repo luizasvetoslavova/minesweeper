@@ -40,14 +40,4 @@ level, though!
 So, unlike next level buttons, previous level navigation is always available. <br>
 You can navigate to score page as well, where you're be able to see all scores for each level that you've set so far. You've got the option to reset your scores in order to be able to start setting them from scratch, just like when you downloaded the game first. <br>
 
-<h3>
-  To do:
-</h3>
-- Random shaped tables <br>
-- Timer visualization and flag counter <br>
-- Improved UI design <br>
-- Faster opening of the cells <br>
-- Save scores in JAR file <br>
-<br> <br>
-
-> <a href="https://github.com/luizasvetoslavova/minesweeper/raw/main/out/artifacts/minesweeper_jar/minesweeper.jar">**DOWNLOAD JAR**</a> <p>(scores not saving properly in JAR)</p>
+> <a href="https://github.com/luizasvetoslavova/minesweeper/raw/main/out/artifacts/minesweeper_jar/minesweeper.jar">**DOWNLOAD JAR**</a>
