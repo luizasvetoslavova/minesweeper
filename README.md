@@ -2,7 +2,7 @@
   Minesweeper
 </h2>
 Minesweeper is a 90's video game, originally created by Microsoft. The graph table resembles a board where each square contians a hidden element that could be either a <b>mine</b>,
-an <b>empty cell</b> or a <b>digit</b>. Every digit represents the number of mines adjacent to it. If a cell is empty (grey), it means that there are no mines adjacent to it. If an empty cell gets opened, all empty cells adjacent to it open all at once.<br>
+an <b>empty cell</b> or a <b>digit</b>. Every digit represents the number of mines adjacent to it. If a cell is empty (grey), it means that there are no mines adjacent to it. If an empty cell gets opened, all empty cells adjacent to it open all at once.<br><br>
 
 The objective of the game is to find out where all the mines are and put a flag on each of them without actually _opening_ any. If you do open a cell and 'step' on a mine, the game ends and you lose.
 All digit squares need to be opened in order for you to win. <br> <br>
@@ -24,7 +24,7 @@ Custom - Anything you choose from <b>3 up to 50</b> squares, <b>20%</b> of which
 </h3>
 The program stores your highest score for each level - best performance time and click count.
 As you update your score by taking less time or using less clicks to finish a game, it gets 
-updated on the 'scores' page section, and is stored in a database. <br>
+updated on the 'scores' page section, and is stored in a database. <br><br>
 As you hit a new score you see
 your old one, and as you win but don't beat your own best score you see a comparison 
 between your current performance and your best score. By default all scores are zero and they 
