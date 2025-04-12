@@ -13,11 +13,11 @@ Left click to open a cell. Right click to flag.
 <h3>
   Levels:
 </h3>
-Easy - <b>9 x 9</b> matrix, <b>15</b> mines. <br>
-Medium - <b>16 x 16</b> matrix, <b>40</b> mines. <br>
-Hard - <b>16 x 30</b> matrix, <b>85</b> mines. <br>
-Expert - <b>23 x 34</b> matrix, <b>149</b> mines. <br>
-Custom - Anything you choose from <b>3 up to 50</b> squares, <b>20%</b> of which are mines. <br> 
+Easy: <b>9 x 9</b> matrix, <b>15</b> mines. <br>
+Medium: <b>16 x 16</b> matrix, <b>40</b> mines. <br>
+Hard: <b>16 x 30</b> matrix, <b>85</b> mines. <br>
+Expert: <b>23 x 34</b> matrix, <b>149</b> mines. <br>
+Custom: Anything you choose from <b>3 up to 50</b> squares, <b>20%</b> of which are mines. <br> 
 
 <h3>
   Scores:
